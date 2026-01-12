@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f9f5f0;
+  --foreground: #1c1917;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: #292524;
+  color: #fefce8;
+}
+
+/* Ensure mobile menu is always on top */
+body {
+  position: relative;
+}
+
+/* Prevent content from creating stacking contexts that interfere with menu */
+main {
+  position: relative;
+  z-index: 1;
+}
+
