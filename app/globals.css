@@ -1,47 +1,46 @@
-@import "tailwindcss";
-
 :root {
-  --background: #f9f5f0;
-  --foreground: #1c1917;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: #C89B60;
+  --color-primary-hover: #b28850;
+  --color-bg: #F9F6F0;
+  --color-bg-dark: #111111;
+  --color-text: #222222;
+  --color-text-light: #666666;
+  --color-white: #ffffff;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), serif;
+  margin: 0;
+  font-weight: normal;
 }
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
-::selection {
-  background-color: #292524;
-  color: #fefce8;
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
 
-/* Ensure mobile menu is always on top */
-body {
-  position: relative;
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-
-/* Prevent content from creating stacking contexts that interfere with menu */
-main {
-  position: relative;
-  z-index: 1;
-}
-

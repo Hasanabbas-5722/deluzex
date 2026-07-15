@@ -1,0 +1,98 @@
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 2.5rem 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 50;
+  transition: all 0.3s ease;
+}
+
+.headerTransparent {
+  color: var(--color-white);
+  background: transparent;
+}
+
+.headerSolid {
+  position: relative;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  padding: 1.5rem 6rem;
+}
+
+.logo {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.nav {
+  display: flex;
+  gap: 3.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.nav a {
+  position: relative;
+  transition: opacity 0.3s ease;
+}
+
+.nav a:hover {
+  opacity: 0.7;
+}
+
+.headerIcons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.iconBtn {
+  color: inherit;
+  transition: opacity 0.3s ease;
+}
+
+.iconBtn:hover {
+  opacity: 0.7;
+}
+
+.userAvatar {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 28px;
+  height: 28px;
+}
+
+.cartIconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 0.6rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1.5rem 2rem;
+  }
+  .nav {
+    display: none;
+  }
+}

@@ -1,0 +1,252 @@
+.main {
+  width: 100%;
+}
+
+/* HERO SECTION */
+.hero {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--color-white);
+  padding: 0 2rem;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: -1;
+}
+
+.heroContent {
+  z-index: 1;
+}
+
+.heroSub {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-family: var(--font-playfair), serif;
+  font-size: 4rem;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.heroDesc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* FILTER SECTION */
+.filterSection {
+  background: var(--color-bg);
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: center;
+}
+
+.filters {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 0.6rem 2rem;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.activeFilter, .filterBtn:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* PROJECTS SECTION */
+.projectsSection {
+  padding: 0 6rem 8rem;
+  background: var(--color-bg);
+}
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.projectCard {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.projectCard img {
+  transition: transform 0.7s ease;
+}
+
+.projectCard:hover img {
+  transform: scale(1.05);
+}
+
+.projectLabelBox {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.plbTitle {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.plbSub {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+.iconBtnRoundWhite {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  transition: all 0.3s;
+}
+
+.projectCard:hover .iconBtnRoundWhite {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.centerBtn {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.btnPrimaryRounded {
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 0.8rem 2.5rem;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btnPrimaryRounded:hover {
+  background: var(--color-primary-hover);
+}
+
+/* CTA SECTION */
+.ctaSection {
+  padding: 8rem 6rem;
+  background: #F7EFE3;
+  position: relative;
+  text-align: center;
+}
+
+.ctaContent {
+  position: relative;
+  z-index: 1;
+}
+
+.ctaTitle {
+  font-family: var(--font-playfair), serif;
+  font-size: 3rem;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.ctaContent p {
+  color: var(--color-text-light);
+  margin-bottom: 3rem;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.btnOutlineRounded {
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 0.8rem 2.5rem;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.btnOutlineRounded:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+@media (max-width: 992px) {
+  .projectGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 3rem;
+  }
+  .filterSection, .projectsSection, .ctaSection {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  .filters {
+    justify-content: flex-start;
+  }
+  .ctaButtons {
+    flex-direction: column;
+  }
+}
