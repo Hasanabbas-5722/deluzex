@@ -286,12 +286,20 @@
 }
 
 .projectGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+  scrollbar-width: none;
+}
+.projectGrid::-webkit-scrollbar {
+  display: none;
 }
 
 .projectCard {
+  flex: 0 0 calc(50% - 1rem);
+  scroll-snap-align: start;
   position: relative;
   aspect-ratio: 4/3;
   border-radius: 12px;
@@ -425,8 +433,8 @@
   .chooseSection {
     margin-top: 0;
   }
-  .projectGrid {
-    grid-template-columns: 1fr;
+  .projectCard {
+    flex: 0 0 calc(85% - 1rem);
   }
 }
 

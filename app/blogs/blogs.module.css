@@ -83,7 +83,14 @@
 .filters {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+}
+.filters::-webkit-scrollbar {
+  display: none;
 }
 
 .filterBtn {
@@ -95,6 +102,8 @@
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.3s;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 
 .activeFilter, .filterBtn:hover {
@@ -324,7 +333,18 @@
     font-size: 3rem;
   }
   .blogGrid {
-    grid-template-columns: 1fr;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+  }
+  .blogGrid::-webkit-scrollbar {
+    display: none;
+  }
+  .blogCard {
+    flex: 0 0 calc(85% - 1rem);
+    scroll-snap-align: start;
   }
   .filterSection, .blogGridSection, .ctaSection {
     padding-left: 2rem;

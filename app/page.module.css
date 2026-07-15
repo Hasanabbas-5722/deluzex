@@ -365,12 +365,20 @@
 }
 
 .categoryGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+  scrollbar-width: none;
+}
+.categoryGrid::-webkit-scrollbar {
+  display: none;
 }
 
 .categoryCard {
+  flex: 0 0 calc(25% - 1.125rem);
+  scroll-snap-align: start;
   position: relative;
   aspect-ratio: 4/5;
   border-radius: 20px;
@@ -420,12 +428,20 @@
 }
 
 .projectGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+  scrollbar-width: none;
+}
+.projectGrid::-webkit-scrollbar {
+  display: none;
 }
 
 .projectCard {
+  flex: 0 0 calc(50% - 1rem);
+  scroll-snap-align: start;
   position: relative;
   aspect-ratio: 4/3;
   border-radius: 12px;
@@ -1000,8 +1016,8 @@
    RESPONSIVE STYLES
    ========================================================================== */
 @media (max-width: 1200px) {
-  .categoryGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .categoryCard {
+    flex: 0 0 calc(33.333% - 1.5rem);
   }
 }
 
@@ -1024,7 +1040,14 @@
     transform: scale(0.9);
   }
   
-  .projectsSection .projectGrid,
+  .categoryCard {
+    flex: 0 0 calc(50% - 1.5rem);
+  }
+  
+  .projectCard {
+    flex: 0 0 calc(70% - 2rem);
+  }
+  
   .arrivalsGrid,
   .storiesGrid {
     grid-template-columns: 1fr;
@@ -1075,6 +1098,14 @@
     font-size: 2rem;
   }
   
+  .categoryCard {
+    flex: 0 0 calc(85% - 1.5rem);
+  }
+  
+  .projectCard {
+    flex: 0 0 calc(90% - 2rem);
+  }
+
   .nav {
     display: none;
   }
@@ -1087,9 +1118,10 @@
     display: none;
   }
   
-  .categoriesSection,
-  .projectsSection,
-  .arrivalsSection,
+  .categoriesSection, .projectsSection, .arrivalsSection, .storiesSection, .statementSection {
+    padding: 4rem 2rem;
+  }
+  
   .aboutSection,
   .storiesSection,
   .ctaSection,

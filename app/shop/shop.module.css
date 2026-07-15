@@ -216,6 +216,17 @@
     gap: 2rem;
   }
   .productGrid {
-    grid-template-columns: 1fr;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+  }
+  .productGrid::-webkit-scrollbar {
+    display: none;
+  }
+  .productCardFull {
+    flex: 0 0 calc(85% - 1rem);
+    scroll-snap-align: start;
   }
 }
