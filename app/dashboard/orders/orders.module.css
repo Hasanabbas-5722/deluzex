@@ -1,0 +1,261 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.header {
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-family: var(--font-libre), serif;
+  font-size: 2rem;
+  color: var(--color-text);
+  margin-bottom: 0.3rem;
+}
+
+.subtitle {
+  color: var(--color-text-light);
+  font-size: 0.85rem;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--color-white);
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 0.8rem 1.2rem;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-bg);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 30px;
+  padding: 0.55rem 1rem;
+  min-width: 220px;
+}
+
+.searchBox svg {
+  color: var(--color-text-light);
+  flex-shrink: 0;
+}
+
+.searchBox input {
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 0.83rem;
+  width: 100%;
+  color: var(--color-text);
+}
+
+.tabs {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.tab {
+  background: none;
+  border: none;
+  color: var(--color-text-light);
+  font-size: 0.83rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tabActive {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  border-bottom: 2px solid var(--color-primary);
+  white-space: nowrap;
+}
+
+.btnTrack {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 0.6rem 1.3rem;
+  border-radius: 8px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(200,155,96,0.25);
+  margin-left: auto;
+}
+
+.btnTrack:hover {
+  background: var(--color-primary-hover);
+}
+
+/* Table */
+.tableWrapper {
+  background: var(--color-white);
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead tr {
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.table th {
+  text-align: left;
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+  font-weight: 500;
+  padding: 1rem 1.2rem;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  transition: background 0.2s;
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: #fdfaf5;
+}
+
+.table td {
+  padding: 0.9rem 1.2rem;
+  vertical-align: middle;
+  font-size: 0.83rem;
+  color: var(--color-text);
+}
+
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.productImg {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: #111;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productInfo h4 {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.15rem;
+}
+
+.productInfo p {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+.orderId {
+  font-size: 0.83rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.orderDate {
+  font-size: 0.83rem;
+  color: var(--color-text);
+}
+
+.amount {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.statusBadge {
+  display: inline-block;
+  font-size: 0.73rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+}
+
+.statusDelivered {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.statusProcessing {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.statusShipped {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.statusCancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.trackLink {
+  color: var(--color-primary);
+  font-size: 0.83rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s;
+}
+
+.trackLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  .tabs {
+    overflow-x: auto;
+  }
+  .tableWrapper {
+    overflow-x: auto;
+  }
+}

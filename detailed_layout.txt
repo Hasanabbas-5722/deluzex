@@ -1,0 +1,3002 @@
+[CANVAS] Design (ID: 1080405:2)
+  [FRAME] Home page (ID: 1080947:2172)
+    - Bounds: w=1440, h=7095
+    - Layout: layoutMode: VERTICAL, alignItems: CENTER
+    - Fill: #f8f1ea
+    [FRAME] LIGHT (ID: 1080947:2173)
+      - Bounds: w=1440, h=1024
+      - Fill: #000000, IMAGE (e962657bd5bfcd4d39be748983ff6366dc4bb19a)
+      - Stroke: #000000 (weight: 1)
+      [FRAME] Frame 2147229702 (ID: 1080947:2174)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229707 (ID: 1080947:2192)
+        - Bounds: w=609, h=376
+        - Layout: layoutMode: VERTICAL, gap: 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229725 (ID: 1080947:2201)
+        - Bounds: w=384, h=126
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, gap: 24px, padding: 4px 16px 4px 4px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229779 (ID: 1080947:2208)
+        - Bounds: w=690, h=343
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229715 (ID: 1080947:2225)
+      - Bounds: w=1440, h=392
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 10px, padding: 100px 80px 100px 80px
+      [TEXT] Discover lighting crafted with precision and elegance, blending timeless design, exceptional quality, and warm illumination to transform every space. (ID: 1080947:2226)
+        - Bounds: w=1217, h=192
+        - Fill: 
+        - Text: "Discover lighting crafted with precision and elegance, blending timeless design, exceptional quality, and warm illumination to transform every space."
+        - Font: General Sans 400, 52px
+        - LineHeight: 70.20000457763672px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+    [FRAME] Frame 2147229721 (ID: 1080947:2227)
+      - Bounds: w=1440, h=636
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 50px
+      [FRAME] Frame 2147229635 (ID: 1080947:2228)
+        - Bounds: w=1280, h=108
+        - Layout: layoutMode: VERTICAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229720 (ID: 1080947:2231)
+        - Bounds: w=1280, h=380
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081362:2787)
+        - Bounds: w=203, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229782 (ID: 1080947:2248)
+      - Bounds: w=1440, h=1099
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229710 (ID: 1080947:2249)
+        - Bounds: w=1280, h=79
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229789 (ID: 1080947:2251)
+        - Bounds: w=1280, h=644
+        - Layout: layoutMode: VERTICAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1080947:2274)
+        - Bounds: w=189, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229759 (ID: 1080947:2275)
+      - Bounds: w=1440, h=885
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 20px 80px 100px 80px
+      [FRAME] Frame 2147229710 (ID: 1080947:2276)
+        - Bounds: w=1280, h=139
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229764 (ID: 1081490:3228)
+        - Bounds: w=1280, h=442
+        - Layout: layoutMode: HORIZONTAL, alignItems: MAX, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229762 (ID: 1080947:2307)
+        - Bounds: w=128, h=56
+        - Layout: layoutMode: HORIZONTAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229737 (ID: 1080947:2349)
+      - Bounds: w=1440, h=1076
+      - Layout: layoutMode: VERTICAL, gap: 80px, padding: 20px 80px 100px 80px
+      [FRAME] Frame 2147229743 (ID: 1080947:2350)
+        - Bounds: w=1280, h=670
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229742 (ID: 1080947:2362)
+        - Bounds: w=1280, h=206
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229769 (ID: 1080947:2375)
+      - Bounds: w=1440, h=856
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 20px 80px 100px 80px
+      [TEXT] CUSTOMER STORIES (ID: 1080947:2376)
+        - Bounds: w=1280, h=79
+        - Fill: 
+        - Text: "CUSTOMER STORIES"
+        - Font: Libre Caslon Display 400, 64px
+        - LineHeight: 79.10399627685547px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+      [FRAME] Frame 2147226404 (ID: 1080947:2581)
+        - Bounds: w=1280, h=473
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229763 (ID: 1080947:2668)
+        - Bounds: w=128, h=56
+        - Layout: layoutMode: HORIZONTAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1080947:2411)
+      - Bounds: w=1440, h=518
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 40px, padding: 100px 80px 100px 80px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1080947:2412)
+        - Bounds: w=1280, h=155
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1080947:2415)
+        - Bounds: w=1280, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229682 (ID: 1080947:2418)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147230004 (ID: 1081491:3513)
+        - Bounds: w=1280, h=161
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 250px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229565 (ID: 1080947:2419)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Add to cart (ID: 1081432:2944)
+    - Bounds: w=1440, h=1024
+    - Fill: #000000, IMAGE (e962657bd5bfcd4d39be748983ff6366dc4bb19a)
+    - Stroke: #000000 (weight: 1)
+    [FRAME] Frame 2147229702 (ID: 1081432:2945)
+      - Bounds: w=1440, h=67
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.07999999821186066) (weight: 1)
+      [FRAME] Frame 2147229710 (ID: 1081432:2953)
+        - Bounds: w=490, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1081432:2964)
+      - Bounds: w=609, h=376
+      - Layout: layoutMode: VERTICAL, gap: 40px
+      [FRAME] Frame 2147229708 (ID: 1081432:2965)
+        - Bounds: w=609, h=288
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1081432:2970)
+        - Bounds: w=348, h=48
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229725 (ID: 1081432:2973)
+      - Bounds: w=384, h=126
+      - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, gap: 24px, padding: 4px 16px 4px 4px, borderRadius: 8px
+      - Fill: #ffffff (opacity: 0.10000000149011612)
+      - Effects: GLASS
+      [RECTANGLE] Rectangle 68 (ID: 1081432:2974)
+        - Bounds: w=114, h=118
+        - Layout: borderRadius: 8px
+        - Fill: 
+      [FRAME] Frame 2147229724 (ID: 1081432:2975)
+        - Bounds: w=226, h=118
+        - Layout: layoutMode: VERTICAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229779 (ID: 1081432:2980)
+      - Bounds: w=690, h=343
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 24px
+      [FRAME] Frame 2147229777 (ID: 1081432:2981)
+        - Bounds: w=690, h=307
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 4 (ID: 1081432:2993)
+        - Bounds: w=52, h=12
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [RECTANGLE] Rectangle 216 (ID: 1081432:3012)
+      - Bounds: w=1440, h=1024
+      - Fill: #000000 (opacity: 0.800000011920929)
+    [FRAME] Frame 2147229930 (ID: 1081434:3105)
+      - Bounds: w=561, h=1023
+      - Layout: layoutMode: VERTICAL, justifyContent: SPACE_BETWEEN, gap: 32px, padding: 24px 32px 24px 32px
+      - Fill: #f8f1ea
+      [FRAME] Frame 2147229938 (ID: 1081435:3178)
+        - Bounds: w=497, h=434
+        - Layout: layoutMode: VERTICAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229937 (ID: 1081435:3177)
+        - Bounds: w=497, h=136
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Projects (ID: 1080952:3533)
+    - Bounds: w=1440, h=5121
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Desktop - 13 (ID: 1080952:3535)
+      - Bounds: w=1440, h=633
+      - Fill: #000000, IMAGE (c6db6c4c3a2a4699736ca50788f94f80dd4bd10b)
+      [FRAME] Frame 2147229702 (ID: 1080952:3536)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229797 (ID: 1080952:3554)
+        - Bounds: w=827, h=424
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 32px, padding: 48px 48px 48px 48px, borderRadius: 24px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229803 (ID: 1080952:3587)
+      - Bounds: w=1440, h=3879
+      - Layout: layoutMode: VERTICAL, gap: 16px, padding: 100px 80px 100px 80px
+      [RECTANGLE] Rectangle 97 (ID: 1080952:3586)
+        - Bounds: w=1280, h=723
+        - Fill: 
+      [RECTANGLE] Rectangle 98 (ID: 1080952:3588)
+        - Bounds: w=1280, h=723
+        - Fill: , 
+      [RECTANGLE] Rectangle 99 (ID: 1080952:3589)
+        - Bounds: w=1280, h=723
+        - Fill: 
+      [RECTANGLE] Rectangle 100 (ID: 1080952:3590)
+        - Bounds: w=1280, h=723
+        - Fill: 
+      [RECTANGLE] Rectangle 101 (ID: 1080952:3591)
+        - Bounds: w=1280, h=723
+        - Fill: 
+    [FRAME] Frame 2147229682 (ID: 1080953:3592)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229565 (ID: 1080953:3593)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Explore all projects (ID: 1080953:3634)
+    - Bounds: w=1440, h=4509
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Desktop - 13 (ID: 1080953:3635)
+      - Bounds: w=1440, h=523
+      - Fill: #000000, IMAGE (c6db6c4c3a2a4699736ca50788f94f80dd4bd10b)
+      [FRAME] Frame 2147229702 (ID: 1080953:3636)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229707 (ID: 1080953:3728)
+        - Bounds: w=609, h=351
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229803 (ID: 1080953:3673)
+      - Bounds: w=1440, h=2404
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229804 (ID: 1080954:3820)
+        - Bounds: w=1280, h=48
+        - Layout: layoutMode: VERTICAL, gap: 10px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229789 (ID: 1080954:3758)
+        - Bounds: w=1280, h=1980
+        - Layout: layoutMode: VERTICAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1080954:3821)
+        - Bounds: w=217, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Stroke:  (weight: 1)
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229782 (ID: 1080954:3825)
+      - Bounds: w=1440, h=973
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      - Fill: #feeddf
+      [FRAME] Frame 2147229806 (ID: 1080955:3895)
+        - Bounds: w=1280, h=773
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 64px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229804 (ID: 1081494:3514)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147230004 (ID: 1081494:3515)
+        - Bounds: w=1280, h=161
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 250px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229565 (ID: 1081494:3536)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] About us (ID: 1081060:2336)
+    - Bounds: w=1440, h=4823
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Desktop - 13 (ID: 1081060:2337)
+      - Bounds: w=1440, h=523
+      - Fill: #000000, IMAGE (c6db6c4c3a2a4699736ca50788f94f80dd4bd10b)
+      [FRAME] Frame 2147229702 (ID: 1081060:2338)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229707 (ID: 1081060:2356)
+        - Bounds: w=777, h=351
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229782 (ID: 1081060:2422)
+      - Bounds: w=1440, h=1114
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      - Fill: #f8f1ea
+      [FRAME] Frame 2147229806 (ID: 1081060:2423)
+        - Bounds: w=1280, h=644
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 64px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229742 (ID: 1081061:2317)
+        - Bounds: w=1280, h=206
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229678 (ID: 1081061:2331)
+      - Bounds: w=1440, h=960
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 59px, padding: 80px 80px 100px 80px
+      [RECTANGLE] Rectangle 59 (ID: 1081061:2332)
+        - Bounds: w=592, h=780
+        - Fill: 
+      [FRAME] Frame 2147229677 (ID: 1081061:2333)
+        - Bounds: w=608, h=779.9614868164062
+        - Layout: layoutMode: VERTICAL, gap: 64px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229783 (ID: 1081061:2391)
+      - Bounds: w=1440, h=1099
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229710 (ID: 1081061:2392)
+        - Bounds: w=1280, h=79
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229789 (ID: 1081061:2394)
+        - Bounds: w=1280, h=644
+        - Layout: layoutMode: VERTICAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081061:2417)
+        - Bounds: w=189, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1081061:2432)
+      - Bounds: w=1440, h=518
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 40px, padding: 100px 80px 100px 80px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1081061:2433)
+        - Bounds: w=1280, h=250
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1081061:2436)
+        - Bounds: w=1280, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229682 (ID: 1081060:2437)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229565 (ID: 1081060:2438)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Blog  (ID: 1081064:4671)
+    - Bounds: w=1440, h=3388
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Desktop - 13 (ID: 1081064:4672)
+      - Bounds: w=1440, h=408
+      - Fill: #000000, IMAGE (c6db6c4c3a2a4699736ca50788f94f80dd4bd10b)
+      [FRAME] Frame 2147229702 (ID: 1081064:4673)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229707 (ID: 1081064:4691)
+        - Bounds: w=777, h=266
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229901 (ID: 1081251:2822)
+      - Bounds: w=1440, h=1853
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 80px 80px 80px 80px
+      [FRAME] Frame 2147229804 (ID: 1081252:2917)
+        - Bounds: w=1280, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229898 (ID: 1081251:2836)
+        - Bounds: w=1280, h=1469
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081340:2902)
+        - Bounds: w=128, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1081064:4794)
+      - Bounds: w=1440, h=518
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 40px, padding: 100px 80px 100px 80px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1081064:4795)
+        - Bounds: w=1280, h=250
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1081064:4798)
+        - Bounds: w=1280, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229682 (ID: 1081064:4801)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229565 (ID: 1081064:4802)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Blog  (ID: 1081407:2899)
+    - Bounds: w=1440, h=5826
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Desktop - 13 (ID: 1081407:2900)
+      - Bounds: w=1440, h=408
+      - Fill: #000000, IMAGE (c6db6c4c3a2a4699736ca50788f94f80dd4bd10b)
+      [FRAME] Frame 2147229702 (ID: 1081407:2901)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229707 (ID: 1081407:2920)
+        - Bounds: w=777, h=177
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 40px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229782 (ID: 1081411:2843)
+      - Bounds: w=1440, h=3499
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229947 (ID: 1081494:3618)
+        - Bounds: w=628, h=50
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229806 (ID: 1081411:2844)
+        - Bounds: w=1280, h=3185
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229783 (ID: 1081430:2838)
+      - Bounds: w=1440, h=792
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229710 (ID: 1081430:2839)
+        - Bounds: w=1280, h=79
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229921 (ID: 1081430:2917)
+        - Bounds: w=1280, h=449
+        - Layout: layoutMode: HORIZONTAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1081452:8960)
+      - Bounds: w=1440, h=518
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 40px, padding: 100px 80px 100px 80px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1081452:8961)
+        - Bounds: w=1280, h=250
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1081452:8964)
+        - Bounds: w=1280, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229682 (ID: 1081407:3023)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229565 (ID: 1081407:3024)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Shop (ID: 1081022:3100)
+    - Bounds: w=1440, h=4348
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Desktop - 13 (ID: 1081022:3101)
+      - Bounds: w=1440, h=377
+      - Fill: #000000, IMAGE (c6db6c4c3a2a4699736ca50788f94f80dd4bd10b)
+      [FRAME] Frame 2147229702 (ID: 1081022:3102)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229707 (ID: 1081022:3120)
+        - Bounds: w=609, h=208
+        - Layout: layoutMode: VERTICAL, gap: 40px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229721 (ID: 1081494:3576)
+      - Bounds: w=1440, h=1048
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 50px, padding: 40px 80px 40px 80px
+      [FRAME] Frame 2147229635 (ID: 1081494:3577)
+        - Bounds: w=1280, h=108
+        - Layout: layoutMode: VERTICAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229720 (ID: 1081494:3580)
+        - Bounds: w=1280, h=380
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229721 (ID: 1081494:3593)
+        - Bounds: w=1280, h=380
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229803 (ID: 1081022:3128)
+      - Bounds: w=1440, h=2314
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229804 (ID: 1081022:3129)
+        - Bounds: w=1280, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229763 (ID: 1081024:2152)
+        - Bounds: w=1280, h=442
+        - Layout: layoutMode: HORIZONTAL, alignItems: MAX, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229805 (ID: 1081024:2211)
+        - Bounds: w=1280, h=422
+        - Layout: layoutMode: HORIZONTAL, alignItems: MAX, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229806 (ID: 1081024:2260)
+        - Bounds: w=1280, h=422
+        - Layout: layoutMode: HORIZONTAL, alignItems: MAX, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229807 (ID: 1081024:2309)
+        - Bounds: w=1280, h=422
+        - Layout: layoutMode: HORIZONTAL, alignItems: MAX, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Pagination (ID: 1081024:2556)
+        - Bounds: w=489, h=38
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229682 (ID: 1081022:3193)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229565 (ID: 1081022:3194)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Mobile (ID: 1080962:4202)
+    - Bounds: w=390, h=3766
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Home section (ID: 1080962:4203)
+      - Bounds: w=390, h=750
+      - Fill: #000000, IMAGE (e962657bd5bfcd4d39be748983ff6366dc4bb19a)
+      [FRAME] Frame 2147229813 (ID: 1080962:4204)
+        - Bounds: w=390, h=254
+        - Layout: layoutMode: VERTICAL, gap: 10px, padding: 8px 16px 8px 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229779 (ID: 1080962:4214)
+        - Bounds: w=390, h=237
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 24px, padding: 16px 16px 16px 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229812 (ID: 1080962:4231)
+        - Bounds: w=390, h=64
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229726 (ID: 1080962:4243)
+        - Bounds: w=205, h=68
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, gap: 16px, padding: 4px 16px 4px 4px, borderRadius: 16px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229814 (ID: 1080962:4267)
+      - Bounds: w=390, h=108
+      - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 10px, padding: 24px 10px 24px 10px
+      [TEXT] Discover lighting crafted with precision and elegance, blending timeless design, exceptional quality, and warm illumination to transform every space. (ID: 1080962:4265)
+        - Bounds: w=346, h=60
+        - Fill: 
+        - Text: "Discover lighting crafted with precision and elegance, blending timeless design, exceptional quality, and warm illumination to transform every space."
+        - Font: General Sans 400, 16px
+        - LineHeight: 21.600000381469727px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+    [FRAME] Frame 2147229816 (ID: 1080968:4279)
+      - Bounds: w=390, h=434
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229817 (ID: 1080968:4280)
+        - Bounds: w=358, h=46
+        - Layout: layoutMode: VERTICAL
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229815 (ID: 1080968:4276)
+        - Bounds: w=358, h=150
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229818 (ID: 1081083:2484)
+        - Bounds: w=358, h=150
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229817 (ID: 1080968:4281)
+      - Bounds: w=390, h=444
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [TEXT] Our Featured Projects. (ID: 1080968:4284)
+        - Bounds: w=358, h=30
+        - Fill: 
+        - Text: "Our Featured Projects."
+        - Font: Libre Caslon Display 400, 24px
+        - LineHeight: 29.663997650146484px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+      [FRAME] Frame 2147229822 (ID: 1080968:4338)
+        - Bounds: w=358, h=294
+        - Layout: layoutMode: VERTICAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1080968:4341)
+        - Bounds: w=147, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 16px 10px 16px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229818 (ID: 1080968:4345)
+      - Bounds: w=390, h=347
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229823 (ID: 1080968:4377)
+        - Bounds: w=358, h=67
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229825 (ID: 1080968:4419)
+        - Bounds: w=358, h=168
+        - Layout: layoutMode: HORIZONTAL, gap: 20px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229826 (ID: 1080968:4483)
+        - Bounds: w=52, h=24
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229778 (ID: 1080971:4484)
+      - Bounds: w=390, h=491
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 20px, padding: 24px undefinedpx 24px undefinedpx
+      [FRAME] Frame 2147229780 (ID: 1080971:4485)
+        - Bounds: w=390, h=391
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1080973:4561)
+        - Bounds: w=140, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 16px 10px 16px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229829 (ID: 1080976:4645)
+      - Bounds: w=390, h=303
+      - Layout: layoutMode: VERTICAL, gap: 8px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229743 (ID: 1080976:4646)
+        - Bounds: w=358, h=183
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229828 (ID: 1080976:4658)
+        - Bounds: w=358, h=64
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229830 (ID: 1080979:4675)
+      - Bounds: w=390, h=327
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [TEXT] CUSTOMER STORIES (ID: 1080979:4676)
+        - Bounds: w=358, h=30
+        - Fill: 
+        - Text: "CUSTOMER STORIES"
+        - Font: Libre Caslon Display 400, 24px
+        - LineHeight: 29.663997650146484px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+      [FRAME] Frame 2147226404 (ID: 1080979:4705)
+        - Bounds: w=358, h=185
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229826 (ID: 1080979:4859)
+        - Bounds: w=52, h=24
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1080979:4871)
+      - Bounds: w=390, h=174
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 24px, padding: 24px 16px 24px 16px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1080979:4872)
+        - Bounds: w=358, h=70
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1080979:4875)
+        - Bounds: w=358, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1080979:4955)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1080979:4956)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1080979:4959)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1080979:4977)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1080979:4979)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Detail page (ID: 1081327:2802)
+    - Bounds: w=390, h=4588
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229812 (ID: 1081327:2803)
+      - Bounds: w=390, h=64
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+      - Stroke: #d8a56e (opacity: 0.5400000214576721) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081327:2804)
+        - Bounds: w=69, h=15
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229811 (ID: 1081327:2811)
+        - Bounds: w=88, h=24
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229829 (ID: 1081327:2815)
+      - Bounds: w=390, h=829
+      - Layout: layoutMode: VERTICAL, gap: 15px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229697 (ID: 1081548:3248)
+        - Bounds: w=358, h=32
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229696 (ID: 1081327:2816)
+        - Bounds: w=358, h=445
+        - Layout: layoutMode: VERTICAL, gap: 10px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229703 (ID: 1081327:2824)
+        - Bounds: w=358, h=274
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229818 (ID: 1081327:2859)
+      - Bounds: w=390, h=1034
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [RECTANGLE] Rectangle 102 (ID: 1081327:2860)
+        - Bounds: w=358, h=284
+        - Layout: borderRadius: 24px
+        - Fill: , 
+        - Stroke:  (weight: 1)
+      [FRAME] Frame 2147229853 (ID: 1081327:2861)
+        - Bounds: w=358, h=682
+        - Layout: layoutMode: VERTICAL
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229847 (ID: 1081623:4178)
+      - Bounds: w=390, h=600
+      - Layout: layoutMode: VERTICAL, gap: 16px, padding: 24px 16px 24px 16px
+      [TEXT] Customer Reviews (ID: 1081623:4179)
+        - Bounds: w=358, h=30
+        - Fill: 
+        - Text: "Customer Reviews"
+        - Font: Libre Caslon Display 400, 24px
+        - LineHeight: 29.663997650146484px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [LINE] Line 525 (ID: 1081623:4180)
+        - Bounds: w=358, h=0
+        - Stroke:  (weight: 1)
+      [FRAME] Frame 2147230084 (ID: 1081623:4181)
+        - Bounds: w=358, h=490
+        - Layout: layoutMode: VERTICAL, gap: 56px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229803 (ID: 1081327:2892)
+      - Bounds: w=390, h=802
+      - Layout: layoutMode: VERTICAL, gap: 16px, padding: 24px 16px 24px 16px
+      [TEXT] Gallery (ID: 1081327:2893)
+        - Bounds: w=358, h=30
+        - Fill: 
+        - Text: "Gallery"
+        - Font: Libre Caslon Display 400, 24px
+        - LineHeight: 29.663997650146484px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+      [RECTANGLE] Rectangle 97 (ID: 1081327:2894)
+        - Bounds: w=358, h=225
+        - Fill: , 
+      [RECTANGLE] Rectangle 98 (ID: 1081327:2895)
+        - Bounds: w=358, h=226
+        - Fill: , 
+      [RECTANGLE] Rectangle 99 (ID: 1081327:2896)
+        - Bounds: w=358, h=225
+        - Fill: , 
+    [FRAME] Frame 2147229830 (ID: 1081327:2897)
+      - Bounds: w=390, h=310
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229823 (ID: 1081327:2898)
+        - Bounds: w=358, h=30
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229825 (ID: 1081327:2900)
+        - Bounds: w=358, h=168
+        - Layout: layoutMode: HORIZONTAL, gap: 20px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229826 (ID: 1081327:2947)
+        - Bounds: w=52, h=24
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229831 (ID: 1081327:2954)
+      - Bounds: w=390, h=561
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      - Fill: #feeddf
+      [FRAME] Frame 2147229823 (ID: 1081327:2955)
+        - Bounds: w=358, h=96
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] List (ID: 1081327:2958)
+        - Bounds: w=358, h=397
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1081327:2995)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1081327:2996)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1081327:2999)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1081327:3017)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1081327:3019)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Collection (ID: 1081061:2443)
+    - Bounds: w=390, h=1944
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Home section (ID: 1081061:2824)
+      - Bounds: w=390, h=238
+      - Fill: #000000, IMAGE (e962657bd5bfcd4d39be748983ff6366dc4bb19a)
+      [FRAME] Frame 2147229813 (ID: 1081061:2825)
+        - Bounds: w=390, h=88
+        - Layout: layoutMode: VERTICAL, gap: 10px, padding: 8px 16px 8px 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229812 (ID: 1081061:2833)
+        - Bounds: w=390, h=64
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229816 (ID: 1081494:3603)
+      - Bounds: w=390, h=434
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229817 (ID: 1081494:3604)
+        - Bounds: w=358, h=46
+        - Layout: layoutMode: VERTICAL
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229815 (ID: 1081494:3607)
+        - Bounds: w=358, h=150
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229818 (ID: 1081494:3611)
+        - Bounds: w=358, h=150
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229818 (ID: 1081061:2530)
+      - Bounds: w=390, h=884
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229804 (ID: 1081061:3277)
+        - Bounds: w=358, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229825 (ID: 1081061:2534)
+        - Bounds: w=358, h=732
+        - Layout: layoutMode: HORIZONTAL, gap: 20px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081305:2932)
+        - Bounds: w=169, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 16px 10px 16px, borderRadius: 8px
+        - Stroke:  (weight: 1)
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1081061:2736)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1081061:2737)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1081061:2740)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1081061:2758)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1081061:2760)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Mobile (ID: 1080980:4989)
+    - Bounds: w=390, h=1659
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Home section (ID: 1080980:4990)
+      - Bounds: w=390, h=238
+      - Fill: #000000, IMAGE (e962657bd5bfcd4d39be748983ff6366dc4bb19a)
+      [FRAME] Frame 2147229813 (ID: 1080980:4991)
+        - Bounds: w=390, h=180
+        - Layout: layoutMode: VERTICAL, gap: 10px, padding: 8px 16px 8px 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229812 (ID: 1080980:5018)
+        - Bounds: w=390, h=64
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229817 (ID: 1080980:5048)
+      - Bounds: w=390, h=557
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229804 (ID: 1080980:5371)
+        - Bounds: w=358, h=30
+        - Layout: layoutMode: VERTICAL, gap: 10px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229822 (ID: 1080980:5050)
+        - Bounds: w=358, h=415
+        - Layout: layoutMode: VERTICAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1080980:5405)
+        - Bounds: w=169, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 16px 10px 16px, borderRadius: 8px
+        - Stroke:  (weight: 1)
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229782 (ID: 1080980:5409)
+      - Bounds: w=390, h=476
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      - Fill: #feeddf
+      [FRAME] Frame 2147229809 (ID: 1080980:5412)
+        - Bounds: w=358, h=60
+        - Layout: layoutMode: VERTICAL, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229808 (ID: 1080980:5417)
+        - Bounds: w=358, h=348
+        - Layout: layoutMode: VERTICAL, gap: 24px, padding: 16px 16px 16px 16px, borderRadius: 16px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1080980:5283)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1080980:5284)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1080980:5287)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1080980:5305)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1080980:5307)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Mobile (ID: 1081061:4327)
+    - Bounds: w=390, h=1922
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Home section (ID: 1081061:4328)
+      - Bounds: w=390, h=238
+      - Fill: #000000, IMAGE (e962657bd5bfcd4d39be748983ff6366dc4bb19a)
+      [FRAME] Frame 2147229813 (ID: 1081061:4329)
+        - Bounds: w=390, h=148
+        - Layout: layoutMode: VERTICAL, gap: 10px, padding: 8px 16px 8px 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229812 (ID: 1081061:4337)
+        - Bounds: w=390, h=64
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229829 (ID: 1081061:4479)
+      - Bounds: w=390, h=387
+      - Layout: layoutMode: VERTICAL, gap: 24px, padding: 24px 16px undefinedpx 16px
+      [FRAME] Frame 2147229743 (ID: 1081061:4480)
+        - Bounds: w=358, h=147
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229828 (ID: 1081061:4488)
+        - Bounds: w=358, h=192
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229830 (ID: 1081061:4584)
+      - Bounds: w=390, h=504
+      - Layout: layoutMode: VERTICAL, gap: 32px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229743 (ID: 1081061:4585)
+        - Bounds: w=358, h=456
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1081061:4605)
+      - Bounds: w=390, h=178
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 24px, padding: 24px 16px 24px 16px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1081061:4606)
+        - Bounds: w=358, h=74
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1081061:4609)
+        - Bounds: w=358, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229817 (ID: 1081061:4349)
+      - Bounds: w=390, h=227
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px, padding: 24px 16px 24px 16px
+      [TEXT] Our Featured Projects. (ID: 1081061:4503)
+        - Bounds: w=358, h=30
+        - Fill: 
+        - Text: "Our Featured Projects."
+        - Font: Libre Caslon Display 400, 24px
+        - LineHeight: 29.663997650146484px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+      [FRAME] Frame 2147229818 (ID: 1081061:4361)
+        - Bounds: w=358, h=133
+        - Layout: layoutMode: HORIZONTAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1081061:4416)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1081061:4417)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1081061:4420)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1081061:4438)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1081061:4440)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Mobile (ID: 1081548:3414)
+    - Bounds: w=390, h=1669
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Home section (ID: 1081548:3415)
+      - Bounds: w=390, h=238
+      - Fill: #000000, IMAGE (e962657bd5bfcd4d39be748983ff6366dc4bb19a)
+      [FRAME] Frame 2147229813 (ID: 1081548:3416)
+        - Bounds: w=390, h=140
+        - Layout: layoutMode: VERTICAL, gap: 10px, padding: 8px 16px 8px 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229812 (ID: 1081548:3424)
+        - Bounds: w=390, h=64
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229817 (ID: 1081548:3614)
+      - Bounds: w=390, h=865
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229804 (ID: 1081548:3615)
+        - Bounds: w=358, h=30
+        - Layout: layoutMode: VERTICAL, gap: 10px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147230006 (ID: 1081554:3291)
+        - Bounds: w=358, h=723
+        - Layout: layoutMode: HORIZONTAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081554:3352)
+        - Bounds: w=79, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 16px 10px 16px, borderRadius: 8px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1081548:3490)
+      - Bounds: w=390, h=178
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 24px, padding: 24px 16px 24px 16px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1081548:3491)
+        - Bounds: w=358, h=74
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1081548:3494)
+        - Bounds: w=358, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1081548:3515)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1081548:3516)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1081548:3519)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1081548:3537)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1081548:3539)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Contact us (ID: 1081061:4114)
+    - Bounds: w=390, h=1176
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229812 (ID: 1081061:4264)
+      - Bounds: w=390, h=64
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+      - Stroke: #d8a56e (opacity: 0.5400000214576721) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081061:4265)
+        - Bounds: w=69, h=15
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229811 (ID: 1081061:4272)
+        - Bounds: w=88, h=24
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229782 (ID: 1081061:4191)
+      - Bounds: w=390, h=724
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 20px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229809 (ID: 1081061:4192)
+        - Bounds: w=358, h=60
+        - Layout: layoutMode: VERTICAL, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229808 (ID: 1081061:4197)
+        - Bounds: w=358, h=472
+        - Layout: layoutMode: VERTICAL, gap: 24px, padding: 16px 16px 16px 16px, borderRadius: 16px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229857 (ID: 1081061:4289)
+        - Bounds: w=358, h=64
+        - Layout: layoutMode: VERTICAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1081061:4299)
+        - Bounds: w=128, h=20
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1081061:4203)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1081061:4204)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1081061:4207)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1081061:4225)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1081061:4227)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Mobile (ID: 1080980:5455)
+    - Bounds: w=390, h=1912
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Home section (ID: 1080980:5456)
+      - Bounds: w=390, h=285
+      - Fill: #000000, IMAGE (3d975277596d07e84db921768897285048a2fa8f)
+      [FRAME] Frame 2147229812 (ID: 1080980:5465)
+        - Bounds: w=390, h=64
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229797 (ID: 1080980:5605)
+        - Bounds: w=295, h=179
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px, padding: 16px 16px 16px 16px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229803 (ID: 1080980:5625)
+      - Bounds: w=390, h=1239
+      - Layout: layoutMode: VERTICAL, gap: 16px, padding: 24px 16px 24px 16px
+      [RECTANGLE] Rectangle 97 (ID: 1080980:5626)
+        - Bounds: w=358, h=225
+        - Fill: , 
+      [RECTANGLE] Rectangle 98 (ID: 1080980:5627)
+        - Bounds: w=358, h=226
+        - Fill: , 
+      [RECTANGLE] Rectangle 99 (ID: 1080980:5628)
+        - Bounds: w=358, h=225
+        - Fill: , 
+      [RECTANGLE] Rectangle 100 (ID: 1080980:5629)
+        - Bounds: w=358, h=226
+        - Fill: , 
+      [RECTANGLE] Rectangle 101 (ID: 1080980:5630)
+        - Bounds: w=358, h=225
+        - Fill: , 
+    [FRAME] Frame 2147229565 (ID: 1080980:5544)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1080980:5545)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1080980:5548)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1080980:5566)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1080980:5568)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Mobile (ID: 1081554:3362)
+    - Bounds: w=390, h=2055
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Home section (ID: 1081554:3363)
+      - Bounds: w=390, h=234
+      - Fill: #000000, IMAGE (3d975277596d07e84db921768897285048a2fa8f)
+      [FRAME] Frame 2147229812 (ID: 1081554:3364)
+        - Bounds: w=390, h=64
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 99px, padding: 20px 16px 20px 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229707 (ID: 1081554:3446)
+        - Bounds: w=358, h=72
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229817 (ID: 1081554:3455)
+      - Bounds: w=390, h=925
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 32px, padding: 24px 16px 24px 16px
+      [FRAME] Frame 2147229947 (ID: 1081554:3552)
+        - Bounds: w=358, h=37
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147230008 (ID: 1081554:3588)
+        - Bounds: w=358, h=754
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229922 (ID: 1081554:3576)
+        - Bounds: w=358, h=22
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147230009 (ID: 1081554:3591)
+      - Bounds: w=390, h=330
+      - Layout: layoutMode: VERTICAL, gap: 20px, padding: 24px 16px 24px 16px
+      [TEXT] Read More (ID: 1081554:3592)
+        - Bounds: w=358, h=25
+        - Fill: 
+        - Text: "Read More"
+        - Font: Libre Caslon Display 400, 20px
+        - LineHeight: 24.719999313354492px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+      [FRAME] Frame 2147230006 (ID: 1081554:3593)
+        - Bounds: w=358, h=237
+        - Layout: layoutMode: HORIZONTAL, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229707 (ID: 1081554:3544)
+      - Bounds: w=390, h=178
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 24px, padding: 24px 16px 24px 16px
+      - Fill: PATTERN
+      [FRAME] Frame 2147229708 (ID: 1081554:3545)
+        - Bounds: w=358, h=74
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229706 (ID: 1081554:3548)
+        - Bounds: w=358, h=32
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229565 (ID: 1081554:3401)
+      - Bounds: w=391, h=388
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 16px, padding: 16px 16px 16px 16px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229562 (ID: 1081554:3402)
+        - Bounds: w=359, h=48
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229563 (ID: 1081554:3405)
+        - Bounds: w=359, h=216
+        - Layout: layoutMode: HORIZONTAL, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147225853 (ID: 1081554:3423)
+        - Bounds: w=227, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] social media (ID: 1081554:3425)
+        - Bounds: w=140, h=24
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Product deatil page (ID: 1081617:8695)
+    - Bounds: w=1440, h=7197
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229836 (ID: 1081617:8696)
+      - Bounds: w=1440, h=796
+      - Layout: layoutMode: VERTICAL
+      [FRAME] Frame 2147229702 (ID: 1081617:8697)
+        - Bounds: w=1440, h=79
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229835 (ID: 1081617:8715)
+        - Bounds: w=1440, h=717
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 24px, padding: 60px 80px 100px 80px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229846 (ID: 1081617:8772)
+      - Bounds: w=1440, h=984
+      - Layout: layoutMode: HORIZONTAL, gap: 92px, padding: 100px 80px 100px 80px
+      [RECTANGLE] Rectangle 102 (ID: 1081617:8773)
+        - Bounds: w=653, h=572
+        - Layout: borderRadius: 24px
+        - Fill: , 
+        - Stroke:  (weight: 1)
+      [FRAME] Frame 2147229853 (ID: 1081617:8774)
+        - Bounds: w=535, h=784
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229847 (ID: 1081623:3646)
+      - Bounds: w=1440, h=1108
+      - Layout: layoutMode: VERTICAL, gap: 40px, padding: 100px 80px 100px 80px
+      [TEXT] Customer Reviews (ID: 1081623:3686)
+        - Bounds: w=1280, h=79
+        - Fill: 
+        - Text: "Customer Reviews"
+        - Font: Libre Caslon Display 400, 64px
+        - LineHeight: 79.10399627685547px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [LINE] Line 525 (ID: 1081623:4176)
+        - Bounds: w=1280, h=0
+        - Stroke:  (weight: 1)
+      [FRAME] Frame 2147230084 (ID: 1081623:4177)
+        - Bounds: w=1280, h=749
+        - Layout: layoutMode: VERTICAL, gap: 56px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229782 (ID: 1081617:8804)
+      - Bounds: w=1440, h=1655
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229710 (ID: 1081617:8805)
+        - Bounds: w=1280, h=79
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229789 (ID: 1081617:8807)
+        - Bounds: w=1280, h=1312
+        - Layout: layoutMode: VERTICAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229759 (ID: 1081617:8815)
+      - Bounds: w=1440, h=965
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 64px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229710 (ID: 1081617:8816)
+        - Bounds: w=1280, h=120
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229764 (ID: 1081617:8819)
+        - Bounds: w=1280, h=442
+        - Layout: layoutMode: HORIZONTAL, alignItems: MAX, gap: 48px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229762 (ID: 1081617:8847)
+        - Bounds: w=128, h=56
+        - Layout: layoutMode: HORIZONTAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229540 (ID: 1081617:8852)
+      - Bounds: w=1440, h=1080
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 60px, padding: 100px 80px 100px 80px
+      - Fill: #feeddf
+      [FRAME] Frame 2147226964 (ID: 1081617:8853)
+        - Bounds: w=1280, h=880
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 60px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229682 (ID: 1081617:8894)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229565 (ID: 1081617:8895)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Contact us (ID: 1081028:2245)
+    - Bounds: w=1440, h=1504
+    - Layout: layoutMode: VERTICAL
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229836 (ID: 1081028:2246)
+      - Bounds: w=1440, h=131
+      - Layout: layoutMode: VERTICAL
+      [FRAME] Frame 2147229852 (ID: 1081028:2673)
+        - Bounds: w=1440, h=131
+        - Layout: layoutMode: VERTICAL
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229846 (ID: 1081028:2301)
+      - Bounds: w=1440, h=764
+      - Layout: layoutMode: HORIZONTAL, gap: 80px, padding: 100px 80px 100px 80px
+      [FRAME] Frame 2147229832 (ID: 1081031:2907)
+        - Bounds: w=703, h=503
+        - Layout: layoutMode: VERTICAL, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229808 (ID: 1081031:2714)
+        - Bounds: w=497, h=564
+        - Layout: layoutMode: VERTICAL, gap: 24px, padding: 24px 24px 24px 24px, borderRadius: 16px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229682 (ID: 1081028:2474)
+      - Bounds: w=1440, h=609
+      - Layout: layoutMode: VERTICAL, justifyContent: CENTER, alignItems: CENTER, gap: 56px, padding: 80px 80px 100px 80px
+      - Stroke: #d8a56e (weight: 1)
+      [FRAME] Frame 2147229565 (ID: 1081028:2475)
+        - Bounds: w=1280, h=261
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, gap: 100px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Sign up (ID: 1081247:4619)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4620)
+      - Bounds: w=471, h=833
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5260)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Elevate Every Space With Light (ID: 1081247:4642)
+        - Bounds: w=391, h=31
+        - Fill: 
+        - Text: "Elevate Every Space With Light"
+        - Font: Inter 600, 26px
+        - LineHeight: 31.46590805053711px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4643)
+        - Bounds: w=391, h=168
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4646)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4647)
+        - Bounds: w=391, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign In Here (ID: 1081247:4652)
+        - Bounds: w=227, h=18
+        - Fill: 
+        - Text: "Already have account? Sign In Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+  [FRAME] Sign In (ID: 1081247:4653)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4654)
+      - Bounds: w=470, h=864
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5316)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Welcome Back (ID: 1081247:4676)
+        - Bounds: w=174, h=34
+        - Fill: 
+        - Text: "Welcome Back"
+        - Font: Hanken Grotesk 600, 26px
+        - LineHeight: 33.87799835205078px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4677)
+        - Bounds: w=390, h=196
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4680)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4681)
+        - Bounds: w=390, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign Up Here (ID: 1081247:4686)
+        - Bounds: w=233, h=18
+        - Fill: 
+        - Text: "Already have account? Sign Up Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+  [FRAME] Sign In - Button enabled (ID: 1081247:4687)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4688)
+      - Bounds: w=470, h=864
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5310)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Welcome Back (ID: 1081247:4710)
+        - Bounds: w=174, h=34
+        - Fill: 
+        - Text: "Welcome Back"
+        - Font: Hanken Grotesk 600, 26px
+        - LineHeight: 33.87799835205078px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4711)
+        - Bounds: w=390, h=196
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4714)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4715)
+        - Bounds: w=390, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign Up Here (ID: 1081247:4720)
+        - Bounds: w=233, h=18
+        - Fill: 
+        - Text: "Already have account? Sign Up Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+  [FRAME] Sign In - Wrong password (ID: 1081247:4721)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4722)
+      - Bounds: w=470, h=865
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5304)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Welcome Back (ID: 1081247:4744)
+        - Bounds: w=174, h=34
+        - Fill: 
+        - Text: "Welcome Back"
+        - Font: Hanken Grotesk 600, 26px
+        - LineHeight: 33.87799835205078px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4745)
+        - Bounds: w=390, h=197
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4749)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4750)
+        - Bounds: w=390, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign Up Here (ID: 1081247:4755)
+        - Bounds: w=233, h=18
+        - Fill: 
+        - Text: "Already have account? Sign Up Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+  [FRAME] Sign In - Send password reset link (ID: 1081247:4756)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4757)
+      - Bounds: w=470, h=546
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5298)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469997 (ID: 1081247:4779)
+        - Bounds: w=236, h=74
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469995 (ID: 1081247:4782)
+        - Bounds: w=390, h=76
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4784)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [TEXT] Remember your password? Sign In Here (ID: 1081247:4785)
+        - Bounds: w=256, h=18
+        - Fill: 
+        - Text: "Remember your password? Sign In Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+  [FRAME] Sign In- Reset new password (ID: 1081247:4786)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4787)
+      - Bounds: w=470, h=562
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5292)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469997 (ID: 1081247:4809)
+        - Bounds: w=318, h=56
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469998 (ID: 1081247:4812)
+        - Bounds: w=390, h=168
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4816)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+  [FRAME] Sign up- Wrong password format (ID: 1081247:4817)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4818)
+      - Bounds: w=471, h=862
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5274)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Elevate Every Space With Light (ID: 1081247:5539)
+        - Bounds: w=391, h=31
+        - Fill: 
+        - Text: "Elevate Every Space With Light"
+        - Font: Inter 600, 26px
+        - LineHeight: 31.46590805053711px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4841)
+        - Bounds: w=391, h=197
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4844)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4845)
+        - Bounds: w=391, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign In Here (ID: 1081247:4850)
+        - Bounds: w=227, h=18
+        - Fill: 
+        - Text: "Already have account? Sign In Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+  [FRAME] Sign up - Email alredy exist  (ID: 1081247:4851)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4852)
+      - Bounds: w=471, h=862
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5267)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Elevate Every Space With Light (ID: 1081247:5538)
+        - Bounds: w=391, h=31
+        - Fill: 
+        - Text: "Elevate Every Space With Light"
+        - Font: Inter 600, 26px
+        - LineHeight: 31.46590805053711px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4875)
+        - Bounds: w=391, h=197
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4878)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4879)
+        - Bounds: w=391, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign In Here (ID: 1081247:4884)
+        - Bounds: w=227, h=18
+        - Fill: 
+        - Text: "Already have account? Sign In Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+  [FRAME] Sign up - System error  (ID: 1081247:4885)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4886)
+      - Bounds: w=471, h=833
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5280)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Elevate Every Space With Light (ID: 1081247:5540)
+        - Bounds: w=391, h=31
+        - Fill: 
+        - Text: "Elevate Every Space With Light"
+        - Font: Inter 600, 26px
+        - LineHeight: 31.46590805053711px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4909)
+        - Bounds: w=391, h=168
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4912)
+        - Bounds: w=200, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4913)
+        - Bounds: w=391, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign In Here (ID: 1081247:4918)
+        - Bounds: w=230, h=18
+        - Fill: 
+        - Text: "Already have account? Sign In Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+    [INSTANCE] Alert (ID: 1081247:4919)
+      - Bounds: w=369, h=44
+      - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, borderRadius: 6px
+      - Fill: #ea5455
+      - Effects: DROP_SHADOW
+      [FRAME] _Alert (ID: I1081247:4919;5188:5636)
+        - Bounds: w=369, h=42
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px, padding: 12px 40px 12px 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Sign up - Verification link sent (ID: 1081247:4920)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 469994 (ID: 1081247:4921)
+      - Bounds: w=471, h=833
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 40px, padding: 60px 40px 60px 40px, borderRadius: 20px
+      - Fill: #ffffff
+      [GROUP] Layer_x0020_1 (ID: 1081247:5286)
+        - Bounds: w=196, h=50
+        [undefined] undefined (ID: undefined)
+      [TEXT] Elevate Every Space With Light (ID: 1081247:5541)
+        - Bounds: w=391, h=31
+        - Fill: 
+        - Text: "Elevate Every Space With Light"
+        - Font: Inter 600, 26px
+        - LineHeight: 31.46590805053711px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 469995 (ID: 1081247:4944)
+        - Bounds: w=391, h=168
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081247:4947)
+        - Bounds: w=233, h=48
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 24px 10px 24px, borderRadius: 8px
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469996 (ID: 1081247:4948)
+        - Bounds: w=391, h=198
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Already have account? Sign In Here (ID: 1081247:4953)
+        - Bounds: w=227, h=18
+        - Fill: 
+        - Text: "Already have account? Sign In Here"
+        - Font: Hanken Grotesk 400, 14px
+        - LineHeight: 18.242000579833984px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / CENTER
+    [INSTANCE] Alert (ID: 1081247:4954)
+      - Bounds: w=355, h=44
+      - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, borderRadius: 6px
+      - Fill: #28c76f
+      - Effects: DROP_SHADOW
+      [FRAME] _Alert (ID: I1081247:4954;5188:5612)
+        - Bounds: w=355, h=44
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px, padding: 12px 40px 12px 40px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Dashboard (ID: 1081437:3182)
+    - Bounds: w=1440, h=1100
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081437:3215)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081437:3216)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081437:3223)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081437:3229)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081438:8784)
+      - Bounds: w=201, h=1061
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081438:8792)
+        - Bounds: w=177, h=993
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081454:15408)
+      - Bounds: w=1239, h=1014
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 12px, padding: 12px 12px 12px 12px
+      [FRAME] Frame 2147229649 (ID: 1081452:8986)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: VERTICAL, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 469640 (ID: 1081453:9919)
+        - Bounds: w=1215, h=111
+        - Layout: layoutMode: HORIZONTAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229916 (ID: 1081453:14389)
+        - Bounds: w=1215, h=449
+        - Layout: layoutMode: HORIZONTAL, gap: 12px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229915 (ID: 1081453:14571)
+        - Bounds: w=1215, h=356
+        - Layout: layoutMode: HORIZONTAL, gap: 10px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Orders (ID: 1081454:15409)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081454:15410)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081454:15411)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081454:15418)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081454:15424)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081454:15428)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081454:15429)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081454:15491)
+      - Bounds: w=1239, h=945
+      - Layout: layoutMode: VERTICAL, gap: 12px, padding: 12px 12px 12px 12px
+      [FRAME] Frame 2147229649 (ID: 1081454:15492)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Content layer (ID: 1081454:24800)
+        - Bounds: w=1200, h=676
+        - Layout: layoutMode: VERTICAL, gap: 16px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Wishlist (ID: 1081455:25344)
+    - Bounds: w=1440, h=1352
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081455:25345)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081455:25346)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081455:25353)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081455:25359)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081455:25363)
+      - Bounds: w=201, h=1273
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081455:25364)
+        - Bounds: w=177, h=1205
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081455:25426)
+      - Bounds: w=1239, h=945
+      - Layout: layoutMode: VERTICAL, gap: 12px, padding: 12px 12px 12px 12px
+      [FRAME] Frame 2147229649 (ID: 1081455:25427)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Content layer (ID: 1081455:25431)
+        - Bounds: w=1200, h=1074
+        - Layout: layoutMode: VERTICAL, gap: 16px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229947 (ID: 1081462:25748)
+      - Bounds: w=1199, h=88
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+      - Fill: #d79322 (opacity: 0.03999999910593033)
+      [FRAME] Frame 2147229948 (ID: 1081462:25749)
+        - Bounds: w=455, h=37
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081462:25759)
+        - Bounds: w=194, h=40
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 20px 10px 20px, borderRadius: 8px
+        - Stroke:  (weight: 1)
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+  [FRAME] Address (ID: 1081462:25763)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081462:25764)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081462:25765)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081462:25772)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081462:25778)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081462:25782)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081462:25783)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081462:25845)
+      - Bounds: w=1239, h=945
+      - Layout: layoutMode: VERTICAL, gap: 12px, padding: 12px 12px 12px 12px
+      [FRAME] Frame 2147229649 (ID: 1081462:25846)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+      [FRAME] Content layer (ID: 1081462:25850)
+        - Bounds: w=1200, h=576
+        - Layout: layoutMode: VERTICAL, gap: 16px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229947 (ID: 1081462:25912)
+      - Bounds: w=1199, h=85
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+      - Fill: #d79322 (opacity: 0.03999999910593033)
+      [FRAME] Frame 2147229948 (ID: 1081462:25913)
+        - Bounds: w=1151, h=37
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Frame 22 (ID: 1081462:25822)
+    - Bounds: w=177, h=44
+    - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px, padding: 8px 12px 8px 12px
+    [GROUP] lock_open (ID: 1081462:25823)
+      - Bounds: w=20, h=20
+      [RECTANGLE] Bounding box (ID: 1081462:25824)
+        - Bounds: w=20, h=20
+        - Fill: 
+      [VECTOR] lock_open (ID: 1081462:25825)
+        - Bounds: w=12, h=17
+        - Fill: 
+    [TEXT] Change Password (ID: 1081462:25826)
+      - Bounds: w=125, h=20
+      - Fill: #636372
+      - Text: "Change Password"
+      - Font: Hanken Grotesk 400, 15px
+      - LineHeight: 19.545000076293945px
+      - LetterSpacing: 0px
+      - TextAlign: LEFT / TOP
+  [FRAME] Payment method (ID: 1081463:26344)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081463:26345)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081463:26346)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081463:26353)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081463:26359)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081463:26363)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081463:26364)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081463:26424)
+      - Bounds: w=1239, h=631
+      - Layout: layoutMode: VERTICAL, gap: 20px, padding: 12px 12px 12px 12px
+      [FRAME] Frame 2147229649 (ID: 1081463:26425)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229963 (ID: 1081467:26799)
+        - Bounds: w=1215, h=408
+        - Layout: layoutMode: VERTICAL, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229654 (ID: 1081467:26702)
+        - Bounds: w=1215, h=100
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 10px, padding: 20px 24px 20px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229947 (ID: 1081463:26513)
+      - Bounds: w=1215, h=88
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+      - Fill: #d79322 (opacity: 0.03999999910593033)
+      [FRAME] Frame 2147229948 (ID: 1081463:26514)
+        - Bounds: w=1050, h=40
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081467:26745)
+        - Bounds: w=117, h=40
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 20px 10px 20px, borderRadius: 8px
+        - Stroke:  (weight: 1)
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+  [FRAME] Profile details (ID: 1081467:26810)
+    - Bounds: w=1440, h=1964
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081467:26811)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081467:26812)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081467:26819)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081467:26825)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081467:26829)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081467:26830)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229649 (ID: 1081487:3354)
+      - Bounds: w=1215, h=41
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+      [FRAME] Frame 2147229952 (ID: 1081487:3355)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: VERTICAL, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229991 (ID: 1081487:3398)
+      - Bounds: w=1188, h=1775
+      - Layout: layoutMode: VERTICAL, gap: 24px
+      [FRAME] Frame 2147229980 (ID: 1081487:3399)
+        - Bounds: w=1188, h=490
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, gap: 24px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229984 (ID: 1081487:3452)
+        - Bounds: w=1188, h=357
+        - Layout: layoutMode: VERTICAL, alignItems: MAX, gap: 34px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229985 (ID: 1081487:3460)
+        - Bounds: w=1188, h=461
+        - Layout: layoutMode: VERTICAL, alignItems: MAX, gap: 34px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Account security (ID: 1081487:3508)
+        - Bounds: w=1188, h=27
+        - Fill: 
+        - Text: "Account security"
+        - Font: Inter 600, 22px
+        - LineHeight: 26.625px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [FRAME] Frame 2147229993 (ID: 1081487:3509)
+        - Bounds: w=1188, h=344
+        - Layout: layoutMode: VERTICAL, gap: 24px
+        [undefined] undefined (ID: undefined)
+  [FRAME] Notification (ID: 1081467:27041)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081467:27042)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081467:27043)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081467:27050)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081467:27056)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081467:27060)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081467:27061)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081467:27123)
+      - Bounds: w=1239, h=520
+      - Layout: layoutMode: VERTICAL, gap: 20px, padding: 12px 12px 12px 12px
+      [FRAME] Frame 2147229649 (ID: 1081467:27124)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] headers (ID: 1081469:34550)
+        - Bounds: w=1215, h=51
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 13px, padding: 12px 24px 16px 24px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 35 (ID: 1081469:34556)
+        - Bounds: w=1215, h=111
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 39 (ID: 1081469:34569)
+        - Bounds: w=1215, h=104
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 8px, padding: 12px 12px 16px 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 34 (ID: 1081469:34586)
+        - Bounds: w=1215, h=106
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 8px, padding: 12px 12px 12px 12px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229947 (ID: 1081467:27231)
+      - Bounds: w=1215, h=88
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+      - Fill: #d79322 (opacity: 0.03999999910593033)
+      [FRAME] Frame 2147229948 (ID: 1081467:27232)
+        - Bounds: w=1073, h=40
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081467:27239)
+        - Bounds: w=94, h=40
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 20px 10px 20px, borderRadius: 8px
+        - Stroke:  (weight: 1)
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+  [FRAME] Support (ID: 1081486:3194)
+    - Bounds: w=1440, h=1404
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081486:3195)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081486:3196)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081486:3203)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081486:3209)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081486:3213)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081486:3214)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229649 (ID: 1081486:3370)
+      - Bounds: w=1215, h=41
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+      [FRAME] Frame 2147229952 (ID: 1081486:3371)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: VERTICAL, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Content layer (ID: 1081486:3376)
+      - Bounds: w=1200, h=492
+      - Layout: layoutMode: VERTICAL, gap: 16px, borderRadius: 12px
+      - Stroke: #c7c7cc (weight: 1)
+      [FRAME] Frame 2147229921 (ID: 1081486:3377)
+        - Bounds: w=1200, h=492
+        - Layout: layoutMode: HORIZONTAL, gap: 24px, padding: 20px 20px 20px 20px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229968 (ID: 1081486:3666)
+      - Bounds: w=1203, h=478
+      - Layout: layoutMode: VERTICAL, gap: 24px, padding: 20px 20px 20px 20px, borderRadius: 12px
+      - Stroke: #c7c7cc (weight: 1)
+      [TEXT] Heading (ID: 1081486:3669)
+        - Bounds: w=605, h=64
+        - Fill: 
+        - Text: "Frequently asked questions"
+        - Font: Hedvig Letters Serif 400, 48px
+        - LineHeight: 64.31999969482422px
+        - LetterSpacing: 0px
+        - TextAlign: CENTER / TOP
+      [FRAME] Frame 2147229594 (ID: 1081486:3631)
+        - Bounds: w=1163, h=350
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229970 (ID: 1081486:3697)
+      - Bounds: w=733, h=152
+      - Layout: layoutMode: HORIZONTAL, gap: 20px, borderRadius: 16px
+      - Fill: #ffffff
+      [RECTANGLE] Rectangle 220 (ID: 1081486:3696)
+        - Bounds: w=249, h=152
+        - Fill: 
+      [FRAME] Frame 192 (ID: 1081486:3685)
+        - Bounds: w=417, h=152
+        - Layout: layoutMode: VERTICAL, gap: 16px, padding: 16px undefinedpx 16px undefinedpx
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Blog (ID: 1081608:3449)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081608:3450)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081608:3451)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081608:3458)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081608:3464)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081608:3468)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081608:3469)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081608:12438)
+      - Bounds: w=1200, h=788
+      - Layout: layoutMode: VERTICAL, gap: 24px
+      [FRAME] Content layer (ID: 1081608:12450)
+        - Bounds: w=1200, h=788
+        - Layout: layoutMode: VERTICAL, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229649 (ID: 1081608:12765)
+      - Bounds: w=1215, h=41
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+      [FRAME] Frame 2147229952 (ID: 1081608:12766)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: VERTICAL, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [INSTANCE] Breadcrumbs (ID: 1081608:12770)
+      - Bounds: w=143, h=20
+      - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+      [INSTANCE] home (ID: I1081608:12770;5185:6455)
+        - Bounds: w=20, h=20
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Home (ID: I1081608:12770;5185:6456)
+        - Bounds: w=74, h=20
+        - Fill: 
+        - Text: "Dashboard"
+        - Font: Hanken Grotesk 500, 15px
+        - LineHeight: 19.545000076293945px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [INSTANCE] chevron-right (ID: I1081608:12770;5185:6457)
+        - Bounds: w=16, h=16
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Library (ID: I1081608:12770;5185:6458)
+        - Bounds: w=48, h=20
+        - Fill: 
+        - Text: "Library"
+        - Font: Hanken Grotesk 500, 15px
+        - LineHeight: 19.545000076293945px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [INSTANCE] chevron-right (ID: I1081608:12770;5185:6459)
+        - Bounds: w=16, h=16
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Data (ID: I1081608:12770;5185:6460)
+        - Bounds: w=37, h=20
+        - Fill: 
+        - Text: "Blogs"
+        - Font: Hanken Grotesk 600, 15px
+        - LineHeight: 19.545000076293945px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+  [FRAME] Blog (ID: 1081615:3620)
+    - Bounds: w=1440, h=1763
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081615:3621)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081615:3622)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081615:3629)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081615:3635)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081615:3639)
+      - Bounds: w=201, h=1684
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081615:3640)
+        - Bounds: w=177, h=1616
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229649 (ID: 1081615:3821)
+      - Bounds: w=1215, h=41
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+      [FRAME] Frame 2147229952 (ID: 1081615:3822)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: VERTICAL, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Breadcrumbs (ID: 1081615:7697)
+      - Bounds: w=274, h=20
+      - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 8px
+      [INSTANCE] home (ID: 1081615:7698)
+        - Bounds: w=20, h=20
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Home (ID: 1081615:7699)
+        - Bounds: w=74, h=20
+        - Fill: 
+        - Text: "Dashboard"
+        - Font: Hanken Grotesk 500, 15px
+        - LineHeight: 19.545000076293945px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [INSTANCE] chevron-right (ID: 1081615:7700)
+        - Bounds: w=16, h=16
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Blogs (ID: 1081615:7712)
+        - Bounds: w=37, h=20
+        - Fill: 
+        - Text: "Blogs"
+        - Font: Hanken Grotesk 500, 15px
+        - LineHeight: 19.545000076293945px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [INSTANCE] chevron-right (ID: 1081615:7713)
+        - Bounds: w=16, h=16
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Library (ID: 1081615:7701)
+        - Bounds: w=48, h=20
+        - Fill: 
+        - Text: "Library"
+        - Font: Hanken Grotesk 500, 15px
+        - LineHeight: 19.545000076293945px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+      [INSTANCE] chevron-right (ID: 1081615:7702)
+        - Bounds: w=16, h=16
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [TEXT] Add new blogs (ID: 1081615:7703)
+        - Bounds: w=99, h=20
+        - Fill: 
+        - Text: "Add new blogs"
+        - Font: Hanken Grotesk 600, 15px
+        - LineHeight: 19.545000076293945px
+        - LetterSpacing: 0px
+        - TextAlign: LEFT / TOP
+    [FRAME] Frame 2147230011 (ID: 1081617:8424)
+      - Bounds: w=1199, h=1478
+      - Layout: layoutMode: GRID
+      [FRAME] Frame 2147229985 (ID: 1081615:8166)
+        - Bounds: w=1199, h=387
+        - Layout: layoutMode: VERTICAL, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229987 (ID: 1081617:8328)
+        - Bounds: w=1199, h=229
+        - Layout: layoutMode: VERTICAL, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229988 (ID: 1081617:8354)
+        - Bounds: w=1199, h=155
+        - Layout: layoutMode: VERTICAL, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Action (ID: 1081617:8414)
+        - Bounds: w=1199, h=38
+        - Layout: layoutMode: HORIZONTAL, justifyContent: MAX, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147230010 (ID: 1081617:8423)
+        - Bounds: w=1199, h=300
+        - Layout: layoutMode: HORIZONTAL, alignItems: MAX, gap: 24px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147230011 (ID: 1081617:8638)
+        - Bounds: w=1199, h=289
+        - Layout: layoutMode: VERTICAL, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [FRAME] Logout (ID: 1081473:3147)
+    - Bounds: w=1440, h=1024
+    - Fill: #f8f1ea
+    [FRAME] Frame 2147229702 (ID: 1081473:3148)
+      - Bounds: w=1440, h=79
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 452px, padding: 24px 80px 24px 80px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] deluzex-svg (black) logo 1 (ID: 1081473:3149)
+        - Bounds: w=151, h=31
+        - Fill: 
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229710 (ID: 1081473:3156)
+        - Bounds: w=434, h=19
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 32px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 2147229711 (ID: 1081473:3162)
+        - Bounds: w=106, h=26
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] sidebar (ID: 1081473:3166)
+      - Bounds: w=201, h=945
+      - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 8px, padding: 28px 12px 40px 12px
+      - Stroke: #d79322 (opacity: 0.23999999463558197) (weight: 1)
+      [FRAME] Frame 99 (ID: 1081473:3167)
+        - Bounds: w=177, h=877
+        - Layout: layoutMode: VERTICAL, gap: 180px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229951 (ID: 1081473:3224)
+      - Bounds: w=1239, h=520
+      - Layout: layoutMode: VERTICAL, gap: 20px, padding: 12px 12px 12px 12px
+      [FRAME] Frame 2147229649 (ID: 1081473:3225)
+        - Bounds: w=1215, h=41
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 4px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] headers (ID: 1081473:3230)
+        - Bounds: w=1215, h=51
+        - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 13px, padding: 12px 24px 16px 24px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 35 (ID: 1081473:3231)
+        - Bounds: w=1215, h=111
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 39 (ID: 1081473:3244)
+        - Bounds: w=1215, h=104
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 8px, padding: 12px 12px 16px 12px
+        - Stroke:  (weight: 1)
+        [undefined] undefined (ID: undefined)
+      [FRAME] Frame 34 (ID: 1081473:3261)
+        - Bounds: w=1215, h=106
+        - Layout: layoutMode: VERTICAL, justifyContent: CENTER, gap: 8px, padding: 12px 12px 12px 12px
+        [undefined] undefined (ID: undefined)
+    [FRAME] Frame 2147229947 (ID: 1081473:3273)
+      - Bounds: w=1215, h=88
+      - Layout: layoutMode: HORIZONTAL, justifyContent: SPACE_BETWEEN, alignItems: CENTER, gap: 32px, padding: 24px 24px 24px 24px, borderRadius: 12px
+      - Fill: #d79322 (opacity: 0.03999999910593033)
+      [FRAME] Frame 2147229948 (ID: 1081473:3274)
+        - Bounds: w=1073, h=40
+        - Layout: layoutMode: HORIZONTAL, alignItems: CENTER, gap: 16px
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+      [INSTANCE] Button (ID: 1081473:3281)
+        - Bounds: w=94, h=40
+        - Layout: layoutMode: HORIZONTAL, justifyContent: CENTER, alignItems: CENTER, gap: 8px, padding: 10px 20px 10px 20px, borderRadius: 8px
+        - Stroke:  (weight: 1)
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+    [FRAME] Background (ID: 1081473:3605)
+      - Bounds: w=1440, h=1024
+      - Fill: #000000 (opacity: 0.10000000149011612)
+      - Effects: BACKGROUND_BLUR
+      [FRAME] Default Model (ID: 1081473:3629)
+        - Bounds: w=640, h=280
+        - Layout: layoutMode: VERTICAL, alignItems: CENTER, gap: 24px, padding: 40px 40px 40px 40px, borderRadius: 24px
+        - Fill: 
+        - Effects: 
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+        [undefined] undefined (ID: undefined)
+  [LINE] Line 517 (ID: 1081491:3344)
+    - Bounds: w=0.9999999481207169, h=110.99999558535728
+    - Stroke: #d9d9d9 (weight: 1)
+  [LINE] Line 523 (ID: 1081623:4172)
+    - Bounds: w=744.0000118172829, h=8.00000048471702
+    - Stroke: #000000 (weight: 1)

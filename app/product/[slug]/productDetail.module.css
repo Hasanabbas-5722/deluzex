@@ -90,7 +90,7 @@
 }
 
 .productTitle {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-libre), serif;
   font-size: 2.5rem;
   color: var(--color-text);
   margin-bottom: 1rem;

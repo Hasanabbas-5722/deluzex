@@ -1,1132 +1,1247 @@
+/* ==========================================================================
+   MAIN
+   ========================================================================== */
 .main {
   width: 100%;
   min-height: 100vh;
-}
-
-/* ==========================================================================
-   HEADER
-   ========================================================================== */
-.header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 2.5rem 6rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 10;
-  color: var(--color-white);
-}
-
-.logo {
-  font-family: var(--font-playfair), serif;
-  font-size: 1.8rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-}
-
-.nav {
-  display: flex;
-  gap: 3.5rem;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.nav a {
-  position: relative;
-  transition: opacity 0.3s ease;
-}
-
-.nav a:hover {
-  opacity: 0.7;
-}
-
-.headerIcons {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.iconBtn {
-  color: var(--color-white);
-  transition: opacity 0.3s ease;
-}
-
-.iconBtn:hover {
-  opacity: 0.7;
-}
-
-.cartIconWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.cartBadge {
-  position: absolute;
-  top: -8px;
-  right: -12px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: 0.6rem;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 10px;
+  background: #FAFAF8;
 }
 
 /* ==========================================================================
    HERO SECTION
+   Figma: 1440x1024, white/cream bg, left = cursive tagline + title + desc + btn
+          right = dark info card (top) + 3 lamp cards (bottom) + dots
    ========================================================================== */
 .hero {
-  position: relative;
-  min-height: 100vh;
+  width: 1440px;
+  max-width: 100%;
+  height: 700px;
+  margin: -80px auto 0; /* pull up behind fixed transparent header */
+  padding: 0 80px;
   display: flex;
   align-items: center;
-  padding: 6rem 6rem 0;
-  color: var(--color-white);
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Hero background image */
 .heroBg {
   position: absolute;
   inset: 0;
-  z-index: -2;
+  z-index: 0;
 }
 
+/* Subtle overlay to keep content readable */
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 100%);
-  z-index: -1;
-}
-
-.heroContent {
-  max-width: 600px;
+  /* background: rgba(250, 250, 248, 0.82); */
   z-index: 1;
 }
 
-.heroSub {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--color-primary);
-  margin-bottom: 1rem;
+/* Left column: 480px approx - sits ABOVE the background */
+.heroLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  max-width: 480px;
+  /* padding-top: 80px; */
+  position: relative;
+  z-index: 2;
 }
 
-.heroTitle {
-  font-size: 5rem;
-  line-height: 1.05;
-  margin-bottom: 1.5rem;
-  font-family: var(--font-playfair), serif;
+/* Cursive golden tagline "Celebrate Every Moment with" */
+.heroTagline {
+  font-family: var(--font-libre), serif;
+  font-style: italic;
+  font-size: 32px;
+  color: #C89B60;
+  margin: 0;
   font-weight: 400;
+  line-height: 1.2;
+}
+
+/* Big heading "Lights" */
+.heroTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 80px;
+  color: #fff;
+  margin: 0;
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -1px;
 }
 
 .heroDesc {
-  font-size: 0.95rem;
+  font-size: 15px;
+  color: #d3d3d3;
   line-height: 1.6;
-  opacity: 0.9;
-  margin-bottom: 2.5rem;
+  margin: 0;
 }
 
-.heroButtons {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.btnPrimary {
-  background: var(--color-primary);
-  color: var(--color-white);
-  padding: 1.1rem 2.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.btnPrimary:hover {
-  background: var(--color-primary-hover);
-  transform: translateY(-2px);
-}
-
-.playBtnWrapper {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-}
-
-.playBtnWrapper span {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.btnPlay {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.4);
-  display: flex;
+.btnExplore {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-white);
-  transition: all 0.3s ease;
+  background: #C89B60;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 16px 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  letter-spacing: 0.02em;
+  transition: background 0.3s;
 }
 
-.playBtnWrapper:hover .btnPlay {
-  background: rgba(255,255,255,0.1);
-  transform: scale(1.05);
+.btnExplore:hover {
+  background: #b28850;
 }
 
-.heroProductWidget {
-  position: absolute;
-  bottom: -4rem; /* overlaps the next section slightly */
-  right: 6rem;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 2rem;
-  border-radius: 16px;
+/* Right column */
+.heroRight {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  z-index: 5;
+  align-items: center;
+  gap: 24px;
+  padding-top: 40px;
+  position: relative;
+  z-index: 2;
 }
 
-.hpwTop {
+/* Dark info card at top right */
+.heroInfoCard {
+  background: #1E1E1E;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  align-self: flex-end;
+  gap: 16px;
+  width: 340px;
+  color: #fff;
 }
 
-.hpwTopImg {
-  border-radius: 4px;
-  background: var(--color-white);
+.heroInfoCardImg {
+  width: 112px;
+  height: 94px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.hpwInfo {
-  text-align: right;
-}
-
-.hpwInfo h3 {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.hpwInfo p {
-  color: var(--color-white);
-  font-weight: 300;
-  margin-top: 0.25rem;
-}
-
-.hpwLamps {
+.heroInfoCardText {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.heroInfoCardNum {
+  font-size: 13px;
+  color: #888;
+}
+
+.heroInfoCardName {
+  font-size: 20px;
+  font-family: var(--font-libre), serif;
+  color: #fff;
+  font-weight: 400;
+}
+
+.heroInfoCardCount {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 8px;
+}
+
+/* 3 Lamp display row */
+.heroLamps {
+  display: flex;
+  gap: 16px;
   align-items: flex-end;
 }
 
-.hpwLampCard {
-  background: var(--color-white);
-  border-radius: 12px;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.heroLampCard {
   position: relative;
-  transition: transform 0.3s ease;
+  width: 200px;
+  height: 210px;
+  border-radius: 20px;
+  background: #fcfcfc;
+  overflow: hidden;
 }
 
-.activeCard {
-  transform: translateY(1.5rem);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-  z-index: 2;
-  padding: 1.5rem 1rem;
+.heroLampCardActive {
+  width: 240px;
+  height: 260px;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  border: 1px solid #E8E0D8;
 }
 
-.hpwLabel {
+.heroLampLabel {
   position: absolute;
-  bottom: -2rem;
-  font-size: 0.55rem;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
   white-space: nowrap;
-  color: var(--color-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 14px;
+  font-weight: 500;
+  color: #cb9856;
+  background: transparent;
+  text-align: center;
+  font-weight: 600;
 }
 
-.hpwArrows {
+/* Dots */
+.heroDots {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 2rem;
+  gap: 10px;
+  align-items: center;
 }
 
-.arrowBtn {
-  color: var(--color-primary);
-  opacity: 0.6;
-  transition: opacity 0.3s;
+.heroDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #D4C5B5;
+  display: block;
 }
 
-.arrowBtn:hover {
-  opacity: 1;
+.heroDotActive {
+  background: #2B2B2B;
 }
 
 /* ==========================================================================
    STATEMENT SECTION
+   Figma: 1440x392, large 52px text, first part gold, rest dark gray, centered
    ========================================================================== */
 .statementSection {
-  padding: 12rem 6rem 6rem;
-  background: var(--color-bg);
-  text-align: center;
+  width: 1440px;
+  max-width: 100%;
+  height: 392px;
+  margin: 0 auto;
+  padding: 100px 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FAFAF8;
 }
 
 .statementText {
-  font-family: var(--font-playfair), serif;
-  font-size: 2.2rem;
-  line-height: 1.4;
-  color: var(--color-text);
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.statementHighlight {
-  color: var(--color-primary);
-}
-
-/* ==========================================================================
-   COMMON SECTIONS
-   ========================================================================== */
-.sectionHeader {
+  font-size: 48px;
+  line-height: 1.35;
   text-align: center;
-  margin-bottom: 4rem;
-}
-
-.sectionSub {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--color-primary);
-  margin-bottom: 1rem;
-}
-
-.signatureText {
-  font-family: var(--font-italianno), cursive;
-  color: var(--color-primary);
-  font-size: 2.5rem;
+  color: #6B6B6B;
+  margin: 0;
+  max-width: 1100px;
+  font-family: 'General Sans', sans-serif;
   font-weight: 400;
-  margin-bottom: 0.5rem;
 }
 
-.sectionTitle {
-  font-size: 2.8rem;
-  color: var(--color-text);
-}
-
-.sectionDesc {
-  font-size: 0.95rem;
-  color: var(--color-text-light);
-  line-height: 1.6;
-  margin-top: 1rem;
-}
-
-.centerBtn {
-  display: flex;
-  justify-content: center;
-  margin-top: 4rem;
-}
-
-.btnPrimaryRounded {
-  background: var(--color-primary);
-  color: var(--color-white);
-  padding: 1rem 2.5rem;
-  border-radius: 30px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.btnPrimaryRounded:hover {
-  background: var(--color-primary-hover);
-  transform: translateY(-2px);
+.statementGold {
+  color: #C89B60;
 }
 
 /* ==========================================================================
    CATEGORIES SECTION
+   Figma: 1440x636, italic golden tagline, large Libre Caslon title, 4 cards, btn
    ========================================================================== */
 .categoriesSection {
-  padding: 4rem 6rem;
-  background: var(--color-bg);
+  width: 1440px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 34px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  background: #FAFAF8;
+}
+
+.categoriesHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.categoriesTagline {
+  font-family: var(--font-libre), serif;
+  font-style: italic;
+  font-size: 22px;
+  color: #C89B60;
+  margin: 0;
+  font-weight: 400;
+}
+
+.categoriesTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 56px;
+  color: #2B2B2B;
+  font-weight: 400;
+  margin: 0;
 }
 
 .categoryGrid {
   display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 1rem;
-  scrollbar-width: none;
-}
-.categoryGrid::-webkit-scrollbar {
-  display: none;
+  gap: 24px;
+  width: 100%;
+  max-width: 1280px;
 }
 
-.categoryCard {
-  flex: 0 0 calc(25% - 1.125rem);
-  scroll-snap-align: start;
+/* ===== NEW CATEGORY CARD STYLES (matching Figma exactly) ===== */
+/* 4 cards side by side, tall portrait aspect ratio, dark amber image fills card */
+/* Outer corners of first/last card are more rounded, inner corners less */
+
+.catCard {
+  flex: 1;
   position: relative;
-  aspect-ratio: 4/5;
+  height: 380px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #2A1F14;
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  border-top-left-radius: 60px;
+  border-bottom-right-radius: 60px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.catCard:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+}
+
+/* Active card: golden border, shows label */
+.catCardActive {
+  border: 2.5px solid #C89B60;
+  box-shadow: 0 0 0 1px rgba(200,155,96,0.3), 0 8px 32px rgba(200,155,96,0.15);
+}
+
+/* "Chandeliers" label - white text centered at bottom of active card */
+.catCardLabel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px 16px 24px;
+  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.catCardLabel span {
+  font-family: var(--font-libre), serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #fff;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+
+.btnExploreCat {
+  background: #C89B60;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.3s;
+}
+
+.btnExploreCat:hover {
+  background: #b28850;
+}
+
+/* ==========================================================================
+   NEW ARRIVALS SECTION
+   Figma: 1440x1099, large spaced "NEW ARRIVALS" title, 3 product cards, nav arrows
+   ========================================================================== */
+.newArrivalsSection {
+  width: 1440px;
+  max-width: 100%;
+  height: 1099px;
+  margin: 0 auto;
+  padding: 20px 80px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 64px;
+  background: #FAFAF8;
+}
+
+.newArrivalsHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.newArrivalsTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 80px;
+  letter-spacing: 0.05em;
+  color: #2B2B2B;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1;
+}
+
+.newArrivalsDesc {
+  font-size: 16px;
+  color: #888;
+  text-align: center;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.newArrivalsGrid {
+  display: flex;
+  gap: 40px;
+  width: 1280px;
+  max-width: 100%;
+  align-items: flex-end;
+}
+
+/* Base product card */
+.productCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.productCardFeatured {
+  flex: 1.2; /* center card slightly wider */
+}
+
+.productCardImg {
+  position: relative;
+  height: 320px;
+  background: #F5F2EE;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.productCardFeatured .productCardImg {
+  height: 390px;
+  background: #fff;
+  border: 1.5px solid #C89B60;
+}
+
+.productCardImgActive {
+  border: 1.5px solid #C89B60 !important;
+  background: #fff !important;
+}
+
+/* + button inside product card */
+.productAddBtn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #C89B60;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.productAddBtn:hover {
+  transform: scale(1.1);
+  background: #b28850;
+}
+
+.productCardInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 4px;
+}
+
+.productCardLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.productCardName {
+  font-family: 'General Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2B2B2B;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.productCardRating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.productStar {
+  color: #C89B60;
+  font-size: 16px;
+}
+
+.productRatingText {
+  font-size: 13px;
+  color: #888;
+}
+
+.productCardRight {
+  display: flex;
+  align-items: center;
+}
+
+.productCardPrice {
+  font-size: 18px;
+  font-weight: 600;
+  color: #C89B60;
+}
+
+/* ==========================================================================
+   FEATURED PROJECTS SECTION
+   Figma: 1440x885, "Our Featured Projects." Libre Caslon, 2 large image cards
+   ========================================================================== */
+.projectsSection {
+  width: 1440px;
+  max-width: 100%;
+  height: 885px;
+  margin: 0 auto;
+  padding: 20px 80px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  background: #FAFAF8;
+}
+
+.projectsTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 64px;
+  color: #2B2B2B;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+}
+
+.projectGrid {
+  display: flex;
+  gap: 24px;
+  width: 1280px;
+  max-width: 100%;
+  height: 480px;
+}
+
+.projectCard {
+  flex: 1;
+  position: relative;
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
 }
 
-.activeCategory {
-  border: 3px solid var(--color-primary);
+.projectCard:hover .projectCardLabel {
+  opacity: 1;
 }
 
-.categoryCard img {
-  transition: transform 0.7s ease;
-}
-
-.categoryCard:hover img {
-  transform: scale(1.05);
-}
-
-.catOverlay {
+.projectCardLabel {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%);
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 10px;
+  padding: 18px 20px;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 2rem;
-}
-
-.catOverlay span {
-  color: var(--color-white);
-  font-family: var(--font-playfair), serif;
-  font-size: 1.5rem;
-}
-
-/* ==========================================================================
-   PROJECTS SECTION
-   ========================================================================== */
-.projectsSection {
-  padding: 8rem 6rem;
-  background: var(--color-bg);
-  text-align: center;
-}
-
-.projectsSection .sectionTitle {
-  margin-bottom: 4rem;
-}
-
-.projectGrid {
-  display: flex;
-  gap: 2rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 1rem;
-  scrollbar-width: none;
-}
-.projectGrid::-webkit-scrollbar {
-  display: none;
-}
-
-.projectCard {
-  flex: 0 0 calc(50% - 1rem);
-  scroll-snap-align: start;
-  position: relative;
-  aspect-ratio: 4/3;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.projectCard img {
-  transition: transform 0.7s ease;
-}
-
-.projectCard:hover img {
-  transform: scale(1.05);
-}
-
-.projectLabelBox {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  right: 1.5rem;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(10px);
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  text-align: left;
 }
 
-.plbTitle {
-  display: block;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-text);
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-}
-
-.plbSub {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--color-text-light);
-}
-
-.iconBtnRoundWhite {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--color-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text);
-  transition: background 0.3s, color 0.3s;
-}
-
-.iconBtnRoundWhite:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
-}
-
-/* ==========================================================================
-   NEW ARRIVALS SECTION
-   ========================================================================== */
-.arrivalsSection {
-  padding: 8rem 6rem;
-  background: var(--color-bg); /* slightly different off-white in design, but keeping consistent with theme */
-}
-
-.arrivalsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-.productCardFull {
-  background: var(--color-white);
-  border-radius: 16px;
-  padding: 1rem;
+.projectCardLabelText {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  gap: 4px;
 }
 
-.productImgWrapper {
-  position: relative;
-  background: #F5F5F5;
-  border-radius: 12px;
-  aspect-ratio: 1;
-  padding: 2rem;
+.projectCardLabelTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2B2B2B;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.activeWrapper {
-  border: 1px solid var(--color-primary);
+.projectCardLabelSub {
+  font-size: 13px;
+  color: #888;
 }
 
-.btnCartRound {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--color-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s, background 0.3s;
-}
-
-.btnCartRound:hover {
-  transform: scale(1.1);
-  background: var(--color-primary-hover);
-}
-
-.productInfoFull {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0 0.5rem 0.5rem;
-}
-
-.piLeft h4 {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-  color: var(--color-text);
-}
-
-.stockInfo {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.7rem;
-  color: var(--color-text-light);
-}
-
-.piRight {
-  text-align: right;
-}
-
-.stars {
-  color: var(--color-primary);
-  font-size: 0.7rem;
-  margin-bottom: 0.5rem;
-}
-
-.stars span {
-  color: var(--color-text-light);
-  margin-left: 0.25rem;
-}
-
-.price {
-  color: var(--color-primary);
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-.carouselArrows {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 3rem;
-}
-
-.flatArrow {
+.projectArrowBtn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid #E0E0E0;
+  background: rgba(255,255,255,0.8);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #2B2B2B;
+  transition: background 0.3s;
+}
+
+.projectArrowBtn:hover {
+  background: #C89B60;
+  color: #fff;
+}
+
+.btnExploreProjects {
+  background: #C89B60;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.3s;
+}
+
+.btnExploreProjects:hover {
+  background: #b28850;
+}
+
+/* Arrow group shared */
+.arrowGroup {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.arrowOutline {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid #D5C5B5;
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  color: #888;
+  transition: border-color 0.3s, color 0.3s;
 }
 
-.solidArrow {
-  width: 36px;
-  height: 36px;
+.arrowOutline:hover {
+  border-color: #C89B60;
+  color: #C89B60;
+}
+
+.arrowSolid {
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--color-white);
+  background: #C89B60;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.arrowSolid:hover {
+  background: #b28850;
 }
 
 /* ==========================================================================
    ABOUT US SECTION
+   Figma: 1440x1076, left text (ABOUT US label, title, divider, desc, btn, icons)
+          right = large chandelier image; stats row = 4 image cards with overlay
    ========================================================================== */
 .aboutSection {
-  padding: 8rem 6rem 0;
-  background: var(--color-bg);
+  width: 1440px;
+  max-width: 100%;
+  height: 1076px;
+  margin: 0 auto;
+  padding: 20px 80px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  background: #FAFAF8;
 }
 
-.aboutContent {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6rem;
-  align-items: center;
-  margin-bottom: 6rem;
+.aboutInner {
+  display: flex;
+  gap: 80px;
+  width: 1280px;
+  max-width: 100%;
+  height: 610px;
 }
 
-.aboutText {
-  padding-right: 2rem;
+.aboutLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
 }
 
-.aboutText .sectionTitle {
-  margin: 1rem 0 2rem;
-  font-size: 3.5rem;
+.aboutLabel {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #C89B60;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+
+.aboutTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 52px;
+  color: #2B2B2B;
+  font-weight: 400;
   line-height: 1.1;
+  margin: 0 0 24px;
+}
+
+.aboutDivider {
+  width: 60px;
+  height: 2px;
+  background: #C89B60;
+  margin-bottom: 28px;
 }
 
 .aboutDesc {
-  font-size: 1rem;
+  font-size: 16px;
+  color: #666;
   line-height: 1.6;
-  color: var(--color-text-light);
-  margin-bottom: 3rem;
+  margin: 0 0 32px;
 }
 
-.btnOutline {
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  padding: 1rem 2rem;
-  border-radius: 30px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+.btnDiscoverStory {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
+  gap: 10px;
+  border: 1px solid #C89B60;
+  color: #C89B60;
+  background: transparent;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.3s, color 0.3s;
+  margin-bottom: 40px;
 }
 
-.btnOutline:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
+.btnDiscoverStory:hover {
+  background: #C89B60;
+  color: #fff;
 }
 
-.features {
+.aboutFeatures {
   display: flex;
-  gap: 3rem;
-  margin-top: 4rem;
-  padding-top: 4rem;
-  border-top: 1px solid rgba(0,0,0,0.05);
+  gap: 0;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid rgba(0,0,0,0.08);
 }
 
-.featureItem {
+.aboutFeatureItem {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 12px;
+  flex: 1;
   text-align: center;
-  gap: 1rem;
 }
 
-.featureIcon {
-  width: 60px;
-  height: 60px;
+.aboutFeatureIcon {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: #F2E8DB; /* light beige */
+  background: #F5EFE6;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);
+  color: #C89B60;
 }
 
-.featureItem span {
-  font-size: 0.75rem;
+.aboutFeatureItem span {
+  font-size: 13px;
+  color: #555;
   font-weight: 500;
-  max-width: 100px;
-  line-height: 1.4;
-  color: var(--color-text);
 }
 
-.aboutImage {
+.aboutFeatureDivider {
+  width: 1px;
+  height: 80px;
+  background: rgba(0,0,0,0.08);
+  flex-shrink: 0;
+}
+
+.aboutRight {
+  width: 520px;
+  height: 610px;
   position: relative;
-  aspect-ratio: 4/5;
-  border-radius: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Stats Row: 4 image cards with overlaid text */
+.statsRow {
+  display: flex;
+  gap: 24px;
+  width: 1280px;
+  max-width: 100%;
+  height: 206px;
+}
+
+.statCard {
+  flex: 1;
+  position: relative;
+  border-radius: 8px;
   overflow: hidden;
 }
 
-.statsBanner {
-  background: var(--color-bg-dark);
-  color: var(--color-white);
-  padding: 4rem 2rem;
+.statOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
   display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  text-align: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  gap: 6px;
 }
 
-.statDivider {
-  width: 1px;
-  height: 60px;
-  background: rgba(255,255,255,0.1);
+.statNum {
+  font-family: var(--font-libre), serif;
+  font-size: 36px;
+  color: #fff;
+  font-weight: 400;
 }
 
-.statBox h3 {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 2.5rem;
-  font-weight: 300;
-  margin-bottom: 0.5rem;
-}
-
-.statBox p {
-  color: #888;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+.statLabel {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  text-transform: capitalize;
 }
 
 /* ==========================================================================
-   CUSTOMER STORIES
+   CUSTOMER STORIES SECTION
+   Figma: 1440x856, large Libre Caslon "CUSTOMER STORIES" title, 3 cards, arrows
+          Center card has golden border and is the active/featured one
    ========================================================================== */
 .storiesSection {
-  padding: 8rem 6rem;
-  background: var(--color-bg);
+  width: 1440px;
+  max-width: 100%;
+  height: 856px;
+  margin: 0 auto;
+  padding: 80px 80px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  background: #FAFAF8;
+}
+
+.storiesTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 80px;
+  letter-spacing: 0.04em;
+  color: #2B2B2B;
+  font-weight: 400;
+  text-align: center;
+  margin: 0;
 }
 
 .storiesGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  align-items: center;
+  display: flex;
+  gap: 24px;
+  width: 1280px;
+  max-width: 100%;
+  height: 460px;
+  align-items: stretch;
 }
 
 .storyCard {
-  background: var(--color-white);
-  padding: 3rem 2.5rem;
-  border-radius: 12px;
+  flex: 1;
+  background: #fff;
+  border: 1px solid #E8E0D8;
+  border-radius: 16px;
+  padding: 36px 32px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  transition: transform 0.4s, box-shadow 0.4s;
+  gap: 20px;
 }
 
-.activeStory {
-  transform: scale(1.05);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+.storyCardActive {
+  border: 1.5px solid #C89B60;
+  box-shadow: 0 8px 32px rgba(200,155,96,0.12);
 }
 
 .storyStars {
-  color: var(--color-primary);
-  font-size: 1rem;
+  color: #C89B60;
+  font-size: 20px;
+  letter-spacing: 2px;
 }
 
 .storyText {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--color-text-light);
+  font-size: 15px;
+  line-height: 1.7;
+  color: #666;
+  flex: 1;
+  margin: 0;
 }
 
 .storyAuthor {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 14px;
+  margin-top: 8px;
 }
 
-.avatar {
+.storyAvatar {
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #F0E8DA;
 }
 
-.storyAuthor h5 {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.9rem;
+.storyAuthorInfo h5 {
+  font-size: 16px;
   font-weight: 600;
-  color: var(--color-text);
+  color: #2B2B2B;
+  margin: 0 0 4px;
 }
 
-.storyAuthor span {
-  font-size: 0.75rem;
-  color: var(--color-text-light);
+.storyAuthorInfo span {
+  font-size: 13px;
+  color: #888;
 }
 
 /* ==========================================================================
    CTA SECTION
+   Figma: 1440x518, cream texture bg, big Libre Caslon title, 2 buttons
    ========================================================================== */
 .ctaSection {
-  padding: 8rem 6rem;
-  background: #F7EFE3; /* Wavy pattern background colour base */
-  position: relative;
-  overflow: hidden;
-}
-
-.ctaSection::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(200, 155, 96, 0.1) 4px, rgba(200, 155, 96, 0.1) 8px);
-  z-index: 0;
-  opacity: 0.5;
-}
-
-.ctaContent {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  max-width: 600px;
+  width: 1440px;
+  max-width: 100%;
+  height: 518px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F5EFE6;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(180,140,80,0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+  padding: 100px 80px;
+  padding: 100px 80px;
+}
+
+.ctaInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 32px;
 }
 
 .ctaTitle {
-  font-family: var(--font-playfair), serif;
-  font-size: 3rem;
-  color: var(--color-text);
+  font-family: var(--font-libre), serif;
+  font-size: 72px;
+  color: #2B2B2B;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.05;
 }
 
-.ctaContent p {
-  color: var(--color-text-light);
-  margin: 1.5rem 0 3rem;
-  font-size: 0.95rem;
+.ctaDesc {
+  font-size: 16px;
+  color: #888;
+  line-height: 1.6;
+  margin: 0;
 }
 
-.ctaButtons {
+.ctaBtns {
   display: flex;
-  gap: 1.5rem;
-  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
 }
 
-.btnOutlineRounded {
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  padding: 1rem 2.5rem;
-  border-radius: 30px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background: transparent;
-  transition: all 0.3s;
-}
-
-.btnOutlineRounded:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
-}
-
-/* ==========================================================================
-   FOOTER
-   ========================================================================== */
-.footer {
-  padding: 6rem 6rem 2rem;
-  background: var(--color-white);
-}
-
-.footerGrid {
-  display: flex;
-  justify-content: space-between;
-  gap: 4rem;
-}
-
-.footerCol {
-  flex: 1;
-  max-width: 300px;
-}
-
-.footerCol h4, .footerColRight h4 {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-primary);
-  margin-bottom: 2rem;
-}
-
-.logos {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 4rem;
-}
-
-.logoItem {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.socialIcons {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 4rem;
-}
-
-.socialIcons a {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-primary);
-  transition: all 0.3s;
-}
-
-.socialIcons a:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
-}
-
-.copyright {
-  color: var(--color-text-light);
-  font-size: 0.75rem;
-}
-
-.footerColRight {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.newsletter {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--color-primary);
-  padding-bottom: 0.5rem;
-  width: 400px;
-  margin-bottom: 5rem;
-}
-
-.newsletter input {
+.ctaBtnPrimary {
+  background: #C89B60;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 16px 36px;
+  border-radius: 8px;
   border: none;
-  background: none;
-  outline: none;
-  flex: 1;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.85rem;
-  color: var(--color-text);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.3s;
 }
 
-.btnCartRoundSmall {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--color-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.ctaBtnPrimary:hover {
+  background: #b28850;
 }
 
-.footerLinks {
-  display: flex;
-  gap: 6rem;
-  width: 100%;
-  justify-content: flex-end;
+.ctaBtnOutline {
+  background: transparent;
+  color: #C89B60;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 16px 36px;
+  border-radius: 8px;
+  border: 1px solid #C89B60;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.3s, color 0.3s;
 }
 
-.linkGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.linkGroup a {
-  font-size: 0.85rem;
-  color: var(--color-text-light);
-  transition: color 0.3s;
-}
-
-.linkGroup a:hover {
-  color: var(--color-text);
+.ctaBtnOutline:hover {
+  background: #C89B60;
+  color: #fff;
 }
 
 /* ==========================================================================
-   RESPONSIVE STYLES
+   RESPONSIVE
    ========================================================================== */
-@media (max-width: 1200px) {
-  .categoryCard {
-    flex: 0 0 calc(33.333% - 1.5rem);
+@media (max-width: 1440px) {
+  .hero,
+  .statementSection,
+  .categoriesSection,
+  .newArrivalsSection,
+  .projectsSection,
+  .aboutSection,
+  .storiesSection,
+  .ctaSection {
+    width: 100%;
+    height: auto;
+  }
+
+  .heroLeft {
+    padding-top: 120px;
+    padding-bottom: 60px;
+  }
+
+  .hero {
+    min-height: 650px;
+    padding: 0 40px;
   }
 }
 
-@media (max-width: 992px) {
-  .heroTitle {
-    font-size: 3.5rem;
-  }
-  
-  .heroProductWidget {
-    bottom: 2rem;
-    right: 2rem;
-    padding: 1rem;
-  }
-  
-  .hpwLampCard {
-    transform: scale(0.8);
-  }
-  
-  .activeCard {
-    transform: scale(0.9);
-  }
-  
-  .categoryCard {
-    flex: 0 0 calc(50% - 1.5rem);
-  }
-  
-  .projectCard {
-    flex: 0 0 calc(70% - 2rem);
-  }
-  
-  .arrivalsGrid,
-  .storiesGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .aboutContent {
-    grid-template-columns: 1fr;
-  }
-  
-  .statsBanner {
-    flex-wrap: wrap;
-    gap: 2rem;
-  }
-  
-  .statDivider {
-    display: none;
-  }
-  
-  .footerGrid {
+@media (max-width: 1024px) {
+  .hero {
     flex-direction: column;
+    height: auto;
+    padding: 120px 40px 60px;
+    gap: 60px;
   }
-  
-  .footerColRight {
-    align-items: flex-start;
+
+  .heroLeft {
+    padding-top: 0;
+    max-width: 100%;
+    text-align: center;
+    align-items: center;
   }
-  
-  .footerLinks {
-    justify-content: flex-start;
+
+  .heroTitle {
+    font-size: 60px;
+  }
+
+  .heroTagline {
+    font-size: 24px;
+  }
+
+  .heroRight {
+    width: 100%;
+  }
+
+  .categoriesSection,
+  .newArrivalsSection,
+  .projectsSection,
+  .aboutSection,
+  .storiesSection {
+    padding: 60px 40px;
+  }
+
+  .categoryGrid {
     flex-wrap: wrap;
-    gap: 2rem;
+    height: auto;
+    width: 100%;
+  }
+
+  .catCard {
+    flex: 0 0 calc(50% - 12px);
+    height: 300px;
+  }
+
+  .newArrivalsTitle,
+  .storiesTitle {
+    font-size: 52px;
+  }
+
+  .ctaTitle {
+    font-size: 48px;
+  }
+
+  .aboutInner {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+  }
+
+  .aboutRight {
+    width: 100%;
+    height: 400px;
+  }
+
+  .statsRow {
+    width: 100%;
+    overflow-x: auto;
   }
 }
 
 @media (max-width: 768px) {
-  .header {
-    padding: 1.5rem 2rem;
-  }
-  
-  .heroTitle {
-    font-size: 2.5rem;
-  }
-
-  .sectionTitle {
-    font-size: 2rem;
-  }
-
-  .statBox h3 {
-    font-size: 2rem;
-  }
-  
-  .categoryCard {
-    flex: 0 0 calc(85% - 1.5rem);
-  }
-  
-  .projectCard {
-    flex: 0 0 calc(90% - 2rem);
-  }
-
-  .nav {
-    display: none;
-  }
-  
   .hero {
-    padding: 6rem 2rem 0;
+    padding: 100px 24px 40px;
+  }
+
+  .heroTitle {
+    font-size: 48px;
+  }
+
+  .heroLamps {
+    flex-direction: row;
+    justify-content: flex-start;
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 16px; /* Space for scrollbar */
+    /* Hide scrollbar for cleaner look */
+    scrollbar-width: none; 
   }
   
-  .heroProductWidget {
+  .heroLamps::-webkit-scrollbar {
     display: none;
   }
-  
-  .categoriesSection, .projectsSection, .arrivalsSection, .storiesSection, .statementSection {
-    padding: 4rem 2rem;
+
+  .heroLampCard {
+    width: 140px;
+    height: 160px;
+    flex-shrink: 0;
   }
-  
-  .aboutSection,
-  .storiesSection,
-  .ctaSection,
-  .footer {
-    padding-left: 2rem;
-    padding-right: 2rem;
+
+  .heroLampCardActive {
+    width: 160px;
+    height: 190px;
+    flex-shrink: 0;
+  }
+
+  .heroInfoCard {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .statementText {
+    font-size: 28px;
+  }
+
+  .categoriesSection {
+    padding: 40px 20px;
+  }
+
+  .categoriesTitle {
+    font-size: 32px;
+  }
+
+  .categoryGrid {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: auto;
+    gap: 16px;
+  }
+
+  .catCard {
+    flex: none;
+    width: 100%;
+    height: 220px;
+    border-top-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+  }
+
+  .newArrivalsGrid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .productCard {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .projectGrid {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .projectCard {
+    height: 280px;
+  }
+
+  .storiesGrid {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .aboutTitle {
+    font-size: 36px;
+  }
+
+  .ctaTitle {
+    font-size: 36px;
+  }
+
+  .ctaBtns {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .statsRow {
+    flex-wrap: wrap;
+  }
+
+  .statCard {
+    flex: 0 0 calc(50% - 12px);
+    height: 160px;
   }
 }

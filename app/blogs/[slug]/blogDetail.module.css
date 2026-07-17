@@ -41,7 +41,7 @@
 }
 
 .heroTitle {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-libre), serif;
   font-size: 3rem;
   line-height: 1.1;
 }
@@ -96,7 +96,7 @@
 }
 
 .contentSubtitle {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-libre), serif;
   font-size: 1.5rem;
   color: var(--color-primary);
   margin-top: 2rem;

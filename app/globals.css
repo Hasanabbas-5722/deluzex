@@ -1,24 +1,31 @@
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap');
+
 :root {
   --color-primary: #C89B60;
   --color-primary-hover: #b28850;
-  --color-bg: #F9F6F0;
+  --color-stroke: #d8a56e;
+  --color-bg: #f8f1ea;
   --color-bg-dark: #111111;
-  --color-text: #222222;
+  --color-text: #000000;
   --color-text-light: #666666;
   --color-white: #ffffff;
+  --font-libre: 'Libre Caslon Display', serif;
+  --font-inter: 'Inter', sans-serif;
 }
 
 body {
   margin: 0;
   padding: 0;
+  padding-top: 80px; /* offset for fixed header */
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family: 'General Sans', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-libre), serif;
   margin: 0;
   font-weight: normal;
 }

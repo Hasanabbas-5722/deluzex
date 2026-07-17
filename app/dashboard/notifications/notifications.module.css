@@ -1,0 +1,260 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1000px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-family: var(--font-libre), serif;
+  font-size: 2rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--color-text-light);
+  font-size: 0.85rem;
+}
+
+.btnAdd {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
+}
+
+.btnAdd:hover {
+  background: var(--color-primary-hover);
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.listHeader h2 {
+  font-size: 1rem;
+  font-family: var(--font-inter), sans-serif;
+  color: var(--color-text);
+}
+
+.btnClear {
+  color: #ef4444;
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnClear:hover {
+  text-decoration: underline;
+}
+
+.notificationList {
+  display: flex;
+  flex-direction: column;
+}
+
+.notifItem {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.notifIcon {
+  width: 40px;
+  height: 40px;
+  background: #fdf5ea;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.notifContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notifContent h3 {
+  font-size: 0.95rem;
+  font-family: var(--font-inter), sans-serif;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.notifContent p {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  line-height: 1.5;
+}
+
+.notifTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.tagMeeting {
+  background: #e0e7ff;
+  color: #4338ca;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.notifMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.textWarning {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #d97706;
+}
+
+.date {
+  color: var(--color-text-light);
+}
+
+.notifActions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.btnSecondary {
+  background: #fdf5ea;
+  color: var(--color-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btnSecondary:hover {
+  background: #f6e6d1;
+}
+
+.btnDismiss {
+  background: #fff1f2;
+  color: #ef4444;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btnDismiss:hover {
+  background: #ffe4e6;
+}
+
+.settingsBanner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #fdfaf5;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.05);
+  margin-top: 1rem;
+}
+
+.settingsIconWrapper {
+  width: 40px;
+  height: 40px;
+  background: #f3f4f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  flex-shrink: 0;
+}
+
+.settingsContent {
+  flex: 1;
+}
+
+.settingsContent h3 {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  margin-bottom: 0.2rem;
+}
+
+.settingsContent p {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+.btnSecondaryOutline {
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btnSecondaryOutline:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .settingsBanner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .notifTitleRow {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .notifMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
