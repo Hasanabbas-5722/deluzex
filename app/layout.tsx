@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import ConditionalFooter from "./components/ConditionalFooter";
 import { CartProvider } from "./context/CartContext";
 import CartSidebar from "./components/CartSidebar";
+import MainSidebar from "./components/MainSidebar";
 
 const libre = Libre_Caslon_Display({
   weight: "400",
@@ -41,6 +42,7 @@ export default function RootLayout({
               {children}
               <ConditionalFooter />
               <CartSidebar />
+              <MainSidebar />
             </CartProvider>
           </SidebarProvider>
         </AuthProvider>

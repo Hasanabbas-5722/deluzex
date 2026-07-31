@@ -4,18 +4,46 @@ import styles from "./shop.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "../context/CartContext";
+import { useEffect, useState } from "react";
+import { fetchCategories, fetchProducts, Category, Product } from "../services/api";
 
 export default function Shop() {
   const { openCart } = useCart();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+  
+  const totalPages = Math.ceil(products.length / itemsPerPage) || 1;
+  const currentProducts = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const products = [
-    { id: 1, name: "AURORA CHANDELIER", price: "£800", image: "/images/lamp_modern_tall_1784107732736.jpg", stock: 8 },
-    { id: 2, name: "VERA CHANDELIER", price: "£1,200", image: "/images/lamp_classic_1784107722127.jpg", stock: 3 },
-    { id: 3, name: "LUMINA PENDANT", price: "£450", image: "/images/lamp_black_gold_1784107745696.jpg", stock: 15 },
-    { id: 4, name: "CRYSTAL CASCADE", price: "£2,500", image: "/images/category_chandelier_1784107756268.jpg", stock: 2 },
-    { id: 5, name: "MODERNIST WALL SCONCE", price: "£220", image: "/images/lamp_modern_tall_1784107732736.jpg", stock: 24 },
-    { id: 6, name: "ELEGANCE TABLE LAMP", price: "£350", image: "/images/lamp_classic_1784107722127.jpg", stock: 12 },
-  ];
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [cats, prods] = await Promise.all([
+          fetchCategories(),
+          fetchProducts()
+        ]);
+        setCategories(cats);
+        setProducts(prods);
+      } catch (error) {
+        console.error("Failed to load shop data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
 
   return (
     <main className={styles.main}>
@@ -26,60 +54,133 @@ export default function Shop() {
         </div>
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
-          <p className={styles.heroSub}>EXPLORE OUR COLLECTION</p>
-          <h1 className={styles.heroTitle}>The Shop</h1>
+          <h1 className={styles.heroTitle}>Timeless<br/>Illumination</h1>
+          <p className={styles.heroSub}>Luxury Lighting Designed For Modern Interiors.</p>
         </div>
       </section>
 
-      <section className={styles.shopSection}>
-        {/* SIDEBAR FILTERS */}
-        <aside className={styles.sidebar}>
-          <div className={styles.filterGroup}>
-            <h3>Categories</h3>
-            <label><input type="checkbox" /> All Lighting</label>
-            <label><input type="checkbox" /> Chandeliers</label>
-            <label><input type="checkbox" /> Pendants</label>
-            <label><input type="checkbox" /> Wall Lights</label>
-            <label><input type="checkbox" /> Table Lamps</label>
-          </div>
-          <div className={styles.filterGroup}>
-            <h3>Price Range</h3>
-            <label><input type="checkbox" /> £0 - £500</label>
-            <label><input type="checkbox" /> £500 - £1,000</label>
-            <label><input type="checkbox" /> £1,000 - £2,500</label>
-            <label><input type="checkbox" /> £2,500+</label>
-          </div>
-        </aside>
-
-        {/* PRODUCT GRID */}
-        <div className={styles.productGrid}>
-          {products.map((product) => (
-            <div key={product.id} className={styles.productCardFull}>
-              <Link href={`/product/${product.id}`}>
-                <div className={styles.productImgWrapper}>
-                  <Image src={product.image} alt={product.name} fill style={{ objectFit: 'contain' }} />
-                </div>
-              </Link>
-              <button className={styles.btnCartRound} onClick={openCart}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-              </button>
-              
-              <div className={styles.productInfoFull}>
-                <div className={styles.piLeft}>
-                  <h4>{product.name}</h4>
-                  <div className={styles.stockInfo}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>
-                    <span>In Stock ({product.stock} items)</span>
-                  </div>
-                </div>
-                <div className={styles.piRight}>
-                  <div className={styles.stars}>★★★★★ <span>(14)</span></div>
-                  <div className={styles.price}>{product.price}</div>
-                </div>
+      {/* CATEGORIES SECTION */}
+      <section className={styles.categoriesSection}>
+        <div className={styles.sectionHeader}>
+          <p className={styles.sectionSub}>Lighting for every interior</p>
+          <h2 className={styles.sectionTitle}>Discover Our Categories</h2>
+        </div>
+        <div className={styles.categoriesGrid}>
+          {categories.map((cat, i) => (
+            <div key={cat.id || i} className={styles.categoryCard}>
+              <Image src={cat.image_url || "/images/category_chandelier_1784107756268.jpg"} alt={cat.name} fill style={{ objectFit: 'cover' }} />
+              <div className={styles.categoryOverlay}>
+                <h3 className={styles.categoryTitle}>{cat.name}</h3>
               </div>
             </div>
           ))}
         </div>
+      </section>
+
+      {/* FILTER BAR */}
+      <section className={styles.filterBar}>
+        <div className={styles.filterPills}>
+          <button className={styles.pill}>Pendant Lights</button>
+          <button className={styles.pill}>COB Lights</button>
+          <button className={styles.pill}>Table Lights</button>
+          <button className={styles.pill}>Wall Lights</button>
+        </div>
+        <div className={styles.sortBy}>
+          <span>SORT BY :</span>
+          <select className={styles.sortSelect}>
+            <option>FEATURED</option>
+            <option>PRICE: LOW TO HIGH</option>
+            <option>PRICE: HIGH TO LOW</option>
+            <option>NEWEST ARRIVALS</option>
+          </select>
+        </div>
+      </section>
+
+      {/* PRODUCT GRID */}
+      <section className={styles.productsSection}>
+        <div className={styles.productGrid}>
+          {loading ? (
+            <p>Loading products...</p>
+          ) : currentProducts.length === 0 ? (
+            <p>No products found.</p>
+          ) : (
+            currentProducts.map((product, i) => (
+              <div key={product._id || i} className={styles.productCard}>
+                <Link href={`/product/${product._id}`}>
+                  <div className={styles.productImageWrapper}>
+                    <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title} fill style={{ objectFit: 'contain' }} />
+                    <button 
+                      className={styles.addToCartBtn} 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openCart();
+                      }}
+                      aria-label="Add to cart"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+  <path d="M0 0h24v24H0V0z" fill="none"/>
+  <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-8.9-5h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4l-3.87 7H8.53L4.27 2H1v2h2l3.6 7.59L3.62 17H19v-2H7l1.1-2z"/>
+</svg>   
+                    </button>
+                  </div>
+                </Link>
+                
+                <div className={styles.productInfo}>
+                  <div className={styles.productInfoRow}>
+                    <h4 className={styles.productName}>{product.product_title}</h4>
+                    <div className={styles.productPrice}>${product.product_price}</div>
+                  </div>
+                  <div className={styles.productRating}>
+                    <svg className={styles.starIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    {product.product_rating || 3} ({product.reviews_count || 0} Reviews)
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* PAGINATION */}
+        {!loading && totalPages > 1 && (
+          <div className={styles.pagination}>
+            <div 
+              className={styles.pageNav} 
+              onClick={() => handlePageChange(currentPage - 1)}
+              style={{ opacity: currentPage === 1 ? 0.5 : 1, pointerEvents: currentPage === 1 ? 'none' : 'auto' }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              Previous
+            </div>
+            
+            {Array.from({ length: totalPages }).map((_, index) => {
+              const pageNum = index + 1;
+              return (
+                <div 
+                  key={pageNum}
+                  className={`${styles.pageItem} ${currentPage === pageNum ? styles.pageActive : ''}`}
+                  onClick={() => handlePageChange(pageNum)}
+                >
+                  {pageNum}
+                </div>
+              );
+            })}
+            
+            <div 
+              className={styles.pageNav} 
+              onClick={() => handlePageChange(currentPage + 1)}
+              style={{ opacity: currentPage === totalPages ? 0.5 : 1, pointerEvents: currentPage === totalPages ? 'none' : 'auto' }}
+            >
+              Next
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );

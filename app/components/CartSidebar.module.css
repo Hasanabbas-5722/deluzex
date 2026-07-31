@@ -189,6 +189,18 @@
 
 @media (max-width: 500px) {
   .sidebar {
-    width: 100%;
+    width: 85%;
+  }
+  
+  .header {
+    padding: 1.5rem;
+  }
+  
+  .cartItems {
+    padding: 0 1.5rem;
+  }
+  
+  .footer {
+    padding: 1.5rem;
   }
 }

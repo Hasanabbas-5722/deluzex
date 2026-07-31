@@ -1,8 +1,12 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Link from "next/link";
+import { fetchCategories, fetchProducts } from "./services/api";
 
-export default function Home() {
+export default async function Home() {
+  const categories = await fetchCategories();
+  const products = await fetchProducts("is_new_arrival=true"); // Assuming backend supports sorting
+
   return (
     <main className={styles.main}>
 
@@ -101,25 +105,37 @@ export default function Home() {
           <h2 className={styles.categoriesTitle}>Discover Our Categories</h2>
         </div>
         <div className={styles.categoryGrid}>
-          {/* Card 1 - no label */}
-          <div className={styles.catCard}>
-            <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
-          </div>
-          {/* Card 2 - Active with golden border + Chandeliers label */}
-          <div className={`${styles.catCard} ${styles.catCardActive}`}>
-            <Image src="/images/category_chandelier_1784107756268.jpg" alt="Chandeliers" fill style={{ objectFit: "cover" }} />
-            <div className={styles.catCardLabel}>
-              <span>Chandeliers</span>
-            </div>
-          </div>
-          {/* Card 3 - no label */}
-          <div className={styles.catCard}>
-            <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
-          </div>
-          {/* Card 4 - no label */}
-          <div className={styles.catCard}>
-            <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
-          </div>
+          {categories.length > 0 ? (
+            categories.slice(0, 4).map((cat: any, i: number) => (
+              <div key={cat.id || i} className={`${styles.catCard} ${i === 1 ? styles.catCardActive : ''}`}>
+                <Image src={cat.image_url || "/images/category_chandelier_1784107756268.jpg"} alt={cat.name || "Category"} fill style={{ objectFit: "cover" }} />
+                {i === 1 && (
+                  <div className={styles.catCardLabel}>
+                    <span>{cat.name}</span>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <>
+              {/* Fallback layout if no API data */}
+              <div className={styles.catCard}>
+                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
+              </div>
+              <div className={`${styles.catCard} ${styles.catCardActive}`}>
+                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Chandeliers" fill style={{ objectFit: "cover" }} />
+                <div className={styles.catCardLabel}>
+                  <span>Chandeliers</span>
+                </div>
+              </div>
+              <div className={styles.catCard}>
+                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
+              </div>
+              <div className={styles.catCard}>
+                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
+              </div>
+            </>
+          )}
         </div>
         <button className={styles.btnExploreCat}>Explore Categories</button>
       </section>
@@ -135,78 +151,38 @@ export default function Home() {
           </p>
         </div>
         <div className={styles.newArrivalsGrid}>
-          {/* Card 1 */}
-          <div className={styles.productCard}>
-            <div className={styles.productCardImg}>
-              <Image src="/images/lamp_modern_tall_1784107732736.jpg" alt="Aurora Chandelier" fill style={{ objectFit: "contain" }} />
-              <button className={styles.productAddBtn}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-            </div>
-            <div className={styles.productCardInfo}>
-              <div className={styles.productCardLeft}>
-                <h4 className={styles.productCardName}>AURORA CHANDELIER</h4>
-                <div className={styles.productCardRating}>
-                  <span className={styles.productStar}>★</span>
-                  <span className={styles.productRatingText}>4.8 ( 300 Reviews )</span>
+          {products.length > 0 ? (
+            products.slice(0, 3).map((product: any, i: number) => {
+              const isCenter = i === 1; // Assuming 3 items, the middle one is featured
+              return (
+                <div key={product._id || i} className={`${styles.productCard} ${isCenter ? styles.productCardFeatured : ''}`}>
+                  <div className={`${styles.productCardImg} ${isCenter ? styles.productCardImgActive : ''}`}>
+                    <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.name} fill style={{ objectFit: "cover" }} />
+                    <button className={styles.productAddBtn}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className={styles.productCardInfo}>
+                    <div className={styles.productCardLeft}>
+                      <h4 className={styles.productCardName}>{product.product_title || "Product Name"}</h4>
+                      <div className={styles.productCardRating}>
+                        <span className={styles.productStar}>★</span>
+                        <span className={styles.productRatingText}>{product.product_rating || "4.8"} ( {product.reviews_count || "300"} Reviews )</span>
+                      </div>
+                    </div>
+                    <div className={styles.productCardRight}>
+                      <span className={styles.productCardPrice}>₹{product.product_price}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className={styles.productCardRight}>
-                <span className={styles.productCardPrice}>$300</span>
-              </div>
-            </div>
-          </div>
-          {/* Card 2 - Active/Featured (center, larger) */}
-          <div className={`${styles.productCard} ${styles.productCardFeatured}`}>
-            <div className={`${styles.productCardImg} ${styles.productCardImgActive}`}>
-              <Image src="/images/lamp_classic_1784107722127.jpg" alt="Aurora Chandelier" fill style={{ objectFit: "contain" }} />
-              <button className={styles.productAddBtn}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-            </div>
-            <div className={styles.productCardInfo}>
-              <div className={styles.productCardLeft}>
-                <h4 className={styles.productCardName}>AURORA CHANDELIER</h4>
-                <div className={styles.productCardRating}>
-                  <span className={styles.productStar}>★</span>
-                  <span className={styles.productRatingText}>4.8 ( 300 Reviews )</span>
-                </div>
-              </div>
-              <div className={styles.productCardRight}>
-                <span className={styles.productCardPrice}>$300</span>
-              </div>
-            </div>
-          </div>
-          {/* Card 3 */}
-          <div className={styles.productCard}>
-            <div className={styles.productCardImg}>
-              <Image src="/images/lamp_black_gold_1784107745696.jpg" alt="Aurora Chandelier" fill style={{ objectFit: "contain" }} />
-              <button className={styles.productAddBtn}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-            </div>
-            <div className={styles.productCardInfo}>
-              <div className={styles.productCardLeft}>
-                <h4 className={styles.productCardName}>AURORA CHANDELIER</h4>
-                <div className={styles.productCardRating}>
-                  <span className={styles.productStar}>★</span>
-                  <span className={styles.productRatingText}>4.8 ( 300 Reviews )</span>
-                </div>
-              </div>
-              <div className={styles.productCardRight}>
-                <span className={styles.productCardPrice}>$300</span>
-              </div>
-            </div>
-          </div>
+              );
+            })
+          ) : (
+            <p style={{ textAlign: 'center', width: '100%', gridColumn: '1 / -1' }}>No products found.</p>
+          )}
         </div>
         <div className={styles.arrowGroup}>
           <button className={styles.arrowOutline}>
