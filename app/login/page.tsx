@@ -126,7 +126,7 @@ export default function Login() {
 
     try {
       if (isLogin) {
-        const response = await fetch("https://deluzexlighting.com/api/v1/auth/login", {
+        const response = await fetch("https://api.deluzexlighting.com/api/v1/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -147,7 +147,7 @@ export default function Login() {
           setToast({ type: "error", message: data.detail || "Login failed." });
         }
       } else {
-        const response = await fetch("https://deluzexlighting.com/api/v1/auth/register", {
+        const response = await fetch("https://api.deluzexlighting.com/api/v1/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
