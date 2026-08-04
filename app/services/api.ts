@@ -1,4 +1,8 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://deluzexlighting.com/api/v1";
+
+type JsonObject = Record<string, unknown>;
+
+type ApiMutationBody = JsonObject | FormData;
 
 export interface Category {
   id: string | number;
@@ -99,7 +103,7 @@ export async function fetchProductById(id: string): Promise<Product | null> {
 
 // --- ADMIN MUTATIONS ---
 
-export async function createProduct(productData: any) {
+export async function createProduct(productData: ApiMutationBody) {
   const isFormData = productData instanceof FormData;
   const res = await fetch(`${API_BASE_URL}/products`, {
     method: 'POST',
@@ -110,7 +114,7 @@ export async function createProduct(productData: any) {
   return res.json();
 }
 
-export async function updateProduct(id: string | number, productData: any) {
+export async function updateProduct(id: string | number, productData: ApiMutationBody) {
   const isFormData = productData instanceof FormData;
   const res = await fetch(`${API_BASE_URL}/products/${id}`, {
     method: 'PUT',
@@ -130,7 +134,7 @@ export async function deleteProduct(id: string | number) {
   return res.json();
 }
 
-export async function createCategory(categoryData: any) {
+export async function createCategory(categoryData: JsonObject) {
   const res = await fetch(`${API_BASE_URL}/categories`, {
     method: 'POST',
     headers: getAuthHeaders(),
@@ -140,7 +144,7 @@ export async function createCategory(categoryData: any) {
   return res.json();
 }
 
-export async function updateCategory(id: string | number, categoryData: any) {
+export async function updateCategory(id: string | number, categoryData: JsonObject) {
   const res = await fetch(`${API_BASE_URL}/categories/${id}`, {
     method: 'PUT',
     headers: getAuthHeaders(),

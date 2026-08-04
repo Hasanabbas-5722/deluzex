@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "../admin.module.css";
 import { fetchProducts, deleteProduct, Product } from "../../services/api";
@@ -72,7 +73,7 @@ export default function AdminProducts() {
                   <tr key={prod._id}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        {prod.product_main_image && <img src={prod.product_main_image} alt={prod.product_title} className={styles.tableImage} />}
+                        {prod.product_main_image && <Image src={prod.product_main_image} alt={prod.product_title} width={48} height={48} className={styles.tableImage} />}
                         {/* <span style={{ fontWeight: 600 }}>{prod.product_title}</span> */}
                       </div>
                     </td>

@@ -12,15 +12,15 @@ export default function Contact() {
       <section className={styles.contactSection}>
         <div className={styles.leftCol}>
           <p className={styles.signatureText}>signature lighting collection</p>
-          <h1 className={styles.title}>We'd Love To Hear From You</h1>
+          <h1 className={styles.title}>We do Love To Hear From You</h1>
           
           <div className={styles.description}>
             <p>Looking for the perfect lighting solution?</p>
             <p>Planning a residential or commercial project?</p>
             <p>Need a custom lighting design?</p>
             <p>Want expert guidance before making a purchase?</p>
-            <p>Whether you're designing a luxury residence, hotel, restaurant, or workspace, our team is here to help bring your vision to life.</p>
-            <p className={styles.responseNote}>Get in touch with us and we'll respond within 24 hours.</p>
+            <p>Whether you are designing a luxury residence, hotel, restaurant, or workspace, our team is here to help bring your vision to life.</p>
+            <p className={styles.responseNote}>Get in touch with us and we will respond within 24 hours.</p>
           </div>
 
           <div className={styles.contactInfo}>

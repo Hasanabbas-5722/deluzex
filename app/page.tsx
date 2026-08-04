@@ -1,6 +1,5 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import Link from "next/link";
 import { fetchCategories, fetchProducts } from "./services/api";
 
 export default async function Home() {
@@ -106,7 +105,7 @@ export default async function Home() {
         </div>
         <div className={styles.categoryGrid}>
           {categories.length > 0 ? (
-            categories.slice(0, 4).map((cat: any, i: number) => (
+            categories.slice(0, 4).map((cat, i: number) => (
               <div key={cat.id || i} className={`${styles.catCard} ${i === 1 ? styles.catCardActive : ''}`}>
                 <Image src={cat.image_url || "/images/category_chandelier_1784107756268.jpg"} alt={cat.name || "Category"} fill style={{ objectFit: "cover" }} />
                 {i === 1 && (
@@ -152,12 +151,12 @@ export default async function Home() {
         </div>
         <div className={styles.newArrivalsGrid}>
           {products.length > 0 ? (
-            products.slice(0, 3).map((product: any, i: number) => {
+            products.slice(0, 3).map((product, i: number) => {
               const isCenter = i === 1; // Assuming 3 items, the middle one is featured
               return (
                 <div key={product._id || i} className={`${styles.productCard} ${isCenter ? styles.productCardFeatured : ''}`}>
                   <div className={`${styles.productCardImg} ${isCenter ? styles.productCardImgActive : ''}`}>
-                    <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.name} fill style={{ objectFit: "cover" }} />
+                    <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title} fill style={{ objectFit: "cover" }} />
                     <button className={styles.productAddBtn}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -170,7 +169,7 @@ export default async function Home() {
                       <h4 className={styles.productCardName}>{product.product_title || "Product Name"}</h4>
                       <div className={styles.productCardRating}>
                         <span className={styles.productStar}>★</span>
-                        <span className={styles.productRatingText}>{product.product_rating || "4.8"} ( {product.reviews_count || "300"} Reviews )</span>
+                        <span className={styles.productRatingText}>{product.product_rating || "4.8"} ( 300 Reviews )</span>
                       </div>
                     </div>
                     <div className={styles.productCardRight}>

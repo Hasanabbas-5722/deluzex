@@ -33,7 +33,7 @@ export default function BlogDetail() {
             One of the biggest mistakes people make when choosing a chandelier is selecting the wrong size. A chandelier that is too small will look lost in a large room, while one that is too large can overwhelm the space and make it feel cramped.
           </p>
           <p>
-            To find the right size, add the dimensions of the room together in feet and convert that number to inches. For example, if your room is 12x14 feet, the diameter of your chandelier should be around 26 inches (12 + 14 = 26). This is a general rule of thumb, but it’s a good starting point.
+            To find the right size, add the dimensions of the room together in feet and convert that number to inches. For example, if your room is 12x14 feet, the diameter of your chandelier should be around 26 inches (12 + 14 = 26). This is a general rule of thumb, but it&apos;s a good starting point.
           </p>
 
           <div className={styles.articleImage}>
@@ -54,7 +54,7 @@ export default function BlogDetail() {
           </div>
 
           <p>
-            For living rooms, consider the ceiling height. If you have standard 8-foot ceilings, look for a chandelier that isn't too tall or one that can be flush-mounted. If you have vaulted ceilings, a large, dramatic fixture can draw the eye upward and emphasize the height of the room.
+            For living rooms, consider the ceiling height. If you have standard 8-foot ceilings, look for a chandelier that isn&apos;t too tall or one that can be flush-mounted. If you have vaulted ceilings, a large, dramatic fixture can draw the eye upward and emphasize the height of the room.
           </p>
 
           <h3 className={styles.contentSubtitle}>3. Layer Your Lighting</h3>

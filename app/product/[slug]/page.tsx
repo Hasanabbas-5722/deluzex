@@ -20,7 +20,6 @@ export default function ProductDetail() {
   // UI State
   const [qty, setQty] = useState(1);
   const [activeThumb, setActiveThumb] = useState(0);
-  const [openSpec, setOpenSpec] = useState<string | null>("dimensions");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   useEffect(() => {
@@ -49,11 +48,6 @@ export default function ProductDetail() {
   if (!product) {
     return <main className={styles.main}><p style={{padding: '2rem 6rem'}}>Product not found.</p></main>;
   }
-
-  const thumbnails = [
-    product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg",
-    ...(product.product_images || ["/images/lamp_classic_1784107722127.jpg", "/images/category_chandelier_1784107756268.jpg", "/images/about_chandelier_1784107790569.jpg"])
-  ];
 
   return (
     <main className={styles.main}>

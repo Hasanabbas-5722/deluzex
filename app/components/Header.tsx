@@ -14,15 +14,14 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
 
   const isHome = pathname === "/";
-  const isDashboard = pathname.startsWith("/dashboard");
 
   // Listen to scroll only on home page
   useEffect(() => {
     if (!isHome) return;
+
     const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    // Reset when leaving home
-    setScrolled(window.scrollY > 60);
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
