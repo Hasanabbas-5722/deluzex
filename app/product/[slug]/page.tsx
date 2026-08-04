@@ -61,7 +61,7 @@ export default function ProductDetail() {
           
           <div className={styles.starsRow}>
             <div className={styles.stars}>{ "★".repeat(Math.floor(product.product_rating || 3))}{ "☆".repeat(5 - Math.floor(product.product_rating || 3)) }</div>
-            <span className={styles.reviewCount}>{product.product_rating || 3.0} ({product.reviews_count || 35} Reviews)</span>
+            <span className={styles.reviewCount}>{product.product_rating || 3.0} ({35} Reviews)</span>
           </div>
 
 
@@ -106,10 +106,10 @@ export default function ProductDetail() {
 
         <div className={styles.heroRight}>
           <div className={styles.mainImageContainer}>
-            <Image src={product.product_images[activeThumb]} alt={product.product_title} fill style={{ objectFit: 'cover' }} />
+            <Image src={product?.product_images?.[activeThumb] || product?.product_main_image || ""} alt={product?.product_title} fill style={{ objectFit: 'cover' }} />
           </div>
           <div className={styles.thumbnailsCol}>
-            {product.product_images.map((thumb, idx) => (
+            {product?.product_images?.map((thumb, idx) => (
               <div 
                 key={idx} 
                 className={`${styles.thumbnail} ${activeThumb === idx ? styles.thumbnailActive : ''}`}
@@ -153,7 +153,7 @@ export default function ProductDetail() {
           <div className={styles.ratingScore}>
             <h3>{product.product_rating || 4.8}</h3>
             <div className={styles.stars}>{ "★".repeat(Math.floor(product.product_rating || 3))}{ "☆".repeat(5 - Math.floor(product.product_rating || 3)) }</div>
-            <p>{product.reviews_count || 35} Reviews</p>
+            <p>{35} Reviews</p>
           </div>
           <div className={styles.ratingBars}>
             {[
@@ -230,10 +230,10 @@ export default function ProductDetail() {
         
         <div className={styles.ctlGrid}>
           {relatedProducts.slice(0,3).map((prod, i) => (
-            <div key={prod.id || i} className={styles.productCard}>
-              <Link href={`/product/${prod.id}`}>
+            <div key={prod._id || i} className={styles.productCard}>
+              <Link href={`/product/${prod._id}`}>
                 <div className={styles.productImageWrapper}>
-                  <Image src={prod.image_url || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.name} fill style={{ objectFit: 'contain' }} />
+                  <Image src={prod.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.product_title} fill style={{ objectFit: 'contain' }} />
                   <button 
                     className={styles.addToCartBtn} 
                     onClick={(e) => {
@@ -250,14 +250,14 @@ export default function ProductDetail() {
               </Link>
               
               <div className={styles.productInfoRow}>
-                <h4 className={styles.productName}>{prod.name}</h4>
-                <div className={styles.productPrice}>${prod.price}</div>
+                <h4 className={styles.productName}>{prod.product_title}</h4>
+                <div className={styles.productPrice}>${prod.product_price}</div>
               </div>
               <div className={styles.productRating}>
                 <svg className={styles.starIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
-                {prod.rating || "4.8"} ({prod.reviews_count || "750"} Reviews)
+                {"4.8"} ({35} Reviews)
               </div>
             </div>
           ))}
