@@ -10,6 +10,7 @@ export default function OrderSuccessPage() {
   useEffect(() => {
     // Generate a random 6 digit order number purely for display
     const randomOrderNum = Math.floor(100000 + Math.random() * 900000);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOrderNumber(`ORD-${randomOrderNum}`);
   }, []);
 

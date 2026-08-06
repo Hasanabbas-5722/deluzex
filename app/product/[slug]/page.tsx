@@ -4,7 +4,7 @@ import styles from "./productDetail.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../store/cartSlice";
+import { addToCart, openCart } from "../../store/cartSlice";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchProductById, fetchProducts, Product } from "../../services/api";

@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Header.module.css";
-import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { openCart } from "../store/cartSlice";
 import { useSidebar } from "../context/SidebarContext";

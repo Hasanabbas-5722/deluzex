@@ -24,11 +24,22 @@ const calculateTotal = (items: CartItem[]) => {
   return items.reduce((total, item) => total + item.price * item.quantity, 0);
 };
 
+export interface AddToCartPayload {
+  _id?: string | number;
+  id?: string | number;
+  product_title?: string;
+  name?: string;
+  product_price?: number;
+  price?: number;
+  product_main_image?: string;
+  image_url?: string;
+}
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<any>) => {
+    addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
       const product = action.payload;
       const productId = product._id || product.id;
       

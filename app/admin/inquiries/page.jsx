@@ -9,13 +9,13 @@ export default function AdminInquiries() {
   const [loading, setLoading] = useState(true);
 
   const loadInquiries = async () => {
-    setLoading(true);
     const data = await fetchInquiries();
     setInquiries(data);
     setLoading(false);
   };
   
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadInquiries();
   }, []);
 
