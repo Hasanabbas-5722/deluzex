@@ -29,8 +29,8 @@ export interface AddToCartPayload {
   id?: string | number;
   product_title?: string;
   name?: string;
-  product_price?: number;
-  price?: number;
+  product_price?: number | string;
+  price?: number | string;
   product_main_image?: string;
   image_url?: string;
 }
