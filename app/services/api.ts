@@ -162,3 +162,40 @@ export async function deleteCategory(id: string | number) {
   if (!res.ok) throw new Error('Failed to delete category');
   return res.json();
 }
+
+export async function submitContactForm(contactData: JsonObject) {
+  const res = await fetch(`${API_BASE_URL}/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(contactData)
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Failed to submit contact form');
+  }
+  return res.json();
+}
+
+export interface Inquiry {
+  _id: string | number;
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+  createdAt?: string;
+}
+
+export async function fetchInquiries(): Promise<Inquiry[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/contact`, {
+      headers: getAuthHeaders(),
+      next: { revalidate: 60 }
+    });
+    if (!res.ok) throw new Error("Failed to fetch inquiries");
+    const data = await res.json();
+    return data.data || data || [];
+  } catch (error) {
+    console.error("Error fetching inquiries:", error);
+    return [];
+  }
+}

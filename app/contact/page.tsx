@@ -1,7 +1,44 @@
+"use client";
+
 import styles from "./contact.module.css";
 import Link from "next/link";
+import { useState } from "react";
+import { submitContactForm } from "../services/api";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: ""
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMessage("");
+    try {
+      await submitContactForm(formData);
+      setStatus("success");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (error: unknown) {
+      setStatus("error");
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else if (typeof error === "string") {
+        setErrorMessage(error);
+      } else {
+        setErrorMessage("Something went wrong. Please try again.");
+      }
+    }
+  };
+
   return (
     <main className={styles.main}>
       <div className={styles.breadcrumb}>
@@ -47,24 +84,30 @@ export default function Contact() {
         </div>
 
         <div className={styles.rightCol}>
-          <form className={styles.contactForm}>
+          <form className={styles.contactForm} onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label>Name</label>
-              <input type="text" placeholder="Enter your name" />
+              <input type="text" name="name" placeholder="Enter your name" value={formData.name} onChange={handleChange} required />
             </div>
             <div className={styles.formGroup}>
               <label>Email<span className={styles.required}>*</span></label>
-              <input type="email" placeholder="Enter your mail" />
+              <input type="email" name="email" placeholder="Enter your mail" value={formData.email} onChange={handleChange} required />
             </div>
             <div className={styles.formGroup}>
               <label>Phone</label>
-              <input type="tel" placeholder="Enter your Number" />
+              <input type="tel" name="phone" placeholder="Enter your Number" value={formData.phone} onChange={handleChange} />
             </div>
             <div className={styles.formGroup}>
-              <label>Placeholder</label>
-              <textarea placeholder="Placeholder" rows={6}></textarea>
+              <label>Message</label>
+              <textarea name="message" placeholder="How can we help?" rows={6} value={formData.message} onChange={handleChange} required></textarea>
             </div>
-            <button type="submit" className={styles.submitBtn}>Submit</button>
+            
+            {status === "error" && <p style={{ color: "#ef4444", fontSize: "0.9rem", marginBottom: "1rem" }}>{errorMessage}</p>}
+            {status === "success" && <p style={{ color: "#10b981", fontSize: "0.9rem", marginBottom: "1rem" }}>Thank you! Your message has been sent successfully.</p>}
+            
+            <button type="submit" className={styles.submitBtn} disabled={status === "loading"}>
+              {status === "loading" ? "Sending..." : "Submit"}
+            </button>
           </form>
         </div>
       </section>

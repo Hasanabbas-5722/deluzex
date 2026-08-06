@@ -3,13 +3,14 @@
 import styles from "./productDetail.module.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "../../context/CartContext";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/cartSlice";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchProductById, fetchProducts, Product } from "../../services/api";
 
 export default function ProductDetail() {
-  const { openCart } = useCart();
+  const dispatch = useDispatch();
   const params = useParams();
   
   // Data State
@@ -99,7 +100,7 @@ export default function ProductDetail() {
               <span>{qty}</span>
               <button onClick={() => setQty(qty + 1)}>+</button>
             </div>
-            <button className={styles.btnPrimary} onClick={openCart}>Add To Bag</button>
+            <button className={styles.btnPrimary} onClick={() => dispatch(addToCart(product))}>Add To Bag</button>
             <button className={styles.btnOutline}>Add To Wishlist</button>
           </div>
         </div>

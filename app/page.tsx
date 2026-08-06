@@ -1,10 +1,11 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { fetchCategories, fetchProducts } from "./services/api";
+import AddToCartButton from "./components/AddToCartButton";
 
 export default async function Home() {
   const categories = await fetchCategories();
-  const products = await fetchProducts("is_new_arrival=true"); // Assuming backend supports sorting
+  const products = await fetchProducts("limit=8");
 
   return (
     <main className={styles.main}>
@@ -108,11 +109,11 @@ export default async function Home() {
             categories.slice(0, 4).map((cat, i: number) => (
               <div key={cat.id || i} className={`${styles.catCard} ${i === 1 ? styles.catCardActive : ''}`}>
                 <Image src={cat.image_url || "/images/category_chandelier_1784107756268.jpg"} alt={cat.name || "Category"} fill style={{ objectFit: "cover" }} />
-                {i === 1 && (
+                
                   <div className={styles.catCardLabel}>
                     <span>{cat.name}</span>
                   </div>
-                )}
+                
               </div>
             ))
           ) : (
@@ -136,7 +137,7 @@ export default async function Home() {
             </>
           )}
         </div>
-        <button className={styles.btnExploreCat}>Explore Categories</button>
+        {/* <button className={styles.btnExploreCat}>Explore Categories</button> */}
       </section>
 
       {/* ===================== NEW ARRIVALS SECTION ===================== */}
@@ -149,39 +150,37 @@ export default async function Home() {
             And Timeless Elegance For Modern Interiors.
           </p>
         </div>
-        <div className={styles.newArrivalsGrid}>
-          {products.length > 0 ? (
-            products.slice(0, 3).map((product, i: number) => {
-              const isCenter = i === 1; // Assuming 3 items, the middle one is featured
-              return (
-                <div key={product._id || i} className={`${styles.productCard} ${isCenter ? styles.productCardFeatured : ''}`}>
-                  <div className={`${styles.productCardImg} ${isCenter ? styles.productCardImgActive : ''}`}>
-                    <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title} fill style={{ objectFit: "cover" }} />
-                    <button className={styles.productAddBtn}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg>
-                    </button>
-                  </div>
-                  <div className={styles.productCardInfo}>
-                    <div className={styles.productCardLeft}>
-                      <h4 className={styles.productCardName}>{product.product_title || "Product Name"}</h4>
-                      <div className={styles.productCardRating}>
-                        <span className={styles.productStar}>★</span>
-                        <span className={styles.productRatingText}>{product.product_rating || "4.8"} ( 300 Reviews )</span>
+        <div className={styles.newArrivalsMarquee}>
+          <div className={styles.marqueeTrack}>
+            {[1, 2].map((keyGroup) => (
+              <div key={keyGroup} className={styles.marqueeGroupArrivals}>
+                {products.length > 0 ? (
+                  products.map((product, i: number) => (
+                    <div key={`${keyGroup}-${product._id || i}`} className={styles.productCard}>
+                      <div className={styles.productCardImg}>
+                        <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title || "Product"} fill style={{ objectFit: "cover" }} />
+                        <AddToCartButton product={product} />
+                      </div>
+                      <div className={styles.productCardInfo}>
+                        <div className={styles.productCardLeft}>
+                          <h4 className={styles.productCardName}>{product.product_title || "Product Name"}</h4>
+                          <div className={styles.productCardRating}>
+                            <span className={styles.productStar}>★</span>
+                            <span className={styles.productRatingText}>{product.product_rating || "4.8"} ( 300 Reviews )</span>
+                          </div>
+                        </div>
+                        <div className={styles.productCardRight}>
+                          <span className={styles.productCardPrice}>₹{product.product_price}</span>
+                        </div>
                       </div>
                     </div>
-                    <div className={styles.productCardRight}>
-                      <span className={styles.productCardPrice}>₹{product.product_price}</span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <p style={{ textAlign: 'center', width: '100%', gridColumn: '1 / -1' }}>No products found.</p>
-          )}
+                  ))
+                ) : (
+                  <p style={{ textAlign: 'center', width: '100%' }}>No products found.</p>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
         <div className={styles.arrowGroup}>
           <button className={styles.arrowOutline}>
@@ -330,45 +329,51 @@ export default async function Home() {
       {/* Figma: 1440x856, large Libre Caslon title, 3 testimonial cards, nav arrows */}
       <section className={styles.storiesSection}>
         <h2 className={styles.storiesTitle}>CUSTOMER STORIES</h2>
-        <div className={styles.storiesGrid}>
-          <div className={styles.storyCard}>
-            <div className={styles.storyStars}>★★★★☆</div>
-            <p className={styles.storyText}>
-              The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
-            </p>
-            <div className={styles.storyAuthor}>
-              <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
-              <div className={styles.storyAuthorInfo}>
-                <h5>Anna Clark</h5>
-                <span>Interior Designer</span>
+        <div className={styles.storiesMarquee}>
+          <div className={styles.marqueeTrack}>
+            {[1, 2].map((keyGroup) => (
+              <div key={keyGroup} className={styles.marqueeGroupStories}>
+                <div className={styles.storyCard}>
+                  <div className={styles.storyStars}>★★★★☆</div>
+                  <p className={styles.storyText}>
+                    The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
+                  </p>
+                  <div className={styles.storyAuthor}>
+                    <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
+                    <div className={styles.storyAuthorInfo}>
+                      <h5>Anna Clark</h5>
+                      <span>Interior Designer</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.storyCard}>
+                  <div className={styles.storyStars}>★★★★☆</div>
+                  <p className={styles.storyText}>
+                    The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
+                  </p>
+                  <div className={styles.storyAuthor}>
+                    <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
+                    <div className={styles.storyAuthorInfo}>
+                      <h5>Anna Clark</h5>
+                      <span>Interior Designer</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.storyCard}>
+                  <div className={styles.storyStars}>★★★★☆</div>
+                  <p className={styles.storyText}>
+                    The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
+                  </p>
+                  <div className={styles.storyAuthor}>
+                    <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
+                    <div className={styles.storyAuthorInfo}>
+                      <h5>Anna Clark</h5>
+                      <span>Interior Designer</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className={`${styles.storyCard} ${styles.storyCardActive}`}>
-            <div className={styles.storyStars}>★★★★☆</div>
-            <p className={styles.storyText}>
-              The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
-            </p>
-            <div className={styles.storyAuthor}>
-              <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
-              <div className={styles.storyAuthorInfo}>
-                <h5>Anna Clark</h5>
-                <span>Interior Designer</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.storyCard}>
-            <div className={styles.storyStars}>★★★★☆</div>
-            <p className={styles.storyText}>
-              The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
-            </p>
-            <div className={styles.storyAuthor}>
-              <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
-              <div className={styles.storyAuthorInfo}>
-                <h5>Anna Clark</h5>
-                <span>Interior Designer</span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         <div className={styles.arrowGroup}>

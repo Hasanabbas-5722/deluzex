@@ -3,7 +3,7 @@ import { Libre_Caslon_Display, Italianno } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import ConditionalFooter from "./components/ConditionalFooter";
-import { CartProvider } from "./context/CartContext";
+import { ReduxProvider } from "./store/ReduxProvider";
 import CartSidebar from "./components/CartSidebar";
 import MainSidebar from "./components/MainSidebar";
 
@@ -37,13 +37,13 @@ export default function RootLayout({
       <body className={`${libre.variable} ${italianno.variable}`}>
         <AuthProvider>
           <SidebarProvider>
-            <CartProvider>
+            <ReduxProvider>
               <Header />
               {children}
               <ConditionalFooter />
               <CartSidebar />
               <MainSidebar />
-            </CartProvider>
+            </ReduxProvider>
           </SidebarProvider>
         </AuthProvider>
       </body>
