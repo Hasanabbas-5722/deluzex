@@ -81,7 +81,7 @@ export default function AdminProducts() {
                     <td>
                       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                         <Link href={`/admin/products/edit/${prod._id}`} className={styles.actionLink}>Edit</Link>
-                        <button onClick={() => setItemToDelete(prod._id)} className={styles.actionDelete}>Delete</button>
+                        <button onClick={() => setItemToDelete(prod._id || prod.id || null)} className={styles.actionDelete}>Delete</button>
                       </div>
                     </td>
                   </tr>

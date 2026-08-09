@@ -1,14 +1,23 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
 
 export interface Category {
-  id: string | number;
+  _id?: string;
+  id?: string | number;
+  category_id?: string | number;
   name: string;
-  image_url?: string;
-  description?: string;
+  image_url?: string | null;
+  description?: string | null;
 }
 
 export interface Product {
-  _id: string | number;
+  _id?: string | number;
+  id?: string | number;
+  name?: string;
+  price?: string | number;
+  rating?: number;
+  image_url?: string;
+  description?: string;
+  reviews_count?: number;
   product_title: string;
   product_price: string;
   product_description: string;
@@ -56,8 +65,8 @@ export async function fetchCategories(): Promise<Category[]> {
     if (!res.ok) throw new Error("Failed to fetch categories");
     const data = await res.json();
     
-    // Support typical API response wrappers like { data: [...] } or direct arrays [...]
-    return data.data || data || [];
+    // Support direct arrays [...] or response wrappers like { data: [...] }
+    return Array.isArray(data) ? data : (data.data || []);
   } catch (error) {
     console.error("Error fetching categories:", error);
     return []; // Return empty array on failure so UI doesn't crash

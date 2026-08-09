@@ -40,8 +40,8 @@ export default function EditProduct() {
           let parsedGallery = ["", "", "", ""];
           if (Array.isArray(data?.product_images)) {
             parsedGallery = [...data.product_images, "", "", "", ""].slice(0, 4);
-          } else if (typeof data.product_images === 'string' && data.product_images) {
-            parsedGallery = [...data.product_images.split(",").map((s: string) => s.trim()), "", "", "", ""].slice(0, 4);
+          } else if (typeof (data as any)?.product_images === 'string' && (data as any).product_images) {
+            parsedGallery = [...((data as any).product_images as string).split(",").map((s: string) => s.trim()), "", "", "", ""].slice(0, 4);
           }
           
           setCurrentMainImage(data.product_main_image || data.image_url || "");

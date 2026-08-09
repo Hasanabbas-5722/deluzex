@@ -112,10 +112,10 @@ export default function ProductDetail() {
 
         <div className={styles.heroRight}>
           <div className={styles.mainImageContainer}>
-            <Image src={product.product_images[activeThumb]} alt={product.product_title} fill style={{ objectFit: 'cover' }} />
+            <Image src={(product.product_images && product.product_images[activeThumb]) || product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title} fill style={{ objectFit: 'cover' }} />
           </div>
           <div className={styles.thumbnailsCol}>
-            {product.product_images.map((thumb, idx) => (
+            {(product.product_images || []).map((thumb, idx) => (
               <div 
                 key={idx} 
                 className={`${styles.thumbnail} ${activeThumb === idx ? styles.thumbnailActive : ''}`}
@@ -237,9 +237,9 @@ export default function ProductDetail() {
         <div className={styles.ctlGrid}>
           {relatedProducts.slice(0,3).map((prod, i) => (
             <div key={prod.id || i} className={styles.productCard}>
-              <Link href={`/product/${prod.id}`}>
+              <Link href={`/product/${prod._id || prod.id}`}>
                 <div className={styles.productImageWrapper}>
-                  <Image src={prod.image_url || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.name} fill style={{ objectFit: 'contain' }} />
+                  <Image src={prod.product_main_image || prod.image_url || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.product_title || prod.name || "Product"} fill style={{ objectFit: 'contain' }} />
                   <button 
                     className={styles.addToCartBtn} 
                     onClick={(e) => {
@@ -256,14 +256,14 @@ export default function ProductDetail() {
               </Link>
               
               <div className={styles.productInfoRow}>
-                <h4 className={styles.productName}>{prod.name}</h4>
-                <div className={styles.productPrice}>${prod.price}</div>
+                <h4 className={styles.productName}>{prod.product_title || prod.name}</h4>
+                <div className={styles.productPrice}>${prod.product_price || prod.price}</div>
               </div>
               <div className={styles.productRating}>
                 <svg className={styles.starIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
-                {prod.rating || "4.8"} ({prod.reviews_count || "750"} Reviews)
+                {prod.product_rating || prod.rating || "4.8"} ({prod.reviews_count || "750"} Reviews)
               </div>
             </div>
           ))}
