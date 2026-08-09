@@ -3,12 +3,15 @@
 import styles from "./shop.module.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "../context/CartContext";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, updateQuantity, removeFromCart } from "../store/cartSlice";
+import { RootState } from "../store/store";
 import { useEffect, useState } from "react";
 import { fetchCategories, fetchProducts, Category, Product } from "../services/api";
 
 export default function Shop() {
-  const { openCart } = useCart();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -106,26 +109,48 @@ export default function Shop() {
           ) : currentProducts.length === 0 ? (
             <p>No products found.</p>
           ) : (
-            currentProducts.map((product, i) => (
-              <div key={product._id || i} className={styles.productCard}>
-                <Link href={`/product/${product._id}`}>
+            currentProducts.map((product, i) => {
+              const cartItem = cartItems.find(item => String(item.id) === String(product._id));
+              
+              return (
+                <div key={product._id || i} className={styles.productCard}>
                   <div className={styles.productImageWrapper}>
-                    <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title} fill style={{ objectFit: 'contain' }} />
-                    <button 
-                      className={styles.addToCartBtn} 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openCart();
-                      }}
-                      aria-label="Add to cart"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-  <path d="M0 0h24v24H0V0z" fill="none"/>
-  <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-8.9-5h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4l-3.87 7H8.53L4.27 2H1v2h2l3.6 7.59L3.62 17H19v-2H7l1.1-2z"/>
-</svg>   
-                    </button>
+                    <Link href={`/product/${product._id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                      <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title} fill style={{ objectFit: 'cover' }} />
+                    </Link>
+                    
+                    {cartItem ? (
+                      <div className={styles.cartQuantityControl}>
+                        <button onClick={(e) => {
+                          e.preventDefault();
+                          if (cartItem.quantity === 1) {
+                            dispatch(removeFromCart(product._id));
+                          } else {
+                            dispatch(updateQuantity({ id: product._id, change: -1 }));
+                          }
+                        }}>-</button>
+                        <span>{cartItem.quantity}</span>
+                        <button onClick={(e) => {
+                          e.preventDefault();
+                          dispatch(updateQuantity({ id: product._id, change: 1 }));
+                        }}>+</button>
+                      </div>
+                    ) : (
+                      <button 
+                        className={styles.addToCartBtn} 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch(addToCart(product));
+                        }}
+                        aria-label="Add to cart"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                          <path d="M0 0h24v24H0V0z" fill="none"/>
+                          <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-8.9-5h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4l-3.87 7H8.53L4.27 2H1v2h2l3.6 7.59L3.62 17H19v-2H7l1.1-2z"/>
+                        </svg>   
+                      </button>
+                    )}
                   </div>
-                </Link>
                 
                 <div className={styles.productInfo}>
                   <div className={styles.productInfoRow}>
@@ -136,12 +161,12 @@ export default function Shop() {
                     <svg className={styles.starIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
-                    {product.product_rating || 3} ({product.reviews_count || 0} Reviews)
+                    {product.product_rating || 3} ({35} Reviews)
                   </div>
                 </div>
               </div>
-            ))
-          )}
+            );
+            }))}
         </div>
 
         {/* PAGINATION */}

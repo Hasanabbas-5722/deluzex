@@ -1,37 +1,53 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
+
+type AuthUser = Record<string, unknown> | null;
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: any | null;
-  login: (token: string, userData: any) => void;
+  user: AuthUser;
+  login: (token: string, userData: AuthUser) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function hasAccessToken(): boolean {
+  if (typeof document === "undefined") {
+    return false;
+  }
+
+  return document.cookie.includes("access_token=");
+}
+
+function readStoredUser(): AuthUser {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const storedUser = window.localStorage.getItem("user");
+  if (!storedUser) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(storedUser) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<any | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => hasAccessToken());
+  const [user, setUser] = useState<AuthUser>(() => readStoredUser());
 
-  useEffect(() => {
-    const token = document.cookie.includes("access_token=");
-    if (token) {
-      setIsAuthenticated(true);
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-        } catch (e) {}
-      }
-    }
-  }, []);
-
-  const login = (token: string, userData: any) => {
+  const login = (token: string, userData: AuthUser) => {
     setIsAuthenticated(true);
     setUser(userData);
     document.cookie = `access_token=${token}; path=/; max-age=86400`; // 1 day
-    localStorage.setItem("user", JSON.stringify(userData));
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
   };
 
   const logout = () => {

@@ -3,13 +3,14 @@
 import styles from "./productDetail.module.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "../../context/CartContext";
+import { useDispatch } from "react-redux";
+import { addToCart, openCart } from "../../store/cartSlice";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchProductById, fetchProducts, Product } from "../../services/api";
 
 export default function ProductDetail() {
-  const { openCart } = useCart();
+  const dispatch = useDispatch();
   const params = useParams();
   
   // Data State
@@ -20,7 +21,6 @@ export default function ProductDetail() {
   // UI State
   const [qty, setQty] = useState(1);
   const [activeThumb, setActiveThumb] = useState(0);
-  const [openSpec, setOpenSpec] = useState<string | null>("dimensions");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   useEffect(() => {
@@ -50,11 +50,6 @@ export default function ProductDetail() {
     return <main className={styles.main}><p style={{padding: '2rem 6rem'}}>Product not found.</p></main>;
   }
 
-  const thumbnails = [
-    product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg",
-    ...(product.product_images || ["/images/lamp_classic_1784107722127.jpg", "/images/category_chandelier_1784107756268.jpg", "/images/about_chandelier_1784107790569.jpg"])
-  ];
-
   return (
     <main className={styles.main}>
       {/* HERO SECTION */}
@@ -67,7 +62,7 @@ export default function ProductDetail() {
           
           <div className={styles.starsRow}>
             <div className={styles.stars}>{ "★".repeat(Math.floor(product.product_rating || 3))}{ "☆".repeat(5 - Math.floor(product.product_rating || 3)) }</div>
-            <span className={styles.reviewCount}>{product.product_rating || 3.0} ({product.reviews_count || 35} Reviews)</span>
+            <span className={styles.reviewCount}>{product.product_rating || 3.0} ({35} Reviews)</span>
           </div>
 
 
@@ -105,17 +100,17 @@ export default function ProductDetail() {
               <span>{qty}</span>
               <button onClick={() => setQty(qty + 1)}>+</button>
             </div>
-            <button className={styles.btnPrimary} onClick={openCart}>Add To Bag</button>
+            <button className={styles.btnPrimary} onClick={() => dispatch(addToCart(product))}>Add To Bag</button>
             <button className={styles.btnOutline}>Add To Wishlist</button>
           </div>
         </div>
 
         <div className={styles.heroRight}>
           <div className={styles.mainImageContainer}>
-            <Image src={(product.product_images && product.product_images[activeThumb]) || product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title} fill style={{ objectFit: 'cover' }} />
+            <Image src={product?.product_images?.[activeThumb] || product?.product_main_image || ""} alt={product?.product_title} fill style={{ objectFit: 'cover' }} />
           </div>
           <div className={styles.thumbnailsCol}>
-            {(product.product_images || []).map((thumb, idx) => (
+            {product?.product_images?.map((thumb, idx) => (
               <div 
                 key={idx} 
                 className={`${styles.thumbnail} ${activeThumb === idx ? styles.thumbnailActive : ''}`}
@@ -159,7 +154,7 @@ export default function ProductDetail() {
           <div className={styles.ratingScore}>
             <h3>{product.product_rating || 4.8}</h3>
             <div className={styles.stars}>{ "★".repeat(Math.floor(product.product_rating || 3))}{ "☆".repeat(5 - Math.floor(product.product_rating || 3)) }</div>
-            <p>{product.reviews_count || 35} Reviews</p>
+            <p>{35} Reviews</p>
           </div>
           <div className={styles.ratingBars}>
             {[
@@ -236,10 +231,10 @@ export default function ProductDetail() {
         
         <div className={styles.ctlGrid}>
           {relatedProducts.slice(0,3).map((prod, i) => (
-            <div key={prod.id || i} className={styles.productCard}>
-              <Link href={`/product/${prod._id || prod.id}`}>
+            <div key={prod._id || i} className={styles.productCard}>
+              <Link href={`/product/${prod._id}`}>
                 <div className={styles.productImageWrapper}>
-                  <Image src={prod.product_main_image || prod.image_url || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.product_title || prod.name || "Product"} fill style={{ objectFit: 'contain' }} />
+                  <Image src={prod.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.product_title} fill style={{ objectFit: 'contain' }} />
                   <button 
                     className={styles.addToCartBtn} 
                     onClick={(e) => {
@@ -256,14 +251,14 @@ export default function ProductDetail() {
               </Link>
               
               <div className={styles.productInfoRow}>
-                <h4 className={styles.productName}>{prod.product_title || prod.name}</h4>
-                <div className={styles.productPrice}>${prod.product_price || prod.price}</div>
+                <h4 className={styles.productName}>{prod.product_title}</h4>
+                <div className={styles.productPrice}>${prod.product_price}</div>
               </div>
               <div className={styles.productRating}>
                 <svg className={styles.starIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
-                {prod.product_rating || prod.rating || "4.8"} ({prod.reviews_count || "750"} Reviews)
+                {"4.8"} ({35} Reviews)
               </div>
             </div>
           ))}

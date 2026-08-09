@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "../admin.module.css";
 import { fetchCategories, deleteCategory, Category } from "../../services/api";
@@ -68,7 +69,7 @@ export default function AdminCategories() {
                   <tr key={cat.id}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        {cat.image_url && <img src={cat.image_url} alt={cat.name} className={styles.tableImage} />}
+                        {cat.image_url && <Image src={cat.image_url} alt={cat.name} width={48} height={48} className={styles.tableImage} />}
                         <span style={{ fontWeight: 600 }}>{cat.name}</span>
                       </div>
                     </td>

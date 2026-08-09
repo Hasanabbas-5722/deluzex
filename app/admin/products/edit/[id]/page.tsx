@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import styles from "../../../../admin/admin.module.css";
@@ -36,21 +37,27 @@ export default function EditProduct() {
       try {
         const data = await fetchProductById(params.id as string);
         if (data) {
-          
+          const rawProductImages = data?.product_images as unknown;
           let parsedGallery = ["", "", "", ""];
-          if (Array.isArray(data?.product_images)) {
-            parsedGallery = [...data.product_images, "", "", "", ""].slice(0, 4);
-          } else if (typeof (data as any)?.product_images === 'string' && (data as any).product_images) {
-            parsedGallery = [...((data as any).product_images as string).split(",").map((s: string) => s.trim()), "", "", "", ""].slice(0, 4);
+
+          if (Array.isArray(rawProductImages)) {
+            parsedGallery = [...rawProductImages, "", "", "", ""].slice(0, 4);
+          } else if (typeof rawProductImages === "string" && rawProductImages.trim()) {
+            const splitImages = rawProductImages
+              .split(",")
+              .map((s: string) => s.trim())
+              .filter((s: string) => s.length > 0);
+
+            parsedGallery = [...splitImages, "", "", "", ""].slice(0, 4);
           }
-          
-          setCurrentMainImage(data.product_main_image || data.image_url || "");
+
+          setCurrentMainImage(data.product_main_image || "");
           setCurrentGallery(parsedGallery);
 
           setFormData({
-            product_title: data.product_title || data.name || "",
-            product_description: data.product_description || data.description || "",
-            product_price: data.product_price?.toString() || data.price?.toString() || "",
+            product_title: data.product_title || "",
+            product_description: data.product_description  || "",
+            product_price: data.product_price?.toString() || "",
             product_category: data.product_category || "",
             product_material: data.product_material || "",
             product_voltage: data.product_voltage || "",
@@ -176,7 +183,7 @@ export default function EditProduct() {
               
               <div style={{ marginBottom: '1.5rem' }}>
                 <label style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)', display: 'block', marginBottom: '0.5rem' }}>Main Image (Leave empty to keep current)</label>
-                {currentMainImage && <img src={currentMainImage} alt="Current main" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.5rem' }} />}
+                {currentMainImage && <Image src={currentMainImage} alt="Current main" width={50} height={50} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.5rem' }} />}
                 <input type="file" accept="image/*" onChange={handleMainImageChange} style={inputStyle} />
               </div>
               
@@ -184,7 +191,7 @@ export default function EditProduct() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 {[0, 1, 2, 3].map(index => (
                   <div key={index}>
-                    {currentGallery[index] && <img src={currentGallery[index]} alt={`Current gallery ${index}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.5rem' }} />}
+                    {currentGallery[index] && <Image src={currentGallery[index]} alt={`Current gallery ${index}`} width={50} height={50} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.5rem' }} />}
                     <input type="file" accept="image/*" onChange={(e) => handleGalleryImageChange(e, index)} style={inputStyle} />
                   </div>
                 ))}

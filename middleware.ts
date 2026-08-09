@@ -4,23 +4,25 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Define public routes that don't require authentication.
-  // Add any other routes here that you want to be accessible without logging in (e.g., '/', '/about')
-  const publicRoutes = ['/login', '/signup', '/signin'];
-  
-  const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'));
+  // Define routes that require authentication
+  const protectedRoutes = ['/admin', '/checkout'];
+  const isProtectedRoute = protectedRoutes.some(route => pathname === route || pathname.startsWith(route + '/'));
+
+  // Define routes meant only for unauthenticated users
+  const authRoutes = ['/login', '/signup', '/signin'];
+  const isAuthRoute = authRoutes.some(route => pathname === route || pathname.startsWith(route + '/'));
 
   // Get token/session from cookies
   const token = request.cookies.get('accessToken')?.value || request.cookies.get('session')?.value || request.cookies.get('access_token')?.value;
 
-  if (!token && !isPublicRoute) {
-    // If there is no token and the route is not public, redirect to login
+  if (!token && isProtectedRoute) {
+    // Redirect to login if trying to access a protected route without a token
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  if (token && isPublicRoute) {
-    // If the user is logged in and tries to access login/signup, redirect to dashboard or home
-    return NextResponse.redirect(new URL('/dashboard/notifications', request.url));
+  if (token && isAuthRoute) {
+    // Redirect away from login if already authenticated
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return NextResponse.next();

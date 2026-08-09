@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import styles from "../../../admin.module.css";
-import { fetchCategories, updateCategory } from "../../../../services/api";
+import { fetchCategories, updateCategory, Category } from "../../../../services/api";
 
 export default function EditCategory() {
   const router = useRouter();
@@ -23,7 +23,8 @@ export default function EditCategory() {
         // Since there is no fetchCategoryById, we can fetch all and find the one.
         // A real app would have fetchCategoryById
         const allCategories = await fetchCategories();
-        const data = allCategories.find((c: any) => c.id.toString() === params.id);
+        const currentId = Array.isArray(params.id) ? params.id[0] : params.id;
+        const data = allCategories.find((category: Category) => category.id.toString() === currentId);
         
         if (data) {
           setFormData({

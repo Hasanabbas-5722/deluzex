@@ -126,7 +126,7 @@ export default function Login() {
 
     try {
       if (isLogin) {
-        const response = await fetch("http://127.0.0.1:8000/api/v1/auth/login", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -147,7 +147,7 @@ export default function Login() {
           setToast({ type: "error", message: data.detail || "Login failed." });
         }
       } else {
-        const response = await fetch("http://127.0.0.1:8000/api/v1/auth/register", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -172,7 +172,7 @@ export default function Login() {
           setToast({ type: "error", message: data.message || "Registration failed." });
         }
       }
-    } catch (error) {
+    } catch {
       setToast({ type: "error", message: "An unexpected error occurred." });
     } finally {
       setIsLoading(false);

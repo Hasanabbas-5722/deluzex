@@ -2,27 +2,26 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Header.module.css";
-import Image from "next/image";
-import { useCart } from "../context/CartContext";
+import { useDispatch } from "react-redux";
+import { openCart } from "../store/cartSlice";
 import { useSidebar } from "../context/SidebarContext";
 import { useEffect, useState } from "react";
 
 export default function Header() {
   const pathname = usePathname();
-  const { openCart } = useCart();
+  const dispatch = useDispatch();
   const { sidebarOpen, toggleSidebar } = useSidebar();
   const [scrolled, setScrolled] = useState(false);
 
   const isHome = pathname === "/";
-  const isDashboard = pathname.startsWith("/dashboard");
 
   // Listen to scroll only on home page
   useEffect(() => {
     if (!isHome) return;
+
     const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    // Reset when leaving home
-    setScrolled(window.scrollY > 60);
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
@@ -78,9 +77,9 @@ export default function Header() {
       </nav>
 
       <div className={styles.headerIcons}>
-        <a href="/dashboard" className={styles.userIcon}>
+        {/* <a href="/dashboard" className={styles.userIcon}>
           <Image src="/images/avatar_woman_1784107804209.jpg" alt="User" width={24} height={24} className={styles.userAvatar} />
-        </a>
+        </a> */}
         <button className={styles.iconBtn}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="8" />
@@ -88,7 +87,7 @@ export default function Header() {
           </svg>
         </button>
         <div className={styles.cartIconWrapper}>
-          <button className={styles.iconBtn} onClick={openCart}>
+          <button className={styles.iconBtn} onClick={() => dispatch(openCart())}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />

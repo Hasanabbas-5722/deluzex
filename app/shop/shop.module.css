@@ -260,6 +260,47 @@
   background: #A88152;
 }
 
+.cartQuantityControl {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  background: #C19A6B;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 12px;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.cartQuantityControl button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  padding: 0 4px;
+}
+
+.cartQuantityControl button:hover {
+  opacity: 0.7;
+}
+
+.cartQuantityControl span {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 14px;
+  text-align: center;
+}
+
 .productInfoRow {
   display: flex;
   justify-content: space-between;

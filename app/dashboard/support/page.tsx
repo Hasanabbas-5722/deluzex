@@ -26,7 +26,7 @@ export default function Support() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Support & Help</h1>
-        <p className={styles.subtitle}>Need assistance? We're here to help with your orders, products, and account.</p>
+        <p className={styles.subtitle}>Need assistance? We are here to help with your orders, products, and account.</p>
       </div>
 
       <div className={styles.topicsGrid}>
