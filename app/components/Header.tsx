@@ -2,16 +2,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Header.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openCart } from "../store/cartSlice";
 import { useSidebar } from "../context/SidebarContext";
 import { useEffect, useState } from "react";
+import { RootState } from "../store/store";
 
 export default function Header() {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const { sidebarOpen, toggleSidebar } = useSidebar();
   const [scrolled, setScrolled] = useState(false);
+  const { cartItems, cartTotal } = useSelector((state: RootState) => state.cart);
 
   const isHome = pathname === "/";
 
@@ -94,7 +96,7 @@ export default function Header() {
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
           </button>
-          {isHome && <span className={styles.cartBadge}>02</span>}
+          <span className={styles.cartBadge}>{cartItems.length != 0 ? cartItems.length : "0"}</span>
         </div>
       </div>
     </header>

@@ -199,3 +199,94 @@ export async function fetchInquiries(): Promise<Inquiry[]> {
     return [];
   }
 }
+
+// --- PAYMENTS ---
+
+export interface PaymentMethod {
+  id: string;
+  name: string;
+  description: string;
+  razorpay_method: string;
+  icon: string;
+}
+
+export interface OrderItemPayload {
+  product_id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  image?: string;
+}
+
+export interface ShippingAddressPayload {
+  first_name: string;
+  last_name: string;
+  street: string;
+  city: string;
+  state: string;
+  pin_code: string;
+}
+
+export interface OrderPayload {
+  email: string;
+  phone: string;
+  shipping_address: ShippingAddressPayload;
+  items: OrderItemPayload[];
+  subtotal: number;
+  gst: number;
+  delivery: number;
+  total: number;
+}
+
+export async function fetchPaymentMethods(): Promise<PaymentMethod[]> {
+  const res = await fetch(`${API_BASE_URL}/payments/methods`);
+  if (!res.ok) throw new Error("Failed to fetch payment methods");
+  return res.json();
+}
+
+export async function createPaymentOrder(
+  payload: OrderPayload & { payment_method: string; razorpay_method: string }
+) {
+  const res = await fetch(`${API_BASE_URL}/payments/create-order`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Failed to create payment order");
+  return data as {
+    success: boolean;
+    order_id: string;
+    razorpay_order_id: string;
+    amount: number;
+    currency: string;
+    key_id: string;
+  };
+}
+
+export async function verifyPayment(payload: {
+  order_id: string;
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+}) {
+  const res = await fetch(`${API_BASE_URL}/payments/verify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Payment verification failed");
+  return data as { success: boolean; order_id: string; message: string };
+}
+
+export async function createCodOrder(payload: OrderPayload) {
+  const res = await fetch(`${API_BASE_URL}/payments/cod`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Failed to place order");
+  return data as { success: boolean; order_id: string; message: string };
+}
