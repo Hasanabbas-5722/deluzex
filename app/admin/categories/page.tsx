@@ -75,8 +75,8 @@ export default function AdminCategories() {
                     </td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                        <Link href={`/admin/categories/edit/${cat.id}`} className={styles.actionLink}>Edit</Link>
-                        <button onClick={() => setItemToDelete(cat.id)} className={styles.actionDelete}>Delete</button>
+                        <Link href={`/admin/categories/edit/${cat._id || cat.id || cat.category_id}`} className={styles.actionLink}>Edit</Link>
+                        <button onClick={() => setItemToDelete(cat._id || cat.id || cat.category_id || null)} className={styles.actionDelete}>Delete</button>
                       </div>
                     </td>
                   </tr>

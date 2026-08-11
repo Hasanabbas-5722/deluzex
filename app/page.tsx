@@ -27,7 +27,7 @@ export default async function Home() {
             Crafted With Exceptional Materials And Refined Details To Elevate<br />
             Modern Living Spaces.
           </p>
-          <button className={styles.btnExplore}>Explore Collection</button>
+          <a href="/shop"><button className={styles.btnExplore}>Explore Collection</button></a>
         </div>
 
         {/* Right: Product Widget (dark card + lamp showcase) */}

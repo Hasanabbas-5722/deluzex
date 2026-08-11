@@ -70,7 +70,7 @@ export default function Shop() {
         </div>
         <div className={styles.categoriesGrid}>
           {categories.map((cat, i) => (
-            <div key={cat.id || i} className={styles.categoryCard}>
+            <div key={cat._id || cat.id || cat.category_id || i} className={styles.categoryCard}>
               <Image src={cat.image_url || "/images/category_chandelier_1784107756268.jpg"} alt={cat.name} fill style={{ objectFit: 'cover' }} />
               <div className={styles.categoryOverlay}>
                 <h3 className={styles.categoryTitle}>{cat.name}</h3>
@@ -83,10 +83,12 @@ export default function Shop() {
       {/* FILTER BAR */}
       <section className={styles.filterBar}>
         <div className={styles.filterPills}>
-          <button className={styles.pill}>Pendant Lights</button>
-          <button className={styles.pill}>COB Lights</button>
-          <button className={styles.pill}>Table Lights</button>
-          <button className={styles.pill}>Wall Lights</button>
+          <button className={styles.pill}>All</button>
+          {categories.map((cat, i) => (
+            <button key={cat._id || cat.id || cat.category_id || i} className={styles.pill}>
+              {cat.name}
+            </button>
+          ))}
         </div>
         <div className={styles.sortBy}>
           <span>SORT BY :</span>
