@@ -7,13 +7,14 @@ import { openCart } from "../store/cartSlice";
 import { useSidebar } from "../context/SidebarContext";
 import { useEffect, useState } from "react";
 import { RootState } from "../store/store";
+import Image from "next/image";
 
 export default function Header() {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const { sidebarOpen, toggleSidebar } = useSidebar();
   const [scrolled, setScrolled] = useState(false);
-  const { cartItems, cartTotal } = useSelector((state: RootState) => state.cart);
+  const { cartItems } = useSelector((state: RootState) => state.cart);
 
   const isHome = pathname === "/";
 
@@ -79,9 +80,9 @@ export default function Header() {
       </nav>
 
       <div className={styles.headerIcons}>
-        {/* <a href="/dashboard" className={styles.userIcon}>
+        <a href="/dashboard" className={styles.userIcon}>
           <Image src="/images/avatar_woman_1784107804209.jpg" alt="User" width={24} height={24} className={styles.userAvatar} />
-        </a> */}
+        </a>
         <button className={styles.iconBtn}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="8" />

@@ -24,7 +24,10 @@ export default function EditCategory() {
         // A real app would have fetchCategoryById
         const allCategories = await fetchCategories();
         const currentId = Array.isArray(params.id) ? params.id[0] : params.id;
-        const data = allCategories.find((category: Category) => category.id.toString() === currentId);
+        const data = allCategories.find((category: Category) => {
+          const catId = category.id ?? category._id ?? category.category_id;
+          return catId !== undefined && catId.toString() === currentId;
+        });
         
         if (data) {
           setFormData({

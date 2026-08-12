@@ -12,7 +12,11 @@ export interface RazorpayOptions {
   description?: string;
   order_id: string;
   method?: string;
-  handler: (response: RazorpaySuccessResponse) => void;
+  retry?: {
+    enabled?: boolean;
+    max_count?: number;
+  };
+  handler: (response: RazorpaySuccessResponse) => void | Promise<void>;
   prefill?: {
     name?: string;
     email?: string;
@@ -23,6 +27,10 @@ export interface RazorpayOptions {
   };
   modal?: {
     ondismiss?: () => void;
+    escape?: boolean;
+    animation?: boolean;
+    confirm_close?: boolean;
+    backdropclose?: boolean;
   };
 }
 
@@ -32,9 +40,25 @@ export interface RazorpaySuccessResponse {
   razorpay_signature: string;
 }
 
+export interface RazorpayFailureResponse {
+  error?: {
+    code?: string;
+    description?: string;
+    source?: string;
+    step?: string;
+    reason?: string;
+    metadata?: {
+      order_id?: string;
+      payment_id?: string;
+      [key: string]: unknown;
+    };
+  };
+}
+
 export interface RazorpayInstance {
   open: () => void;
-  on: (event: string, handler: (response: { error?: { description?: string } }) => void) => void;
+  close?: () => void;
+  on: (event: string, handler: (response: RazorpayFailureResponse) => void) => void;
 }
 
 export {};

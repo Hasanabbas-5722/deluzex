@@ -14,7 +14,8 @@ interface AddToCartButtonProps {
 export default function AddToCartButton({ product, styleClass }: AddToCartButtonProps) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-  const cartItem = cartItems.find(item => String(item.id) === String(product._id));
+  const productId = product._id || product.id || "";
+  const cartItem = cartItems.find(item => String(item.id) === String(productId));
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,17 +26,19 @@ export default function AddToCartButton({ product, styleClass }: AddToCartButton
   const handleDecrease = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!productId) return;
     if (cartItem && cartItem.quantity === 1) {
-      dispatch(removeFromCart(product._id));
+      dispatch(removeFromCart(productId));
     } else {
-      dispatch(updateQuantity({ id: product._id, change: -1 }));
+      dispatch(updateQuantity({ id: productId, change: -1 }));
     }
   };
 
   const handleIncrease = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(updateQuantity({ id: product._id, change: 1 }));
+    if (!productId) return;
+    dispatch(updateQuantity({ id: productId, change: 1 }));
   };
 
   if (cartItem) {

@@ -123,16 +123,20 @@ export default function Shop() {
                       <div className={styles.cartQuantityControl}>
                         <button onClick={(e) => {
                           e.preventDefault();
+                          const pId = product._id || product.id || "";
+                          if (!pId) return;
                           if (cartItem.quantity === 1) {
-                            dispatch(removeFromCart(product._id));
+                            dispatch(removeFromCart(pId));
                           } else {
-                            dispatch(updateQuantity({ id: product._id, change: -1 }));
+                            dispatch(updateQuantity({ id: pId, change: -1 }));
                           }
                         }}>-</button>
                         <span>{cartItem.quantity}</span>
                         <button onClick={(e) => {
                           e.preventDefault();
-                          dispatch(updateQuantity({ id: product._id, change: 1 }));
+                          const pId = product._id || product.id || "";
+                          if (!pId) return;
+                          dispatch(updateQuantity({ id: pId, change: 1 }));
                         }}>+</button>
                       </div>
                     ) : (
