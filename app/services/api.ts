@@ -41,8 +41,23 @@ export interface Product {
 // Helper to get token (safe for both client and SSR)
 function getAuthToken(): string | null {
   if (typeof window !== 'undefined') {
-    const match = localStorage.getItem('authToken');
+    const match =
+      localStorage.getItem('authToken') ||
+      localStorage.getItem('access_token') ||
+      localStorage.getItem('token');
     if (match) return match;
+
+    try {
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'access_token' || name === 'accessToken' || name === 'session') {
+          return decodeURIComponent(value);
+        }
+      }
+    } catch {
+      // ignore
+    }
   }
   return null;
 }
@@ -578,5 +593,311 @@ export async function deleteUserCard(cardId: string, email?: string): Promise<bo
     return true;
   }
 }
+
+// --- USER ORDERS API ---
+
+export interface OrderItem {
+  product_id?: string | number;
+  title: string;
+  price: number | string;
+  quantity: number;
+  image?: string;
+  variant?: string;
+}
+
+export interface UserOrder {
+  _id?: string;
+  id?: string;
+  order_id: string;
+  razorpay_order_id?: string;
+  razorpay_payment_id?: string;
+  user_email?: string;
+  user_phone?: string;
+  customer_name?: string;
+  shipping_address?: {
+    first_name?: string;
+    last_name?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    pin_code?: string;
+  };
+  items: OrderItem[];
+  subtotal?: number;
+  gst?: number;
+  delivery?: number;
+  total: number;
+  amount?: number;
+  status: "Processing" | "Shipped" | "Delivered" | "Cancelled" | "Pending" | string;
+  payment_method?: string;
+  payment_status?: string;
+  created_at?: string;
+  createdAt?: string;
+  date?: string;
+}
+
+// Helper to normalize backend order objects into standard UserOrder format
+export function normalizeUserOrder(raw: Record<string, unknown>): UserOrder {
+  const orderId =
+    (raw.order_id as string) ||
+    (raw.orderId as string) ||
+    (raw.id as string) ||
+    (raw._id as string) ||
+    `DLX${Date.now().toString().slice(-4)}`;
+
+  const rawItems = (raw.items || raw.order_items || raw.products || []) as Record<string, unknown>[];
+  const items: OrderItem[] = Array.isArray(rawItems)
+    ? rawItems.map((it: Record<string, unknown>) => ({
+        product_id: (it.product_id || it.productId || it.id || it._id) as string | number | undefined,
+        title:
+          (it.title as string) ||
+          (it.product_title as string) ||
+          (it.name as string) ||
+          (it.product_name as string) ||
+          "Luxury Luminaire",
+        price: (it.price || it.unit_price || it.product_price || 0) as number | string,
+        quantity: (it.quantity || it.qty || 1) as number,
+        image:
+          (it.image as string) ||
+          (it.image_url as string) ||
+          (it.product_main_image as string) ||
+          (it.img as string) ||
+          "/images/category_chandeliers_1784107850024.png",
+        variant: (it.variant || it.selected_variant || it.product_variant || "") as string,
+      }))
+    : [];
+
+  const rawTotal = raw.total || raw.total_amount || raw.amount || raw.grand_total || 0;
+  const numTotal =
+    typeof rawTotal === "string"
+      ? parseFloat(rawTotal.replace(/[^\d.]/g, ""))
+      : Number(rawTotal) || 0;
+
+  const rawDate = (raw.date || raw.order_date || raw.created_at || raw.createdAt) as string | undefined;
+  const formattedDate = rawDate
+    ? new Date(rawDate).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : new Date().toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+
+  return {
+    _id: String(raw._id || raw.id || orderId),
+    id: String(raw.id || raw._id || orderId),
+    order_id: String(orderId),
+    razorpay_order_id: (raw.razorpay_order_id || raw.razorpayOrderId) as string | undefined,
+    razorpay_payment_id: (raw.razorpay_payment_id || raw.razorpayPaymentId) as string | undefined,
+    user_email: (raw.user_email || raw.email) as string | undefined,
+    user_phone: (raw.user_phone || raw.phone) as string | undefined,
+    customer_name:
+      (raw.customer_name as string) ||
+      (raw.customerName as string) ||
+      (raw.shipping_address
+        ? `${(raw.shipping_address as Record<string, string>).first_name || ""} ${(raw.shipping_address as Record<string, string>).last_name || ""}`.trim()
+        : ""),
+    shipping_address: (raw.shipping_address || raw.shippingAddress || raw.address) as UserOrder["shipping_address"],
+    items,
+    subtotal: (raw.subtotal || raw.sub_total || (numTotal > 0 ? numTotal * 0.82 : 0)) as number,
+    gst: (raw.gst || raw.tax || (numTotal > 0 ? numTotal * 0.18 : 0)) as number,
+    delivery: (raw.delivery || raw.shipping_fee || 0) as number,
+    total: numTotal,
+    amount: numTotal,
+    status: (raw.status || raw.order_status || "Processing") as string,
+    payment_method: (raw.payment_method || raw.paymentMethod || "Online") as string,
+    payment_status: (raw.payment_status || raw.paymentStatus || "Paid") as string,
+    created_at: (raw.created_at || raw.createdAt || new Date().toISOString()) as string,
+    createdAt: (raw.createdAt || raw.created_at || new Date().toISOString()) as string,
+    date: formattedDate,
+  };
+}
+
+export async function fetchUserOrders(email?: string): Promise<UserOrder[]> {
+  const localKey = `deluzex_orders_${email ? email.toLowerCase().trim() : "default"}`;
+  let localData: UserOrder[] = [];
+
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem(localKey);
+      if (stored) {
+        localData = JSON.parse(stored);
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // 1. Primary Attempt: GET /api/v1/orders/my-orders (authenticated user)
+  try {
+    const res = await fetch(`${API_BASE_URL}/orders/my-orders`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const rawList = (Array.isArray(data)
+        ? data
+        : data.data || data.orders || data.items || []) as Record<string, unknown>[];
+      if (Array.isArray(rawList)) {
+        const normalizedList = rawList.map(normalizeUserOrder);
+        if (typeof window !== "undefined") {
+          localStorage.setItem(localKey, JSON.stringify(normalizedList));
+        }
+        return normalizedList;
+      }
+    }
+  } catch (error) {
+    console.warn("Error calling GET /orders/my-orders:", error);
+  }
+
+  // 2. Fallback Attempt: GET /api/v1/orders?email=...
+  if (email) {
+    try {
+      const query = `?email=${encodeURIComponent(email.trim())}`;
+      const res = await fetch(`${API_BASE_URL}/orders${query}`, {
+        headers: getAuthHeaders(),
+        cache: "no-store",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const rawList = (Array.isArray(data)
+          ? data
+          : data.data || data.orders || data.items || []) as Record<string, unknown>[];
+        if (Array.isArray(rawList)) {
+          const normalizedList = rawList.map(normalizeUserOrder);
+          if (typeof window !== "undefined") {
+            localStorage.setItem(localKey, JSON.stringify(normalizedList));
+          }
+          return normalizedList;
+        }
+      }
+    } catch (error) {
+      console.warn("Error calling GET /orders fallback:", error);
+    }
+  }
+
+  // 3. Fallback to cached local orders if available
+  if (localData.length > 0) {
+    return localData.map((d) => normalizeUserOrder(d as unknown as Record<string, unknown>));
+  }
+
+  return [];
+}
+
+export async function fetchOrderById(orderId: string): Promise<UserOrder | null> {
+  const cleanId = orderId.replace("#", "").trim();
+
+  // 1. Primary Attempt: GET /api/v1/orders/{order_id}
+  try {
+    const res = await fetch(`${API_BASE_URL}/orders/${cleanId}`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const rawOrder = (data.data || data.order || data) as Record<string, unknown>;
+      if (rawOrder) {
+        return normalizeUserOrder(rawOrder);
+      }
+    }
+  } catch (error) {
+    console.warn(`Error fetching GET /orders/${cleanId}:`, error);
+  }
+
+  // 2. Check local storage cache
+  if (typeof window !== "undefined") {
+    try {
+      const allKeys = Object.keys(localStorage).filter((k) => k.startsWith("deluzex_orders"));
+      for (const k of allKeys) {
+        const list: UserOrder[] = JSON.parse(localStorage.getItem(k) || "[]");
+        const found = list.find((o) => (o.order_id || o.id || "").replace("#", "") === cleanId);
+        if (found) return normalizeUserOrder(found as unknown as Record<string, unknown>);
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  return null;
+}
+
+export async function savePlacedOrder(order: UserOrder): Promise<UserOrder> {
+  const normalizedOrder: UserOrder = {
+    ...order,
+    id: order.id || order.order_id,
+    created_at: order.created_at || new Date().toISOString(),
+    date: order.date || new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" }),
+    status: order.status || "Processing",
+  };
+
+  const userKey = `deluzex_orders_${order.user_email ? order.user_email.toLowerCase().trim() : "default"}`;
+  if (typeof window !== "undefined") {
+    try {
+      // Save to user scoped storage
+      const userOrders = await fetchUserOrders(order.user_email);
+      const updatedUser = [normalizedOrder, ...userOrders.filter((o) => (o.order_id || o.id) !== normalizedOrder.order_id)];
+      localStorage.setItem(userKey, JSON.stringify(updatedUser));
+
+      // Save to global storage
+      const globalStr = localStorage.getItem("deluzex_orders_global");
+      const globalOrders: UserOrder[] = globalStr ? JSON.parse(globalStr) : [];
+      const updatedGlobal = [normalizedOrder, ...globalOrders.filter((o) => (o.order_id || o.id) !== normalizedOrder.order_id)];
+      localStorage.setItem("deluzex_orders_global", JSON.stringify(updatedGlobal));
+    } catch {
+      // ignore
+    }
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/orders`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(normalizedOrder),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return data.data || data;
+    }
+  } catch (error) {
+    console.warn("Could not save order to remote server, stored locally:", error);
+  }
+
+  return normalizedOrder;
+}
+
+export async function cancelUserOrder(orderId: string, email?: string): Promise<boolean> {
+  const cleanId = orderId.replace("#", "").trim();
+  const localKey = `deluzex_orders_${email ? email.toLowerCase().trim() : "default"}`;
+
+  if (typeof window !== "undefined") {
+    try {
+      const orders = await fetchUserOrders(email);
+      const updated = orders.map((o) => {
+        if ((o.order_id || o.id || "").replace("#", "") === cleanId) {
+          return { ...o, status: "Cancelled" };
+        }
+        return o;
+      });
+      localStorage.setItem(localKey, JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/orders/${cleanId}/cancel`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+    });
+    return res.ok;
+  } catch {
+    return true;
+  }
+}
+
 
 

@@ -17,6 +17,7 @@ import {
   saveUserAddress,
   fetchUserCards,
   saveUserCard,
+  savePlacedOrder,
   SavedAddress,
   SavedCard,
   OrderPayload,
@@ -350,6 +351,23 @@ export default function CheckoutPage() {
             });
 
             if (verifyRes && verifyRes.success !== false) {
+              await savePlacedOrder({
+                order_id: orderData.order_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                user_email: email.trim(),
+                user_phone: phone.trim(),
+                customer_name: `${firstName.trim()} ${lastName.trim()}`,
+                shipping_address: orderPayload.shipping_address,
+                items: orderPayload.items,
+                subtotal: orderPayload.subtotal,
+                gst: orderPayload.gst,
+                delivery: orderPayload.delivery,
+                total: orderPayload.total,
+                status: "Processing",
+                payment_method: paymentTab === "card" ? "Razorpay (Credit / Debit Card)" : "Razorpay (UPI / QR)",
+                payment_status: "Paid",
+              });
               dispatch(clearCart());
               router.push(`/checkout/success?orderId=${encodeURIComponent(orderData.order_id)}`);
             } else {
