@@ -1,7 +1,8 @@
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import type { UserProfile } from "../services/api";
 
-type AuthUser = Record<string, unknown> | null;
+export type AuthUser = UserProfile | Record<string, unknown> | null;
 
 interface AuthContextType {
   isAuthenticated: boolean;
