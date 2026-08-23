@@ -14,18 +14,11 @@ export default function Footer() {
           <div className={styles.footerLogos}>
             {/* Amazon logo */}
             <div className={styles.footerLogoItem}>
-              <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-                <circle cx="28" cy="28" r="28" fill="white"/>
-                <text x="50%" y="52%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial" fontWeight="900" fontSize="22" fill="black">a</text>
-                <path d="M16 38 Q28 43 40 38" stroke="#FF9900" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-              </svg>
+              <img src="https://cdn.brandfetch.io/idWdImNSUt/theme/dark/symbol.svg?c=1dxbfHSJFAPEGdCLU4o5B" alt="Amazon logo" width={56} height={56} />
             </div>
             {/* Flipkart logo */}
             <div className={styles.footerLogoItem}>
-              <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-                <rect width="56" height="56" rx="12" fill="#FFD800"/>
-                <text x="50%" y="54%" dominantBaseline="middle" textAnchor="middle" fontFamily="Arial" fontWeight="900" fontSize="26" fill="#2874F0">F</text>
-              </svg>
+              <img src="https://www.vectorlogo.zone/logos/amazon/amazon-icon.svg" alt="Flipkart logo" width={56} height={56} />
             </div>
           </div>
 

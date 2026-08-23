@@ -41,8 +41,9 @@
 
 .footerLogos {
   display: flex;
-  gap: 12px;
+  gap: 22px;
   align-items: center;
+
 }
 
 .footerLogoItem {

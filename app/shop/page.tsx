@@ -53,7 +53,7 @@ export default function Shop() {
       {/* HERO SECTION */}
       <section className={styles.hero}>
         <div className={styles.heroBg}>
-          <Image src="/images/hero_bg_1784107713316.jpg" alt="Shop Hero Background" fill style={{ objectFit: 'cover' }} priority />
+          <Image src="/images/hero_bg_1784107713316.jpg" alt="Shop Hero Background" fill style={{ objectFit: 'cover' }} />
         </div>
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
@@ -82,14 +82,14 @@ export default function Shop() {
 
       {/* FILTER BAR */}
       <section className={styles.filterBar}>
-        <div className={styles.filterPills}>
+        {/* <div className={styles.filterPills}>
           <button className={styles.pill}>All</button>
           {categories.map((cat, i) => (
             <button key={cat._id || cat.id || cat.category_id || i} className={styles.pill}>
               {cat.name}
             </button>
           ))}
-        </div>
+        </div> */}
         <div className={styles.sortBy}>
           <span>SORT BY :</span>
           <select className={styles.sortSelect}>

@@ -15,7 +15,8 @@
 .hero {
   width: 1440px;
   max-width: 100%;
-  height: 700px;
+  height: 100svh;
+  min-height: 650px;
   margin: -80px auto 0; /* pull up behind fixed transparent header */
   padding: 0 80px;
   display: flex;
@@ -30,13 +31,14 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  height: 100%;
 }
 
 /* Subtle overlay to keep content readable */
 .heroOverlay {
   position: absolute;
   inset: 0;
-  /* background: rgba(250, 250, 248, 0.82); */
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -56,7 +58,7 @@
 .heroTagline {
   font-family: var(--font-libre), serif;
   font-style: italic;
-  font-size: 32px;
+  font-size: 22px;
   color: #C89B60;
   margin: 0;
   font-weight: 400;
@@ -79,6 +81,7 @@
   color: #d3d3d3;
   line-height: 1.6;
   margin: 0;
+  font-family: var(--font-figtree), serif;
 }
 
 .btnExplore {
@@ -87,7 +90,7 @@
   justify-content: center;
   background: #C89B60;
   color: #fff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   padding: 16px 32px;
   border-radius: 8px;
@@ -96,6 +99,31 @@
   width: fit-content;
   letter-spacing: 0.02em;
   transition: background 0.3s;
+  font-family: var(--font-libre), serif;
+}
+
+.btncatalogue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #C89B60;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 16px 32px;
+  border-radius: 8px;
+  border: 1px solid #C89B60;
+  cursor: pointer;
+  width: fit-content;
+  letter-spacing: 0.02em;
+  transition: background 0.3s, color 0.3s;
+  font-family: var(--font-libre), serif;
+}
+
+.heroBtns {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
 }
 
 .btnExplore:hover {
@@ -115,9 +143,10 @@
 
 /* Dark info card at top right */
 .heroInfoCard {
-  background: #1E1E1E;
+  background: transparent linear-gradient(180deg, rgba(87, 87, 87, 0.6) 0%, rgba(87, 87, 87, 0.6) 100%);
   border-radius: 12px;
   padding: 16px;
+  margin-bottom: 18px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -126,6 +155,7 @@
 }
 
 .heroInfoCardImg {
+  position: relative;
   width: 112px;
   height: 94px;
   border-radius: 8px;
@@ -161,25 +191,79 @@
 /* 3 Lamp display row */
 .heroLamps {
   display: flex;
-  gap: 16px;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
+  width: 650px;
+  max-width: 100%;
+  height: 320px;
+  overflow: hidden;
+  position: relative;
+  padding: 0;
+}
+
+.heroLampsTrack {
+  --hero-card-half: 100px;
+  --hero-carousel-step: 204px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: max-content;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .heroLampCard {
   position: relative;
-  width: 200px;
-  height: 210px;
-  border-radius: 20px;
+  width: 180px;
+  height: 220px;
+  border-radius: 18px;
   background: #fcfcfc;
   overflow: hidden;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              height 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.4s ease,
+              border-color 0.4s ease,
+              transform 0.4s ease;
+}
+
+.heroLampCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.45) 0%,
+    transparent 25%,
+    transparent 65%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.heroLampCard:focus-visible,
+.heroDot:focus-visible {
+  outline: 2px solid #C89B60;
+  outline-offset: 4px;
 }
 
 .heroLampCardActive {
-  width: 240px;
-  height: 260px;
+  width: 200px;
+  height: 285px;
+  border-radius: 20px;
   background: #fff;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-  border: 1px solid #E8E0D8;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  z-index: 2;
+}
+
+.heroLampCardActive::after {
+  opacity: 0;
 }
 
 .heroLampLabel {
@@ -189,7 +273,6 @@
   transform: translateX(-50%);
   white-space: nowrap;
   font-size: 14px;
-  font-weight: 500;
   color: #cb9856;
   background: transparent;
   text-align: center;
@@ -209,6 +292,9 @@
   border-radius: 50%;
   background: #D4C5B5;
   display: block;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 .heroDotActive {
@@ -238,12 +324,13 @@
   color: #6B6B6B;
   margin: 0;
   max-width: 1100px;
-  font-family: 'General Sans', sans-serif;
+  font-family: var(--font-libre), serif;
   font-weight: 400;
 }
 
 .statementGold {
   color: #C89B60;
+  font-family: var(--font-libre), serif;
 }
 
 /* ==========================================================================
@@ -351,7 +438,7 @@
 .btnExploreCat {
   background: #C89B60;
   color: #fff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   padding: 14px 32px;
   border-radius: 8px;
@@ -359,6 +446,7 @@
   cursor: pointer;
   letter-spacing: 0.05em;
   transition: background 0.3s;
+  font-family: var(--font-libre), serif;
 }
 
 .btnExploreCat:hover {
@@ -380,6 +468,7 @@
   align-items: center;
   gap: 64px;
   background: #FAFAF8;
+  font-family: var(--font-libre);
 }
 
 .newArrivalsHeader {
@@ -388,24 +477,28 @@
   align-items: center;
   gap: 16px;
   text-align: center;
+  font-family: var(--font-libre);
+  
 }
 
 .newArrivalsTitle {
   font-family: var(--font-libre), serif;
-  font-size: 80px;
+  font-size: 60px;
   letter-spacing: 0.05em;
   color: #2B2B2B;
   font-weight: 400;
   margin: 0;
   line-height: 1;
+  font-family: var(--font-libre);
 }
 
 .newArrivalsDesc {
-  font-size: 16px;
+  font-size: 18px;
   color: #888;
   text-align: center;
   line-height: 1.6;
   margin: 0;
+  font-family: var(--font-libre);
 }
 
 .newArrivalsMarquee {
@@ -574,10 +667,12 @@
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
+  width: 300px;
 }
 
 .projectCard:hover .projectCardLabel {
   opacity: 1;
+  width: 350px;
 }
 
 .projectCardLabel {
@@ -588,16 +683,19 @@
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(12px);
   border-radius: 10px;
-  padding: 18px 20px;
+  padding: 18px 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 350px;
+  background: transparent linear-gradient(180deg, rgba(244, 242, 242, 0.6) 0%, rgba(247, 245, 245, 0.6) 100%);
 }
 
 .projectCardLabelText {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 350px;
 }
 
 .projectCardLabelTitle {
@@ -610,7 +708,7 @@
 
 .projectCardLabelSub {
   font-size: 13px;
-  color: #888;
+  color: #000000;
 }
 
 .projectArrowBtn {
@@ -843,12 +941,19 @@
   position: relative;
   border-radius: 8px;
   overflow: hidden;
+  background: #F5EFE6;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
 }
 
 .statOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.8) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -858,13 +963,19 @@
 
 .statNum {
   font-family: var(--font-libre), serif;
-  font-size: 36px;
+  font-size: 50px;
   color: #fff;
   font-weight: 400;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.statCard:hover .statNum {
+  color: #C89B60;
 }
 
 .statLabel {
-  font-size: 13px;
+  font-size: 18px;
   color: rgba(255,255,255,0.8);
   text-transform: capitalize;
 }
@@ -889,7 +1000,7 @@
 
 .storiesTitle {
   font-family: var(--font-libre), serif;
-  font-size: 80px;
+  font-size: 60px;
   letter-spacing: 0.04em;
   color: #2B2B2B;
   font-weight: 400;
@@ -1064,6 +1175,14 @@
     height: auto;
   }
 
+  .hero {
+    height: 100svh;
+  }
+
+  .heroBg {
+    height: 100%;
+  }
+
   .heroLeft {
     padding-top: 120px;
     padding-bottom: 60px;
@@ -1079,19 +1198,22 @@
   .hero {
     flex-direction: column;
     height: auto;
-    padding: 120px 40px 60px;
-    gap: 60px;
+    min-height: auto;
+    padding: 100px 32px 40px;
+    gap: 28px;
   }
 
   .heroLeft {
     padding-top: 0;
+    padding-bottom: 0;
     max-width: 100%;
     text-align: center;
     align-items: center;
+    gap: 16px;
   }
 
   .heroTitle {
-    font-size: 60px;
+    font-size: 56px;
   }
 
   .heroTagline {
@@ -1099,7 +1221,13 @@
   }
 
   .heroRight {
+    padding-top: 0;
     width: 100%;
+    gap: 18px;
+  }
+
+  .heroInfoCard {
+    margin-bottom: 0;
   }
 
   .categoriesSection,
@@ -1149,42 +1277,93 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: 100px 24px 40px;
+    padding: 90px 16px 32px;
+    gap: 18px;
+    height: auto;
+    min-height: auto;
+  }
+
+  .heroLeft {
+    padding-top: 0;
+    padding-bottom: 0;
+    gap: 12px;
+  }
+
+  .heroTagline {
+    font-size: 20px;
   }
 
   .heroTitle {
-    font-size: 48px;
+    font-size: 40px;
+    line-height: 1.05;
   }
 
-  .heroLamps {
-    flex-direction: row;
-    justify-content: flex-start;
-    overflow-x: auto;
+  .heroDesc {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .btnExplore {
+    padding: 12px 24px;
+    font-size: 13px;
+  }
+
+  .heroRight {
+    padding-top: 0;
+    gap: 14px;
     width: 100%;
-    padding-bottom: 16px; /* Space for scrollbar */
-    /* Hide scrollbar for cleaner look */
-    scrollbar-width: none; 
-  }
-  
-  .heroLamps::-webkit-scrollbar {
-    display: none;
-  }
-
-  .heroLampCard {
-    width: 140px;
-    height: 160px;
-    flex-shrink: 0;
-  }
-
-  .heroLampCardActive {
-    width: 160px;
-    height: 190px;
-    flex-shrink: 0;
   }
 
   .heroInfoCard {
     width: 100%;
     max-width: 320px;
+    margin-bottom: 0;
+    padding: 12px 14px;
+    gap: 12px;
+  }
+
+  .heroInfoCardImg {
+    width: 70px;
+    height: 70px;
+  }
+
+  .heroInfoCardNum {
+    font-size: 11px;
+  }
+
+  .heroInfoCardName {
+    font-size: 16px;
+  }
+
+  .heroInfoCardCount {
+    font-size: 15px;
+    margin-top: 2px;
+  }
+
+  .heroLamps {
+    width: 100%;
+    height: 220px;
+    padding: 0;
+  }
+
+  .heroLampCard {
+    width: 120px;
+    height: 150px;
+    border-radius: 14px;
+    flex-shrink: 0;
+  }
+
+  .heroLampCardActive {
+    width: 140px;
+    height: 190px;
+    border-radius: 16px;
+    flex-shrink: 0;
+  }
+
+  .heroLampsTrack {
+    --hero-card-half: 70px;
+    --hero-carousel-step: 134px;
+    gap: 14px;
   }
 
   .statementText {
@@ -1258,5 +1437,13 @@
   .statCard {
     flex: 0 0 calc(50% - 12px);
     height: 160px;
+  }
+
+  .statNum {
+    font-size: 34px;
+  }
+
+  .statLabel {
+    font-size: 13px;
   }
 }

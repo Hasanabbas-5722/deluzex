@@ -418,4 +418,18 @@
   .productGrid {
     grid-template-columns: 1fr;
   }
+  .heroOverlay {
+     height:80%;
+     min-height: 285px;
+  }
+  .heroBg {
+     height:80%
+  }
+  .hero {
+     height:40%;
+     min-height: 285px;
+  }
+  .categoriesSection {
+    padding: 0rem 1rem;
+  } 
 }

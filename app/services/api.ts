@@ -38,6 +38,32 @@ export interface Product {
   product_images?: string[];
 }
 
+export interface UserProfile {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone?: string | null;
+  city?: string | null;
+  country?: string | null;
+  is_verified: boolean;
+  created_at: string;
+}
+
+export interface UserProfileUpdate {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone?: string;
+  city?: string;
+  country?: string;
+}
+
+export interface PasswordUpdate {
+  current_password: string;
+  new_password: string;
+}
+
 // Helper to get token (safe for both client and SSR)
 function getAuthToken(): string | null {
   if (typeof window !== 'undefined') {
@@ -75,6 +101,52 @@ function getAuthHeaders(isFormData = false): Record<string, string> {
   return headers;
 }
 
+async function getApiError(res: Response, fallback: string): Promise<Error> {
+  const body = await res.json().catch(() => ({}));
+  const detail = body.detail || body.message;
+  return new Error(typeof detail === "string" ? detail : fallback);
+}
+
+function getResponseData<T>(body: { data?: T } | T): T {
+  return (body && typeof body === "object" && "data" in body ? body.data : body) as T;
+}
+
+export async function fetchUserProfile(): Promise<UserProfile> {
+  const res = await fetch(`${API_BASE_URL}/auth/me`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+  if (!res.ok) throw await getApiError(res, "Failed to fetch profile.");
+  return getResponseData<UserProfile>(await res.json());
+}
+
+export async function updateUserProfile(profile: UserProfileUpdate): Promise<UserProfile> {
+  const res = await fetch(`${API_BASE_URL}/auth/me`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(profile),
+  });
+  if (!res.ok) throw await getApiError(res, "Failed to update profile.");
+  return getResponseData<UserProfile>(await res.json());
+}
+
+export async function updateUserPassword(password: PasswordUpdate): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/auth/me/password`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(password),
+  });
+  if (!res.ok) throw await getApiError(res, "Failed to update password.");
+}
+
+export async function deleteUserProfile(): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/auth/me`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw await getApiError(res, "Failed to delete account.");
+}
+
 export async function fetchCategories(): Promise<Category[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/categories`, {
@@ -86,6 +158,7 @@ export async function fetchCategories(): Promise<Category[]> {
     
     // Support direct arrays [...] or response wrappers like { data: [...] }
     return Array.isArray(data) ? data : (data.data || []);
+    return [];
   } catch (error) {
     console.error("Error fetching categories:", error);
     return []; // Return empty array on failure so UI doesn't crash

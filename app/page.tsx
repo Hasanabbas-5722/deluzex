@@ -2,6 +2,8 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { fetchCategories, fetchProducts } from "./services/api";
 import AddToCartButton from "./components/AddToCartButton";
+import HeroProductWidget from "./components/HeroProductWidget";
+import AnimatedCounter from "./components/animations/AnimatedCounter";
 
 export default async function Home() {
   const categories = await fetchCategories();
@@ -15,7 +17,7 @@ export default async function Home() {
       <section className={styles.hero}>
         {/* Background image */}
         <div className={styles.heroBg}>
-          <Image src="/images/hero_bg_1784107713316.jpg" alt="" fill style={{ objectFit: 'cover' }} priority />
+          <Image src="/images/hero_bg.png" alt="" fill style={{ objectFit: 'cover', height: '100%' }} />
         </div>
         <div className={styles.heroOverlay}></div>
 
@@ -27,65 +29,14 @@ export default async function Home() {
             Crafted With Exceptional Materials And Refined Details To Elevate<br />
             Modern Living Spaces.
           </p>
-          <a href="/shop"><button className={styles.btnExplore}>Explore Collection</button></a>
-        </div>
-
-        {/* Right: Product Widget (dark card + lamp showcase) */}
-        <div className={styles.heroRight}>
-          {/* Dark top info card */}
-          {/* <div className={styles.heroInfoCard}>
-            <div className={styles.heroInfoCardImg}>
-              <Image
-                src="/images/lamp_classic_1784107722127.jpg"
-                alt="Crystal Chandelier"
-                width={112}
-                height={94}
-                style={{ objectFit: "cover", borderRadius: "8px" }}
-              />
-            </div>
-            <div className={styles.heroInfoCardText}>
-              <span className={styles.heroInfoCardNum}>/01</span>
-              <span className={styles.heroInfoCardName}>Crystal Chandelier</span>
-              <span className={styles.heroInfoCardCount}>231</span>
-            </div>
-          </div> */}
-
-          {/* 3 Lamp thumbnails */}
-          <div className={styles.heroLamps}>
-            <div className={styles.heroLampCard}>
-              <Image
-                src="/images/lamp_classic_1784107722127.jpg"
-                alt="Table Lamp"
-                fill
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-            <div className={`${styles.heroLampCard} ${styles.heroLampCardActive}`}>
-              <Image
-                src="/images/lamp_modern_tall_1784107732736.jpg"
-                alt="Crystal Chandelier"
-                fill
-                style={{ objectFit: "cover" }}
-              />
-              {/* <div className={styles.heroLampLabel}>Crystal Chandelier</div> */}
-            </div>
-            <div className={styles.heroLampCard}>
-              <Image
-                src="/images/lamp_black_gold_1784107745696.jpg"
-                alt="Gold Lamp"
-                fill
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-          </div>
-
-          {/* Dots indicator */}
-          <div className={styles.heroDots}>
-            <span className={`${styles.heroDot} ${styles.heroDotActive}`}></span>
-            <span className={styles.heroDot}></span>
-            <span className={styles.heroDot}></span>
+          <div className={styles.heroBtns}>
+            <a href="/shop"><button className={styles.btnExplore}>Explore Collection</button></a>
+          <a href=""><button className={styles.btncatalogue}>View Catalogue</button></a>
           </div>
         </div>
+
+        {/* Right: selected product detail with scrollable lamp choices */}
+        <HeroProductWidget />
       </section>
 
       {/* ===================== STATEMENT SECTION ===================== */}
@@ -137,7 +88,44 @@ export default async function Home() {
             </>
           )}
         </div>
-        {/* <button className={styles.btnExploreCat}>Explore Categories</button> */}
+        <button className={styles.btnExploreCat}>Explore Categories</button>
+      </section>
+      
+      {/* ===================== FEATURED PROJECTS SECTION ===================== */}
+      {/* Figma: 1440x885, "Our Featured Projects." title, 2 large project cards, Explore button */}
+      <section className={styles.projectsSection}>
+        <h2 className={styles.projectsTitle}>Our Featured Projects.</h2>
+        <div className={styles.projectGrid}>
+          <div className={styles.projectCard}>
+            <Image src="/images/project_lounge_1784107767735.jpg" alt="Luxury Villa Residence" fill style={{ objectFit: "cover", borderRadius: "20px" }} />
+            <div className={styles.projectCardLabel}>
+              <div className={styles.projectCardLabelText}>
+                <span className={styles.projectCardLabelTitle}>Luxury Villa Residence</span>
+                <span className={styles.projectCardLabelSub}>Ahmedabad</span>
+              </div>
+              <button className={styles.projectArrowBtn}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className={styles.projectCard}>
+            <Image src="/images/project_lobby_1784107778993.jpg" alt="Luxury Villa Residence" fill style={{ objectFit: "cover", borderRadius: "20px" }} />
+            <div className={styles.projectCardLabel}>
+              <div className={styles.projectCardLabelText}>
+                <span className={styles.projectCardLabelTitle}>Luxury Villa Residence</span>
+                <span className={styles.projectCardLabelSub}>Ahmedabad</span>
+              </div>
+              <button className={styles.projectArrowBtn}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button className={styles.btnExploreProjects}>Explore All Projects</button>
       </section>
 
       {/* ===================== NEW ARRIVALS SECTION ===================== */}
@@ -196,42 +184,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ===================== FEATURED PROJECTS SECTION ===================== */}
-      {/* Figma: 1440x885, "Our Featured Projects." title, 2 large project cards, Explore button */}
-      <section className={styles.projectsSection}>
-        <h2 className={styles.projectsTitle}>Our Featured Projects.</h2>
-        <div className={styles.projectGrid}>
-          <div className={styles.projectCard}>
-            <Image src="/images/project_lounge_1784107767735.jpg" alt="Luxury Villa Residence" fill style={{ objectFit: "cover", borderRadius: "20px" }} />
-            <div className={styles.projectCardLabel}>
-              <div className={styles.projectCardLabelText}>
-                <span className={styles.projectCardLabelTitle}>Luxury Villa Residence</span>
-                <span className={styles.projectCardLabelSub}>Ahmedabad</span>
-              </div>
-              <button className={styles.projectArrowBtn}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className={styles.projectCard}>
-            <Image src="/images/project_lobby_1784107778993.jpg" alt="Luxury Villa Residence" fill style={{ objectFit: "cover", borderRadius: "20px" }} />
-            <div className={styles.projectCardLabel}>
-              <div className={styles.projectCardLabelText}>
-                <span className={styles.projectCardLabelTitle}>Luxury Villa Residence</span>
-                <span className={styles.projectCardLabelSub}>Ahmedabad</span>
-              </div>
-              <button className={styles.projectArrowBtn}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-        <button className={styles.btnExploreProjects}>Explore All Projects</button>
-      </section>
 
       {/* ===================== ABOUT US SECTION ===================== */}
       {/* Figma: 1440x1076, left text + right image, stats row with images at bottom */}
@@ -297,28 +249,28 @@ export default async function Home() {
           <div className={styles.statCard}>
             <Image src="/images/project_lounge_1784107767735.jpg" alt="Years of excellence" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
             <div className={styles.statOverlay}>
-              <span className={styles.statNum}>10+</span>
+              <AnimatedCounter target={10} suffix="+" className={styles.statNum} duration={2} />
               <span className={styles.statLabel}>Years Of Excellence</span>
             </div>
           </div>
           <div className={styles.statCard}>
             <Image src="/images/about_chandelier_1784107790569.jpg" alt="Client satisfaction" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
             <div className={styles.statOverlay}>
-              <span className={styles.statNum}>98%</span>
+              <AnimatedCounter target={98} suffix="%" className={styles.statNum} duration={2.2} />
               <span className={styles.statLabel}>Client Satisfaction</span>
             </div>
           </div>
           <div className={styles.statCard}>
             <Image src="/images/project_lobby_1784107778993.jpg" alt="Lighting installations" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
             <div className={styles.statOverlay}>
-              <span className={styles.statNum}>500+</span>
+              <AnimatedCounter target={500} suffix="+" className={styles.statNum} duration={2.4} />
               <span className={styles.statLabel}>Lighting Installations</span>
             </div>
           </div>
           <div className={styles.statCard}>
             <Image src="/images/project_lounge_1784107767735.jpg" alt="Happy customers" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
             <div className={styles.statOverlay}>
-              <span className={styles.statNum}>50K+</span>
+              <AnimatedCounter target={50} suffix="K+" className={styles.statNum} duration={2} />
               <span className={styles.statLabel}>Happy Customers</span>
             </div>
           </div>

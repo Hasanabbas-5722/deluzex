@@ -1,5 +1,7 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+
 
 :root {
   --color-primary: #C89B60;
@@ -12,6 +14,8 @@
   --color-white: #ffffff;
   --font-libre: 'Libre Caslon Display', serif;
   --font-inter: 'Inter', sans-serif;
+  --font-general-sans: 'General Sans', sans-serif;
+  --font-figtree: 'Figtree', sans-serif;
 }
 
 body {

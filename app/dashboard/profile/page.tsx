@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
+import { fetchUserProfile, updateUserPassword, updateUserProfile } from "../../services/api";
 import styles from "./profile.module.css";
 
 function getInitialUserValue(key: string, defaultValue: string, userObj?: Record<string, string> | null): string {
@@ -51,34 +52,66 @@ export default function ProfilePage() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    const updatedUser = {
-      ...(user || {}),
-      first_name: firstName,
-      last_name: lastName,
-      name: `${firstName} ${lastName}`.trim(),
-      email,
-      phone,
-      city,
-      country,
-    };
+  useEffect(() => {
+    let isMounted = true;
 
-    if (typeof window !== "undefined") {
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+    fetchUserProfile()
+      .then((profile) => {
+        if (!isMounted) return;
+        setFirstName(profile.first_name || "");
+        setLastName(profile.last_name || "");
+        setEmail(profile.email || "");
+        setPhone(profile.phone || "");
+        setCity(profile.city || "");
+        setCountry(profile.country || "");
+        localStorage.setItem("user", JSON.stringify(profile));
+      })
+      .catch((error: Error) => {
+        if (isMounted && error.message !== "Could not validate credentials") {
+          showToast(error.message);
+        }
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingProfile(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingProfile(true);
+    try {
+      const updatedUser = await updateUserProfile({
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        city: city.trim(),
+        country: country.trim(),
+      });
       const token = localStorage.getItem("authToken") || "";
       login(token, updatedUser);
+      showToast("Profile details updated successfully!");
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Failed to update profile.");
+    } finally {
+      setIsSavingProfile(false);
     }
-    showToast("Profile details updated successfully!");
   };
 
-  const handleUpdatePassword = (e: React.FormEvent) => {
+  const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentPassword) {
       alert("Please enter your current password.");
@@ -93,10 +126,21 @@ export default function ProfilePage() {
       return;
     }
 
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    showToast("Password changed successfully!");
+    setIsUpdatingPassword(true);
+    try {
+      await updateUserPassword({
+        current_password: currentPassword,
+        new_password: newPassword,
+      });
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      showToast("Password changed successfully!");
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : "Failed to update password.");
+    } finally {
+      setIsUpdatingPassword(false);
+    }
   };
 
   return (
@@ -228,8 +272,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <button type="submit" className={styles.btnSave}>
-                Save Changes
+              <button type="submit" className={styles.btnSave} disabled={isLoadingProfile || isSavingProfile}>
+                {isSavingProfile ? "Saving..." : "Save Changes"}
               </button>
             </form>
           </div>
@@ -275,8 +319,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <button type="submit" className={styles.btnSave}>
-                Update Password
+              <button type="submit" className={styles.btnSave} disabled={isUpdatingPassword}>
+                {isUpdatingPassword ? "Updating..." : "Update Password"}
               </button>
             </form>
           </div>
