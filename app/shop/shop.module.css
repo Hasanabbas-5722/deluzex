@@ -407,29 +407,85 @@
 }
 
 @media (max-width: 768px) {
-  .heroTitle {
-    font-size: 3rem;
-  }
-  .filterBar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
-  }
-  .productGrid {
-    grid-template-columns: 1fr;
-  }
-  .heroOverlay {
-     height:80%;
-     min-height: 285px;
-  }
-  .heroBg {
-     height:80%
-  }
   .hero {
-     height:40%;
-     min-height: 285px;
+    height: auto;
+    min-height: 260px;
+    padding: 4.5rem 1.25rem 2.5rem;
+  }
+  .heroBg, .heroOverlay {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    min-height: auto;
+  }
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+  .heroSub {
+    font-size: 0.7rem;
   }
   .categoriesSection {
-    padding: 0rem 1rem;
-  } 
+    padding: 2.5rem 1.25rem 1.5rem;
+  }
+  .sectionHeader {
+    margin-bottom: 1.5rem;
+  }
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+  .sectionSub {
+    font-size: 1.2rem;
+  }
+  .categoriesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .filterBar {
+    padding: 0 1.25rem;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .productsSection {
+    padding: 0 1.25rem 3rem;
+  }
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .productName {
+    font-size: 0.65rem;
+  }
+  .productPrice {
+    font-size: 0.7rem;
+  }
+  .pagination {
+    padding: 1.5rem 0 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.9rem;
+  }
+  .categoriesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .categoryTitle {
+    font-size: 0.95rem;
+  }
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .productCard {
+    padding: 0.5rem;
+  }
+  .productImageWrapper {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }

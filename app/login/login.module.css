@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   background: var(--color-bg);
-  padding: 0rem 2rem 1rem;
+  padding: 6rem 1.5rem 3rem;
 }
 
 .loginContainer {
@@ -108,15 +108,19 @@
 }
 
 @media (max-width: 480px) {
+  .main {
+    padding: 5rem 1rem 2rem;
+  }
   .loginContainer {
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.25rem;
+    border-radius: 12px;
   }
   .row {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
   .title {
-    font-size: 2rem;
+    font-size: 1.85rem;
   }
 }
 

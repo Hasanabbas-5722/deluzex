@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Libre_Caslon_Display, Italianno } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
@@ -21,6 +21,12 @@ const italianno = Italianno({
 
 import { AuthProvider } from "./context/AuthContext";
 import { SidebarProvider } from "./context/SidebarContext";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: "deluzex — Where Lights becomes Design",

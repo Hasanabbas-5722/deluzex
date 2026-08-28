@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import styles from "../page.module.css";
 
@@ -36,12 +36,29 @@ export default function HeroProductWidget() {
   const [carouselPosition, setCarouselPosition] = useState(lamps.length * 2 + 1);
   const [isResetting, setIsResetting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const carouselLamps = Array.from({ length: lamps.length * 5 }, (_, index) => lamps[index % lamps.length]);
-  const activeIndex = carouselPosition % lamps.length;
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const touchStartTimeRef = useRef(0);
+  const isHorizontalSwipeRef = useRef<boolean | null>(null);
+  const currentDragOffsetRef = useRef(0);
+  const hasDraggedRef = useRef(false);
+
+  const mouseStartXRef = useRef<number | null>(null);
+  const isMouseDraggingRef = useRef(false);
+
+  const carouselLamps = Array.from(
+    { length: lamps.length * 5 },
+    (_, index) => lamps[index % lamps.length]
+  );
+  const activeIndex = ((carouselPosition % lamps.length) + lamps.length) % lamps.length;
   const activeLamp = lamps[activeIndex];
 
+  // Auto-rotation timer
   useEffect(() => {
-    if (isPaused) {
+    if (isPaused || isDragging) {
       return;
     }
 
@@ -50,29 +67,173 @@ export default function HeroProductWidget() {
     }, 3500);
 
     return () => window.clearInterval(timer);
-  }, [isPaused]);
+  }, [isPaused, isDragging]);
 
+  // Seamless wrap-around boundaries
   useEffect(() => {
-    if (carouselPosition === lamps.length * 4) {
+    if (carouselPosition >= lamps.length * 4) {
       const resetTimer = window.setTimeout(() => {
         setIsResetting(true);
-        setCarouselPosition(lamps.length * 2);
+        setCarouselPosition((pos) => ((pos % lamps.length) + lamps.length) % lamps.length + lamps.length * 2);
         window.requestAnimationFrame(() => setIsResetting(false));
-      }, 650);
+      }, 550);
+
+      return () => window.clearTimeout(resetTimer);
+    } else if (carouselPosition < lamps.length) {
+      const resetTimer = window.setTimeout(() => {
+        setIsResetting(true);
+        setCarouselPosition((pos) => ((pos % lamps.length) + lamps.length) % lamps.length + lamps.length * 2);
+        window.requestAnimationFrame(() => setIsResetting(false));
+      }, 550);
 
       return () => window.clearTimeout(resetTimer);
     }
   }, [carouselPosition]);
 
-  const selectLamp = (index: number) => {
-    setCarouselPosition(lamps.length * 2 + index);
+  const selectLamp = useCallback((targetIndex: number) => {
+    const currentNormalized = ((carouselPosition % lamps.length) + lamps.length) % lamps.length;
+    let diff = targetIndex - currentNormalized;
+    if (diff > lamps.length / 2) diff -= lamps.length;
+    if (diff < -lamps.length / 2) diff += lamps.length;
+    setCarouselPosition((prev) => prev + diff);
+  }, [carouselPosition]);
+
+  // Touch handlers for mobile swipe with bare finger
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    touchStartTimeRef.current = Date.now();
+    currentDragOffsetRef.current = 0;
+    hasDraggedRef.current = false;
+    isHorizontalSwipeRef.current = null;
+    setIsDragging(true);
+    setIsPaused(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = currentX - touchStartXRef.current;
+    const diffY = currentY - touchStartYRef.current;
+
+    if (isHorizontalSwipeRef.current === null) {
+      if (Math.abs(diffX) > 6 || Math.abs(diffY) > 6) {
+        isHorizontalSwipeRef.current = Math.abs(diffX) > Math.abs(diffY);
+      }
+    }
+
+    if (isHorizontalSwipeRef.current) {
+      if (Math.abs(diffX) > 6) {
+        hasDraggedRef.current = true;
+      }
+      currentDragOffsetRef.current = diffX;
+      setDragOffset(diffX);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartXRef.current !== null && isHorizontalSwipeRef.current) {
+      const diffX = currentDragOffsetRef.current;
+      const elapsed = Date.now() - touchStartTimeRef.current;
+      const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+      const step = isMobile ? 127 : 204;
+
+      let delta = 0;
+      if (Math.abs(diffX) > 25) {
+        delta = Math.round(-diffX / step);
+        if (delta === 0) {
+          delta = diffX < 0 ? 1 : -1;
+        }
+      } else if (elapsed < 300 && Math.abs(diffX) > 15) {
+        delta = diffX < 0 ? 1 : -1;
+      }
+
+      if (delta !== 0) {
+        setCarouselPosition((prev) => prev + delta);
+      }
+    }
+
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+    isHorizontalSwipeRef.current = null;
+    currentDragOffsetRef.current = 0;
+    setDragOffset(0);
+    setIsDragging(false);
+
+    window.setTimeout(() => {
+      hasDraggedRef.current = false;
+      setIsPaused(false);
+    }, 200);
+  };
+
+  // Mouse drag handlers for desktop
+  const handleMouseDown = (e: React.MouseEvent) => {
+    mouseStartXRef.current = e.clientX;
+    touchStartTimeRef.current = Date.now();
+    currentDragOffsetRef.current = 0;
+    hasDraggedRef.current = false;
+    isMouseDraggingRef.current = true;
+    setIsDragging(true);
+    setIsPaused(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDraggingRef.current || mouseStartXRef.current === null) return;
+    const diffX = e.clientX - mouseStartXRef.current;
+    if (Math.abs(diffX) > 6) {
+      hasDraggedRef.current = true;
+    }
+    currentDragOffsetRef.current = diffX;
+    setDragOffset(diffX);
+  };
+
+  const handleMouseUp = () => {
+    if (isMouseDraggingRef.current && mouseStartXRef.current !== null) {
+      const diffX = currentDragOffsetRef.current;
+      const elapsed = Date.now() - touchStartTimeRef.current;
+      const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+      const step = isMobile ? 127 : 204;
+
+      let delta = 0;
+      if (Math.abs(diffX) > 30) {
+        delta = Math.round(-diffX / step);
+        if (delta === 0) {
+          delta = diffX < 0 ? 1 : -1;
+        }
+      } else if (elapsed < 300 && Math.abs(diffX) > 18) {
+        delta = diffX < 0 ? 1 : -1;
+      }
+
+      if (delta !== 0) {
+        setCarouselPosition((prev) => prev + delta);
+      }
+    }
+
+    mouseStartXRef.current = null;
+    isMouseDraggingRef.current = false;
+    currentDragOffsetRef.current = 0;
+    setDragOffset(0);
+    setIsDragging(false);
+
+    window.setTimeout(() => {
+      hasDraggedRef.current = false;
+      setIsPaused(false);
+    }, 200);
+  };
+
+  const handleMouseLeave = () => {
+    if (isMouseDraggingRef.current) {
+      handleMouseUp();
+    }
+    setIsPaused(false);
   };
 
   return (
     <div
       className={styles.heroRight}
       onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      onMouseLeave={handleMouseLeave}
       onFocus={() => setIsPaused(true)}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -99,32 +260,53 @@ export default function HeroProductWidget() {
         </div>
       </div>
 
-      <div className={styles.heroLamps} aria-label="Featured lighting products">
+      <div
+        className={styles.heroLamps}
+        aria-label="Featured lighting products"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        style={{ cursor: isDragging ? "grabbing" : "grab", touchAction: "pan-y" }}
+      >
         <div
           className={styles.heroLampsTrack}
           style={{
-            transform: `translateX(calc(50% - var(--hero-card-half) - ${carouselPosition} * var(--hero-carousel-step)))`,
-            transition: isResetting ? "none" : undefined,
+            transform: `translateX(calc(50% - var(--hero-card-half) - ${carouselPosition} * var(--hero-carousel-step) + ${dragOffset}px))`,
+            transition: isDragging || isResetting ? "none" : "transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
           }}
         >
-        {carouselLamps.map((lamp, position) => (
-          <button
-            key={`${lamp.image}-${position}`}
-            type="button"
-            className={`${styles.heroLampCard} ${position === carouselPosition ? styles.heroLampCardActive : ""}`}
-            onClick={() => selectLamp(position % lamps.length)}
-            aria-label={`Show ${lamp.name}`}
-            aria-pressed={position === carouselPosition}
-          >
-            <Image
-              src={lamp.image}
-              alt={lamp.alt}
-              fill
-              sizes="(max-width: 768px) 160px, 240px"
-              style={{ objectFit: "cover" }}
-            />
-          </button>
-        ))}
+          {carouselLamps.map((lamp, position) => (
+            <button
+              key={`${lamp.image}-${position}`}
+              type="button"
+              className={`${styles.heroLampCard} ${
+                position === carouselPosition ? styles.heroLampCardActive : ""
+              }`}
+              onClick={(e) => {
+                if (hasDraggedRef.current) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return;
+                }
+                setCarouselPosition(position);
+              }}
+              aria-label={`Show ${lamp.name}`}
+              aria-pressed={position === carouselPosition}
+            >
+              <Image
+                src={lamp.image}
+                alt={lamp.alt}
+                fill
+                draggable={false}
+                sizes="(max-width: 768px) 160px, 240px"
+                style={{ objectFit: "cover", pointerEvents: "none" }}
+              />
+            </button>
+          ))}
         </div>
       </div>
 

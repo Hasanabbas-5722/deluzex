@@ -266,7 +266,17 @@
   .sidebar {
     width: 100%;
   }
-  .header, .footer, .cartItems {
-    padding: 2rem;
+  .header {
+    padding: 1rem 1.25rem;
+  }
+  .cartItems {
+    padding: 0 1.25rem;
+  }
+  .footer {
+    padding: 1rem 1.25rem 1.5rem;
+  }
+  .itemImageWrapper {
+    width: 85px;
+    height: 85px;
   }
 }

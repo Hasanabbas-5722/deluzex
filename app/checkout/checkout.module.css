@@ -588,22 +588,51 @@
 }
 
 @media (max-width: 900px) {
+  .container {
+    padding: 6rem 1.5rem 3rem;
+  }
+  .title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
   .label {
     font-size: 0.8rem;
     margin-top: 0.6rem;
   }
   .checkoutGrid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 2rem;
   }
   .formRow {
     flex-direction: column;
     gap: 0;
   }
   .summaryCard {
-    padding: 1.75rem;
+    padding: 1.5rem;
   }
   .savedGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5rem 1rem 2.5rem;
+  }
+  .title {
+    font-size: 1.75rem;
+  }
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+  .summaryCard {
+    padding: 1.25rem;
+  }
+  .itemRow {
+    gap: 0.75rem;
+  }
+  .itemImg {
+    width: 60px;
+    height: 60px;
   }
 }

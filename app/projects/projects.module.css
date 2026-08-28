@@ -232,21 +232,82 @@
 @media (max-width: 992px) {
   .projectGrid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .heroTitle {
-    font-size: 3rem;
+  .hero {
+    min-height: 280px;
+    padding: 4rem 1.25rem 2rem;
   }
-  .filterSection, .projectsSection, .ctaSection {
-    padding-left: 2rem;
-    padding-right: 2rem;
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+  .filterSection {
+    padding: 2rem 1.25rem 1.5rem;
   }
   .filters {
+    gap: 0.75rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+  .filterBtn {
+    flex-shrink: 0;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.75rem;
+  }
+  .projectsSection {
+    padding: 0 1.25rem 4rem;
+  }
+  .projectCard {
+    height: 260px;
+  }
+  .projectLabelBox {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .plbTitle {
+    font-size: 0.9rem;
+  }
+  .plbSub {
+    font-size: 0.7rem;
+  }
+  .centerBtn {
+    margin-top: 2.5rem;
+  }
+  .ctaSection {
+    padding: 4rem 1.25rem;
+  }
+  .ctaTitle {
+    font-size: 2.2rem;
   }
   .ctaButtons {
     flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .btnPrimaryRounded, .btnOutlineRounded {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.85rem;
+  }
+  .ctaTitle {
+    font-size: 1.85rem;
   }
 }

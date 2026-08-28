@@ -117,12 +117,42 @@
 
 @media (max-width: 1024px) {
   .header {
-    padding: 1.5rem 2rem;
+    padding: 1.25rem 2rem;
   }
   .nav {
     display: none;
   }
   .hamburgerBtn {
     display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1.25rem;
+  }
+  .headerSolid {
+    padding: 0.85rem 1.25rem;
+  }
+  .logo {
+    font-size: 1.5rem;
+  }
+  .headerIcons {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0.85rem 1rem;
+  }
+  .headerSolid {
+    padding: 0.75rem 1rem;
+  }
+  .logo {
+    font-size: 1.35rem;
+  }
+  .headerIcons {
+    gap: 0.75rem;
   }
 }

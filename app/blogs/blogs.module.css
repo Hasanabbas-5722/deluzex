@@ -325,32 +325,76 @@
   .filterSection {
     flex-direction: column;
     align-items: flex-start;
+    padding: 3rem 2rem 2rem;
+  }
+  .searchAndAdd {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
 @media (max-width: 768px) {
+  .hero {
+    min-height: 280px;
+    padding: 4rem 1.25rem 2rem;
+  }
   .heroTitle {
-    font-size: 3rem;
+    font-size: 2.2rem;
+  }
+  .filterSection {
+    padding: 2rem 1.25rem 1rem;
+    gap: 1.25rem;
+  }
+  .searchAndAdd {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+  .searchBox {
+    width: 100%;
+  }
+  .searchBox input {
+    width: 100%;
+  }
+  .btnAddBlog {
+    width: 100%;
+    text-align: center;
+  }
+  .blogGridSection {
+    padding: 1rem 1.25rem 4rem;
   }
   .blogGrid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 1rem;
-    scrollbar-width: none;
-  }
-  .blogGrid::-webkit-scrollbar {
-    display: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
   .blogCard {
-    flex: 0 0 calc(85% - 1rem);
-    scroll-snap-align: start;
+    flex: none;
+    width: 100%;
   }
-  .filterSection, .blogGridSection, .ctaSection {
-    padding-left: 2rem;
-    padding-right: 2rem;
+  .ctaSection {
+    padding: 4rem 1.25rem;
+  }
+  .ctaTitle {
+    font-size: 2.2rem;
   }
   .ctaButtons {
     flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .btnPrimaryRounded, .btnOutlineRounded {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.85rem;
+  }
+  .ctaTitle {
+    font-size: 1.85rem;
   }
 }

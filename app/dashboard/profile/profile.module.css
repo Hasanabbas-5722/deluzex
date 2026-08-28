@@ -289,16 +289,40 @@
 }
 
 @media (max-width: 900px) {
+  .container {
+    padding: 1.25rem 1rem;
+  }
   .grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
   .profileHero {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    gap: 1.25rem;
+  }
+  .heroLeft {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .heroEmail {
+    justify-content: center;
+    flex-wrap: wrap;
   }
   .formRow {
     flex-direction: column;
     gap: 0;
+  }
+  .card {
+    padding: 1.25rem;
+  }
+  .toast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    justify-content: center;
   }
 }

@@ -163,7 +163,8 @@
 @media (max-width: 992px) {
   .contactSection {
     grid-template-columns: 1fr;
-    gap: 4rem;
+    gap: 3rem;
+    padding: 2rem 3rem 6rem;
   }
   .leftCol {
     padding-right: 0;
@@ -172,12 +173,30 @@
 
 @media (max-width: 768px) {
   .breadcrumb {
-    padding: 2rem;
+    padding: 1.5rem 1.25rem 0.5rem;
   }
   .contactSection {
-    padding: 2rem;
+    padding: 1rem 1.25rem 4rem;
+    gap: 2.5rem;
+  }
+  .signatureText {
+    font-size: 2rem;
+  }
+  .title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
   }
   .rightCol {
-    padding: 2rem;
+    padding: 1.5rem 1.25rem;
+    border-radius: 10px;
+  }
+  .submitBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.85rem;
   }
 }

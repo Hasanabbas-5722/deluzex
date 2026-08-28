@@ -419,7 +419,7 @@
 @media (max-width: 992px) {
   .passionContent, .chooseGrid {
     grid-template-columns: 1fr;
-    gap: 4rem;
+    gap: 3rem;
   }
   .passionText {
     padding-right: 0;
@@ -428,7 +428,8 @@
     grid-template-columns: 1fr 1fr;
     margin: 0 2rem;
     transform: translateY(0);
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
+    padding: 3rem 2rem;
   }
   .chooseSection {
     margin-top: 0;
@@ -439,16 +440,61 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    min-height: 280px;
+    padding: 4rem 1.25rem 2rem;
+  }
   .heroTitle {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+  .sectionTitle {
+    font-size: 2.2rem;
   }
   .passionSection, .chooseSection, .projectsSection, .ctaSection {
-    padding: 4rem 2rem;
+    padding: 3rem 1.25rem;
+  }
+  .passionIcons {
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
   .statsBanner {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 1rem 2.5rem;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+  .statBox:not(:last-child)::after {
+    display: none;
+  }
+  .statBox h3 {
+    font-size: 2rem;
+  }
+  .ctaTitle {
+    font-size: 2.2rem;
   }
   .ctaButtons {
     flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .btnOutlineRounded {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.85rem;
+  }
+  .sectionTitle {
+    font-size: 1.85rem;
+  }
+  .statsBanner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }

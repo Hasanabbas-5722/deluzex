@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./Footer.module.css";
 
@@ -14,11 +15,11 @@ export default function Footer() {
           <div className={styles.footerLogos}>
             {/* Amazon logo */}
             <div className={styles.footerLogoItem}>
-              <img src="https://cdn.brandfetch.io/idWdImNSUt/theme/dark/symbol.svg?c=1dxbfHSJFAPEGdCLU4o5B" alt="Amazon logo" width={56} height={56} />
+              <Image src="https://cdn.brandfetch.io/idWdImNSUt/theme/dark/symbol.svg?c=1dxbfHSJFAPEGdCLU4o5B" alt="Amazon logo" width={56} height={56} unoptimized />
             </div>
             {/* Flipkart logo */}
             <div className={styles.footerLogoItem}>
-              <img src="https://www.vectorlogo.zone/logos/amazon/amazon-icon.svg" alt="Flipkart logo" width={56} height={56} />
+              <Image src="https://www.vectorlogo.zone/logos/amazon/amazon-icon.svg" alt="Flipkart logo" width={56} height={56} unoptimized />
             </div>
           </div>
 

@@ -212,8 +212,23 @@
   color: var(--color-text-light);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
+  .container {
+    padding: 1.25rem 1rem;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .btnAddAddress {
+    width: 100%;
+    justify-content: center;
+  }
   .addressGrid {
     grid-template-columns: 1fr;
+  }
+  .card {
+    padding: 1.25rem;
   }
 }
