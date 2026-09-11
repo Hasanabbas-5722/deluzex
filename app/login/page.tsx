@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import styles from "./login.module.css";
 import { useAuth } from "../context/AuthContext";
+import { useDispatch } from "react-redux";
+import { addToCart, openCart } from "../store/cartSlice";
 
 type ToastProps = {
   type: "success" | "error";
@@ -12,6 +15,7 @@ type ToastProps = {
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const { login } = useAuth();
+  const dispatch = useDispatch();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -137,9 +141,30 @@ export default function Login() {
           setToast({ type: "success", message: "Successfully logged in!" });
           localStorage.setItem("authToken", data?.access_token);
           login(data.access_token, data.data);
+
+          // Auto-add pending cart product if present
+          try {
+            const pending = window.sessionStorage.getItem("pending_cart_product");
+            if (pending) {
+              const product = JSON.parse(pending);
+              dispatch(addToCart(product));
+              dispatch(openCart());
+              window.sessionStorage.removeItem("pending_cart_product");
+            }
+          } catch {
+            // ignore
+          }
+
           console.log("Login successful:", data);
           setTimeout(() => {
-            router.push("/");
+            const redirectParam = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('redirect') : null;
+            if (redirectParam && (data?.data?.is_admin || !redirectParam.startsWith('/admin'))) {
+              router.push(redirectParam);
+            } else if (data?.data?.is_admin) {
+              router.push("/admin");
+            } else {
+              router.push("/");
+            }
           }, 1500);
           console.log("Set timeout completed");
         } else {
@@ -338,6 +363,12 @@ export default function Login() {
               {isLogin ? "Register now" : "Sign in here"}
             </button>
           </p>
+        </div>
+
+        <div style={{ marginTop: '1.25rem', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '1rem' }}>
+          <Link href="/admin/login" style={{ fontSize: '0.8rem', color: '#C49A45', textDecoration: 'none', fontWeight: 600 }}>
+            Administrator Portal &rarr;
+          </Link>
         </div>
       </div>
     </main>

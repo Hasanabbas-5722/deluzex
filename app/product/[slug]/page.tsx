@@ -8,9 +8,11 @@ import { addToCart, openCart } from "../../store/cartSlice";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchProductById, fetchProducts, Product } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ProductDetail() {
   const dispatch = useDispatch();
+  const { isAuthenticated, openLoginModal } = useAuth();
   const params = useParams();
   
   // Data State
@@ -50,26 +52,43 @@ export default function ProductDetail() {
     return <main className={styles.main}><p style={{padding: '2rem 6rem'}}>Product not found.</p></main>;
   }
 
+  const handleAddToBag = () => {
+    if (!product) return;
+    const payload = { ...product, quantity: qty };
+    if (!isAuthenticated) {
+      openLoginModal(
+        payload,
+        `Please log in to add ${product.product_title || "this product"} to your bag.`
+      );
+      return;
+    }
+    dispatch(addToCart(payload));
+  };
+
   return (
-    <main className={styles.main}>
-      {/* HERO SECTION */}
+    <main className={styles.container}>
+      {/* HERO SECTION: Split Layout */}
       <section className={styles.heroSection}>
         <div className={styles.heroLeft}>
-          <div className={styles.breadcrumb}>
-            <Link href="/">Home</Link> <span>/</span> <Link href="/shop">{product.product_category || "Chandeliers"}</Link> <span>/</span> <span>{product.product_title}</span>
+          <div className={styles.breadcrumbs}>
+            <Link href="/">Home</Link> / <Link href="/shop">Shop</Link> / <span>{product.product_title}</span>
           </div>
 
+          <h1 className={styles.title}>{product.product_title}</h1>
           
-          <div className={styles.starsRow}>
-            <div className={styles.stars}>{ "★".repeat(Math.floor(product.product_rating || 3))}{ "☆".repeat(5 - Math.floor(product.product_rating || 3)) }</div>
-            <span className={styles.reviewCount}>{product.product_rating || 3.0} ({35} Reviews)</span>
+          <div className={styles.ratingRow}>
+            <div className={styles.stars}>
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className={styles.star}>★</span>
+              ))}
+            </div>
+            <span className={styles.reviewCount}>({product.product_rating || "4.8"} · 35 Reviews)</span>
           </div>
 
-
-          <h1 className={styles.productTitle}>{product.product_title || "Product Name"}</h1>
           <p className={styles.description}>
-            {product?.product_description || "Crafted with precision, this stunning crystal chandelier brings timeless luxury to any living space. Its brilliant facets reflect light beautifully, creating a warm and inviting atmosphere. Ideal for modern and classic interiors alike."}
+            {product.product_description || "A masterpiece of illumination crafted with meticulous precision. Its balanced proportions and refined materials elevate any modern or transitional interior space."}
           </p>
+
           <div className={styles.specGrid}>
             <div className={styles.specItem}>
               <span className={styles.specLabel}>Material</span>
@@ -100,7 +119,7 @@ export default function ProductDetail() {
               <span>{qty}</span>
               <button onClick={() => setQty(qty + 1)}>+</button>
             </div>
-            <button className={styles.btnPrimary} onClick={() => dispatch(addToCart(product))}>Add To Bag</button>
+            <button className={styles.btnPrimary} onClick={handleAddToBag}>Add To Bag</button>
             <button className={styles.btnOutline}>Add To Wishlist</button>
           </div>
         </div>

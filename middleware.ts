@@ -1,27 +1,75 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+function decodeJwtPayload(token: string): { sub?: string; is_admin?: boolean; exp?: number } | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length < 2) return null;
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const json = atob(base64);
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Define routes that require authentication
-  const protectedRoutes = ['/admin', '/checkout'];
+  const isAdminLogin = pathname === '/admin/login';
+  const isAdminRoute = (pathname === '/admin' || pathname.startsWith('/admin/')) && !isAdminLogin;
+  const protectedRoutes = ['/checkout'];
   const isProtectedRoute = protectedRoutes.some(route => pathname === route || pathname.startsWith(route + '/'));
 
-  // Define routes meant only for unauthenticated users
+  // Define routes meant only for unauthenticated regular users
   const authRoutes = ['/login', '/signup', '/signin'];
   const isAuthRoute = authRoutes.some(route => pathname === route || pathname.startsWith(route + '/'));
 
   // Get token/session from cookies
   const token = request.cookies.get('accessToken')?.value || request.cookies.get('session')?.value || request.cookies.get('access_token')?.value;
 
+  if (isAdminLogin) {
+    if (token) {
+      const payload = decodeJwtPayload(token);
+      const isExpired = payload?.exp ? Date.now() >= payload.exp * 1000 : false;
+      if (payload && !isExpired && payload.is_admin === true) {
+        // Already logged in as admin -> send to admin dashboard
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
+    }
+    return NextResponse.next();
+  }
+
+  if (isAdminRoute) {
+    if (!token) {
+      return NextResponse.redirect(new URL(`/admin/login?redirect=${encodeURIComponent(pathname)}`, request.url));
+    }
+    const payload = decodeJwtPayload(token);
+    const isExpired = payload?.exp ? Date.now() >= payload.exp * 1000 : false;
+    if (!payload || isExpired || payload.is_admin !== true) {
+      // Non-admin user or invalid/expired token - redirect to admin login
+      const response = NextResponse.redirect(new URL(`/admin/login?redirect=${encodeURIComponent(pathname)}`, request.url));
+      if (isExpired) {
+        response.cookies.delete('access_token');
+        response.cookies.delete('accessToken');
+      }
+      return response;
+    }
+    return NextResponse.next();
+  }
+
   if (!token && isProtectedRoute) {
     // Redirect to login if trying to access a protected route without a token
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL(`/login?redirect=${encodeURIComponent(pathname)}`, request.url));
   }
 
   if (token && isAuthRoute) {
-    // Redirect away from login if already authenticated
+    // Redirect away from user login if already authenticated
+    const payload = decodeJwtPayload(token);
+    if (payload?.is_admin === true) {
+      return NextResponse.redirect(new URL('/admin', request.url));
+    }
     return NextResponse.redirect(new URL('/', request.url));
   }
 

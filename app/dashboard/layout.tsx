@@ -9,7 +9,7 @@ import { useSidebar } from "../context/SidebarContext";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, isAdmin } = useAuth();
   const { sidebarOpen, setSidebarOpen } = useSidebar();
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
 
@@ -19,7 +19,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     router.push("/");
   };
 
+  const adminMenuItems = isAdmin
+    ? [
+        {
+          group: "Administration",
+          items: [
+            { name: "Admin Dashboard", path: "/admin", icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" }
+          ]
+        }
+      ]
+    : [];
+
   const menuItems = [
+    ...adminMenuItems,
     {
       group: "My Account",
       items: [

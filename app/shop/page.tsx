@@ -8,9 +8,11 @@ import { addToCart, updateQuantity, removeFromCart } from "../store/cartSlice";
 import { RootState } from "../store/store";
 import { useEffect, useState } from "react";
 import { fetchCategories, fetchProducts, Category, Product } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 export default function Shop() {
   const dispatch = useDispatch();
+  const { isAuthenticated, openLoginModal } = useAuth();
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -136,6 +138,10 @@ export default function Shop() {
                           e.preventDefault();
                           const pId = product._id || product.id || "";
                           if (!pId) return;
+                          if (!isAuthenticated) {
+                            openLoginModal(product, "Please log in to update your cart items.");
+                            return;
+                          }
                           dispatch(updateQuantity({ id: pId, change: 1 }));
                         }}>+</button>
                       </div>
@@ -144,6 +150,10 @@ export default function Shop() {
                         className={styles.addToCartBtn} 
                         onClick={(e) => {
                           e.preventDefault();
+                          if (!isAuthenticated) {
+                            openLoginModal(product, `Please log in to add ${product.product_title || "this lamp"} to your cart.`);
+                            return;
+                          }
                           dispatch(addToCart(product));
                         }}
                         aria-label="Add to cart"

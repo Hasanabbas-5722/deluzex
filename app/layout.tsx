@@ -6,6 +6,8 @@ import ConditionalFooter from "./components/ConditionalFooter";
 import { ReduxProvider } from "./store/ReduxProvider";
 import CartSidebar from "./components/CartSidebar";
 import MainSidebar from "./components/MainSidebar";
+import UserLoginModal from "./components/UserLoginModal";
+import ConsoleBanner from "./components/ConsoleBanner";
 
 const libre = Libre_Caslon_Display({
   weight: "400",
@@ -49,6 +51,8 @@ export default function RootLayout({
               <ConditionalFooter />
               <CartSidebar />
               <MainSidebar />
+              <UserLoginModal />
+              <ConsoleBanner />
             </ReduxProvider>
           </SidebarProvider>
         </AuthProvider>

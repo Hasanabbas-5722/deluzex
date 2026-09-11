@@ -3,10 +3,12 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
+import { useAuth } from "../context/AuthContext";
 import styles from "./MainSidebar.module.css";
 
 export default function MainSidebar() {
   const { sidebarOpen, setSidebarOpen } = useSidebar();
+  const { isAdmin } = useAuth();
   const pathname = usePathname();
 
   // Do not render on dashboard pages, because dashboard has its own sidebar
@@ -33,6 +35,11 @@ export default function MainSidebar() {
           <Link href="/blogs" onClick={() => setSidebarOpen(false)}>Blogs</Link>
           <Link href="/about" onClick={() => setSidebarOpen(false)}>About</Link>
           <Link href="/contact" onClick={() => setSidebarOpen(false)}>Contact</Link>
+          {isAdmin && (
+            <Link href="/admin" onClick={() => setSidebarOpen(false)} style={{ color: "#C49A45", fontWeight: 700 }}>
+              Admin Panel
+            </Link>
+          )}
         </nav>
       </aside>
 

@@ -8,11 +8,13 @@ import { useSidebar } from "../context/SidebarContext";
 import { useEffect, useState } from "react";
 import { RootState } from "../store/store";
 import Image from "next/image";
+import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const { sidebarOpen, toggleSidebar } = useSidebar();
+  const { isAdmin } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const { cartItems } = useSelector((state: RootState) => state.cart);
 
@@ -35,11 +37,12 @@ export default function Header() {
       : styles.headerTransparent
     : styles.headerSolid;
 
-  const isAuthPage =
+  const isExcludedPage =
+    pathname?.startsWith("/admin") ||
     pathname?.includes("/login") ||
     pathname?.includes("/signup") ||
     pathname?.includes("/signin");
-  if (isAuthPage) return null;
+  if (isExcludedPage) return null;
 
   return (
     <header className={`${styles.header} ${headerClass}`}>
@@ -77,6 +80,11 @@ export default function Header() {
         <Link href="/blogs">Blogs</Link>
         <Link href="/about">About</Link>
         <Link href="/contact">Contact</Link>
+        {isAdmin && (
+          <Link href="/admin" style={{ color: "#C49A45", fontWeight: 700, letterSpacing: "0.05em" }}>
+            Admin
+          </Link>
+        )}
       </nav>
 
       <div className={styles.headerIcons}>

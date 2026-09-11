@@ -1,6 +1,10 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+@import "tailwindcss";
+@source "../components";
+@source "../lib";
+@source "../app";
 
 
 :root {
@@ -32,6 +36,10 @@ body {
   font-family: 'General Sans', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+body:has([data-admin-root]) {
+  padding-top: 0 !important;
 }
 
 h1, h2, h3, h4, h5, h6 {

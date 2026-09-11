@@ -9,21 +9,77 @@ import { useSidebar } from "../context/SidebarContext";
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated, isAdmin, loading } = useAuth();
   const { sidebarOpen, setSidebarOpen } = useSidebar();
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
+
+  const isLoginPage = pathname === "/admin/login";
+
+  React.useEffect(() => {
+    document.body.style.paddingTop = "0px";
+    return () => {
+      document.body.style.paddingTop = "";
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (!loading && !isLoginPage) {
+      if (!isAuthenticated) {
+        router.push(`/admin/login?redirect=${encodeURIComponent(pathname)}`);
+      } else if (!isAdmin) {
+        router.push("/");
+      }
+    }
+  }, [loading, isAuthenticated, isAdmin, pathname, router, isLoginPage]);
 
   const handleLogout = () => {
     logout();
     setShowLogoutModal(false);
-    router.push("/");
+    router.push("/admin/login");
   };
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  if (loading || !isAuthenticated || !isAdmin) {
+    return (
+      <div style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#0B0B0B",
+        color: "#C49A45",
+        fontFamily: "inherit"
+      }}>
+        <div style={{
+          width: "40px",
+          height: "40px",
+          border: "3px solid rgba(196, 154, 69, 0.2)",
+          borderTopColor: "#C49A45",
+          borderRadius: "50%",
+          animation: "adminSpin 1s linear infinite"
+        }} />
+        <style dangerouslySetInnerHTML={{ __html: `@keyframes adminSpin { to { transform: rotate(360deg); } }` }} />
+        <p style={{ marginTop: "1.25rem", fontSize: "0.95rem", color: "#E0E0E0", letterSpacing: "0.05em" }}>
+          Verifying administrator privileges...
+        </p>
+      </div>
+    );
+  }
 
   const menuItems = [
     {
       group: "Admin Control",
       items: [
         { name: "Overview", path: "/admin", icon: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" },
+        { name: "Hero Products", path: "/admin/hero-products", icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" },
         { name: "Products", path: "/admin/products", icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" },
         { name: "Categories", path: "/admin/categories", icon: "M4 6h16M4 12h16M4 18h16" },
         { name: "Inquiries", path: "/admin/inquiries", icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" }
@@ -32,7 +88,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className={styles.adminRoot}>
+    <div className={styles.adminRoot} data-admin-root>
       <div className={styles.dashboardContainer}>
         {/* Sidebar */}
         <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarCollapsed}`}>

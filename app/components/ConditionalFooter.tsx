@@ -6,6 +6,7 @@ export default function ConditionalFooter() {
   const pathname = usePathname();
   console.log("pathname", pathname);
   if (
+    pathname?.startsWith("/admin") ||
     pathname?.includes("/dashboard") ||
     pathname?.includes("/login") ||
     pathname?.includes("/signup") ||

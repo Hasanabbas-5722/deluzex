@@ -1,4 +1,55 @@
+import { logger } from "@/lib/logger";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.deluzexlighting.com/api/v1";
+
+const originalFetch = globalThis.fetch;
+
+async function loggedFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+  const method = init?.method || "GET";
+  const startTime = typeof performance !== "undefined" ? performance.now() : Date.now();
+
+  try {
+    const res = await originalFetch(input, init);
+    const durationMs = (typeof performance !== "undefined" ? performance.now() : Date.now()) - startTime;
+
+    let previewData: unknown = undefined;
+    try {
+      const clone = res.clone();
+      const contentType = clone.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        previewData = await clone.json();
+      }
+    } catch {
+      // Ignore preview parsing error
+    }
+
+    logger.api({
+      method,
+      url,
+      status: res.status,
+      durationMs,
+      reqData: init?.body,
+      resData: previewData,
+    });
+
+    return res;
+  } catch (error) {
+    const durationMs = (typeof performance !== "undefined" ? performance.now() : Date.now()) - startTime;
+    logger.api({
+      method,
+      url,
+      status: 0,
+      durationMs,
+      reqData: init?.body,
+      error,
+    });
+    throw error;
+  }
+}
+
+// Scoped alias for fetch so every API operation in this module automatically routes through telemetry
+const fetch = loggedFetch;
 
 type JsonObject = Record<string, unknown>;
 
@@ -47,6 +98,7 @@ export interface UserProfile {
   city?: string | null;
   country?: string | null;
   is_verified: boolean;
+  is_admin?: boolean;
   created_at: string;
 }
 
@@ -160,7 +212,7 @@ export async function fetchCategories(): Promise<Category[]> {
     return Array.isArray(data) ? data : (data.data || []);
     return [];
   } catch (error) {
-    console.error("Error fetching categories:", error);
+    logger.error("API", "Error fetching categories:", error);
     return []; // Return empty array on failure so UI doesn't crash
   }
 }
@@ -177,7 +229,7 @@ export async function fetchProducts(queryParams?: URLSearchParams | string): Pro
     
     return data.data || data || [];
   } catch (error) {
-    console.error("Error fetching products:", error);
+    logger.error("API", "Error fetching products:", error);
     return [];
   }
 }
@@ -193,7 +245,7 @@ export async function fetchProductById(id: string): Promise<Product | null> {
     
     return data.data || data || null;
   } catch (error) {
-    console.error(`Error fetching product ${id}:`, error);
+    logger.error("API", `Error fetching product ${id}:`, error);
     return null;
   }
 }
@@ -260,6 +312,65 @@ export async function deleteCategory(id: string | number) {
   return res.json();
 }
 
+// --- HERO PRODUCTS ---
+
+export interface HeroProduct {
+  _id?: string;
+  id?: string;
+  image: string;
+  name: string;
+  price: number;
+  count?: number;
+  alt: string;
+  created_at?: string;
+}
+
+export async function fetchHeroProducts(): Promise<HeroProduct[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/hero-products`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch hero products");
+    const data = await res.json();
+    return Array.isArray(data) ? data : data.data || [];
+  } catch (error) {
+    logger.error("API", "Error fetching hero products:", error);
+    return [];
+  }
+}
+
+export async function createHeroProduct(heroData: ApiMutationBody) {
+  const isFormData = heroData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/hero-products`, {
+    method: "POST",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? heroData : JSON.stringify(heroData),
+  });
+  if (!res.ok) throw new Error("Failed to create hero product");
+  return res.json();
+}
+
+export async function updateHeroProduct(id: string | number, heroData: ApiMutationBody) {
+  const isFormData = heroData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/hero-products/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? heroData : JSON.stringify(heroData),
+  });
+  if (!res.ok) throw new Error("Failed to update hero product");
+  return res.json();
+}
+
+export async function deleteHeroProduct(id: string | number) {
+  const res = await fetch(`${API_BASE_URL}/hero-products/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error("Failed to delete hero product");
+  return res.json();
+}
+
+
 export async function submitContactForm(contactData: JsonObject) {
   const res = await fetch(`${API_BASE_URL}/contact`, {
     method: 'POST',
@@ -292,7 +403,7 @@ export async function fetchInquiries(): Promise<Inquiry[]> {
     const data = await res.json();
     return data.data || data || [];
   } catch (error) {
-    console.error("Error fetching inquiries:", error);
+    logger.error("API", "Error fetching inquiries:", error);
     return [];
   }
 }

@@ -3,41 +3,76 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import styles from "../page.module.css";
+import { fetchHeroProducts } from "../services/api";
 
-type HeroLamp = {
+export type HeroLamp = {
+  _id?: string;
+  id?: string;
   image: string;
   name: string;
-  count: number;
+  price?: number;
+  count?: number;
   alt: string;
 };
 
-const lamps: HeroLamp[] = [
+const DEFAULT_LAMPS: HeroLamp[] = [
   {
     image: "/images/lamp_modern_tall_1784107732736.jpg",
     name: "Cylindrical Floor Lamp",
+    price: 231,
     count: 231,
     alt: "Modern gold cylinder floor lamp",
   },
   {
     image: "/images/lamp_black_gold_1784107745696.jpg",
     name: "Modern Black Desk Lamp",
+    price: 231,
     count: 231,
     alt: "Modern brass desk lamp with black lampshade",
   },
   {
     image: "/images/lamp_classic_1784107722127.jpg",
     name: "Vintage Pleated Lamp",
+    price: 231,
     count: 231,
     alt: "Vintage gold lamp with pleated shade",
   },
 ];
 
 export default function HeroProductWidget() {
-  const [carouselPosition, setCarouselPosition] = useState(lamps.length * 2 + 1);
+  const [lamps, setLamps] = useState<HeroLamp[]>(DEFAULT_LAMPS);
+  const [carouselPosition, setCarouselPosition] = useState(DEFAULT_LAMPS.length * 2 + 1);
   const [isResetting, setIsResetting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchHeroProducts()
+      .then((data) => {
+        if (isMounted && data && data.length > 0) {
+          const formatted: HeroLamp[] = data.map((item) => ({
+            _id: item._id || item.id,
+            id: item.id || item._id,
+            image: item.image,
+            name: item.name,
+            price: item.price,
+            count: item.count ?? item.price,
+            alt: item.alt,
+          }));
+          setLamps(formatted);
+          setCarouselPosition(formatted.length * 2 + 1);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load hero products from API:", err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const touchStartXRef = useRef<number | null>(null);
   const touchStartYRef = useRef<number | null>(null);
@@ -49,12 +84,13 @@ export default function HeroProductWidget() {
   const mouseStartXRef = useRef<number | null>(null);
   const isMouseDraggingRef = useRef(false);
 
+  const lampCount = lamps.length || 1;
   const carouselLamps = Array.from(
-    { length: lamps.length * 5 },
-    (_, index) => lamps[index % lamps.length]
+    { length: lampCount * 5 },
+    (_, index) => lamps[index % lampCount] || DEFAULT_LAMPS[0]
   );
-  const activeIndex = ((carouselPosition % lamps.length) + lamps.length) % lamps.length;
-  const activeLamp = lamps[activeIndex];
+  const activeIndex = ((carouselPosition % lampCount) + lampCount) % lampCount;
+  const activeLamp = lamps[activeIndex] || DEFAULT_LAMPS[0];
 
   // Auto-rotation timer
   useEffect(() => {
@@ -256,7 +292,7 @@ export default function HeroProductWidget() {
             /{String(activeIndex + 1).padStart(2, "0")}
           </span>
           <span className={styles.heroInfoCardName}>{activeLamp.name}</span>
-          <span className={styles.heroInfoCardCount}>{activeLamp.count}</span>
+          <span className={styles.heroInfoCardCount}>{activeLamp.price ?? activeLamp.count}</span>
         </div>
       </div>
 

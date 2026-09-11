@@ -33,6 +33,7 @@ export interface AddToCartPayload {
   price?: number | string;
   product_main_image?: string;
   image_url?: string;
+  quantity?: number;
 }
 
 const cartSlice = createSlice({
@@ -42,18 +43,19 @@ const cartSlice = createSlice({
     addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
       const product = action.payload;
       const productId = product._id || product.id || Date.now().toString();
+      const qtyToAdd = Math.max(1, product.quantity || 1);
       
       const existingItem = state.cartItems.find(item => item.id === productId);
       
       if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += qtyToAdd;
       } else {
         state.cartItems.push({
           id: productId,
           title: product.product_title || product.name || "Product",
           price: Number(product.product_price || product.price) || 0,
           image: product.product_main_image || product.image_url || "/images/lamp_modern_tall_1784107732736.jpg",
-          quantity: 1
+          quantity: qtyToAdd
         });
       }
       state.cartTotal = calculateTotal(state.cartItems);

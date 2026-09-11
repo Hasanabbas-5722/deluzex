@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { addToCart, updateQuantity, removeFromCart } from "../store/cartSlice";
 import { Product } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 interface AddToCartButtonProps {
   product: Product;
@@ -13,6 +14,7 @@ interface AddToCartButtonProps {
 
 export default function AddToCartButton({ product, styleClass }: AddToCartButtonProps) {
   const dispatch = useDispatch();
+  const { isAuthenticated, openLoginModal } = useAuth();
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const productId = product._id || product.id || "";
   const cartItem = cartItems.find(item => String(item.id) === String(productId));
@@ -20,6 +22,13 @@ export default function AddToCartButton({ product, styleClass }: AddToCartButton
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!isAuthenticated) {
+      openLoginModal(
+        product,
+        `Please log in to add ${product.product_title || product.name || "this lamp"} to your cart.`
+      );
+      return;
+    }
     dispatch(addToCart(product));
   };
 
@@ -38,6 +47,10 @@ export default function AddToCartButton({ product, styleClass }: AddToCartButton
     e.preventDefault();
     e.stopPropagation();
     if (!productId) return;
+    if (!isAuthenticated) {
+      openLoginModal(product, "Please log in to update your cart items.");
+      return;
+    }
     dispatch(updateQuantity({ id: productId, change: 1 }));
   };
 
