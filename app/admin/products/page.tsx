@@ -1,14 +1,34 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../admin.module.css";
-import { fetchProducts, deleteProduct, Product } from "../../services/api";
+import {
+  fetchProducts,
+  deleteProduct,
+  toggleProductNewArrival,
+  Product,
+} from "../../services/api";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Sparkles,
+  CheckCircle2,
+  Search,
+  Flame,
+  Check,
+  Package,
+} from "lucide-react";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [itemToDelete, setItemToDelete] = useState<string | number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterTab, setFilterTab] = useState<"all" | "new_arrivals">("all");
+  const [itemToDelete, setItemToDelete] = useState<Product | null>(null);
+  const [togglingId, setTogglingId] = useState<string | number | null>(null);
+  const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
     loadProducts();
@@ -26,90 +46,466 @@ export default function AdminProducts() {
     }
   }
 
+  async function handleToggleNewArrival(product: Product) {
+    const prodId = product._id || product.id;
+    if (!prodId) return;
+
+    setTogglingId(prodId);
+    const nextStatus = !product.is_new_arrival;
+
+    try {
+      await toggleProductNewArrival(prodId, nextStatus);
+      setProducts((prev) =>
+        prev.map((p) =>
+          (p._id || p.id) === prodId ? { ...p, is_new_arrival: nextStatus } : p
+        )
+      );
+
+      setSuccessMsg(
+        nextStatus
+          ? `"${product.product_title}" is now added to New Arrivals and live on the homepage!`
+          : `"${product.product_title}" removed from New Arrivals.`
+      );
+
+      // Auto-clear message after 4s
+      setTimeout(() => {
+        setSuccessMsg((curr) => (curr ? "" : curr));
+      }, 4000);
+    } catch (error) {
+      console.error("Failed to toggle new arrival:", error);
+      alert("Failed to update New Arrival status. Please try again.");
+    } finally {
+      setTogglingId(null);
+    }
+  }
+
   async function executeDelete() {
     if (!itemToDelete) return;
+    const prodId = itemToDelete._id || itemToDelete.id;
+    if (!prodId) return;
+
     try {
-      await deleteProduct(itemToDelete);
+      await deleteProduct(prodId);
       setItemToDelete(null);
+      setSuccessMsg(`"${itemToDelete.product_title}" deleted successfully.`);
       loadProducts();
     } catch (error) {
       alert("Failed to delete product. " + error);
     }
   }
 
+  const newArrivalsCount = useMemo(
+    () => products.filter((p) => p.is_new_arrival).length,
+    [products]
+  );
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => {
+      if (filterTab === "new_arrivals" && !p.is_new_arrival) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const titleMatch = p.product_title?.toLowerCase().includes(q);
+        const catMatch = p.product_category?.toLowerCase().includes(q);
+        return titleMatch || catMatch;
+      }
+      return true;
+    });
+  }, [products, filterTab, searchQuery]);
+
   return (
-    <div className={styles.sectionContainer}>
-      <div className={styles.headerRow}>
+    <div className={styles.sectionContainer} style={{ width: "100%", maxWidth: "100%" }}>
+      {/* HEADER ROW */}
+      <div className={styles.headerRow} style={{ marginBottom: "1.75rem" }}>
         <div>
-          <h2 className={styles.sectionTitle}>Products Management</h2>
-          <p className={styles.sectionSubtitle}>Manage your entire product catalog.</p>
+          <h2 className={styles.sectionTitle} style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+            <Package size={28} color="#C49A45" />
+            Products Management
+          </h2>
+          <p className={styles.sectionSubtitle}>
+            Manage your catalog and feature any product into the homepage New Arrivals carousel.
+          </p>
         </div>
         <Link href="/admin/products/create" className={styles.primaryButton}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
+          <Plus size={18} />
           Add Product
         </Link>
       </div>
 
-      <div className={styles.card}>
+      {/* Success Notification */}
+      {successMsg && (
+        <div
+          style={{
+            marginBottom: "1.5rem",
+            padding: "0.9rem 1.25rem",
+            background: "#F0FDF4",
+            border: "1px solid #BBF7D0",
+            borderRadius: "10px",
+            color: "#166534",
+            fontSize: "0.875rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "0.5rem",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.02)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+            <CheckCircle2 size={18} />
+            <span style={{ fontWeight: 600 }}>{successMsg}</span>
+          </div>
+          <button
+            onClick={() => setSuccessMsg("")}
+            style={{ background: "transparent", border: "none", color: "#166534", cursor: "pointer", fontSize: "1rem" }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Inline Delete Confirmation (No modal popup/blur) */}
+      {itemToDelete && (
+        <div
+          style={{
+            marginBottom: "1.75rem",
+            padding: "1.25rem 1.75rem",
+            background: "#FEF2F2",
+            border: "1px solid #FECACA",
+            borderRadius: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "1.5rem",
+            flexWrap: "wrap",
+            boxShadow: "0 4px 12px rgba(239, 68, 68, 0.08)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <div
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: "50%",
+                background: "#FEE2E2",
+                color: "#DC2626",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <Trash2 size={22} />
+            </div>
+            <div>
+              <h4 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 700, color: "#991B1B" }}>
+                Confirm Deletion
+              </h4>
+              <p style={{ margin: "0.25rem 0 0", fontSize: "0.875rem", color: "#B91C1C" }}>
+                Are you sure you want to delete &quot;{itemToDelete.product_title}&quot;? This cannot be undone.
+              </p>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+            <button
+              onClick={() => setItemToDelete(null)}
+              className={styles.btnCancel}
+              style={{ background: "#ffffff", border: "1px solid #E5E7EB", padding: "0.65rem 1.25rem" }}
+            >
+              Cancel
+            </button>
+            <button onClick={executeDelete} className={styles.btnDeleteConfirm} style={{ padding: "0.65rem 1.5rem" }}>
+              Yes, Delete Product
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* FILTER TABS & SEARCH BAR */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "1rem",
+          flexWrap: "wrap",
+          marginBottom: "1.25rem",
+        }}
+      >
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <button
+            type="button"
+            onClick={() => setFilterTab("all")}
+            style={{
+              padding: "0.6rem 1.15rem",
+              borderRadius: "8px",
+              border: filterTab === "all" ? "1px solid var(--admin-primary)" : "1px solid var(--admin-border)",
+              background: filterTab === "all" ? "var(--admin-primary)" : "#ffffff",
+              color: filterTab === "all" ? "#ffffff" : "var(--admin-text-main)",
+              fontWeight: 600,
+              fontSize: "0.875rem",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}
+          >
+            All Products
+            <span
+              style={{
+                fontSize: "0.75rem",
+                padding: "2px 8px",
+                borderRadius: "12px",
+                background: filterTab === "all" ? "rgba(255,255,255,0.2)" : "#f1f5f9",
+                color: filterTab === "all" ? "#ffffff" : "var(--admin-text-muted)",
+              }}
+            >
+              {products.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setFilterTab("new_arrivals")}
+            style={{
+              padding: "0.6rem 1.15rem",
+              borderRadius: "8px",
+              border: filterTab === "new_arrivals" ? "1px solid #C49A45" : "1px solid var(--admin-border)",
+              background: filterTab === "new_arrivals" ? "#C49A45" : "#ffffff",
+              color: filterTab === "new_arrivals" ? "#ffffff" : "var(--admin-text-main)",
+              fontWeight: 600,
+              fontSize: "0.875rem",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}
+          >
+            <Sparkles size={15} />
+            New Arrivals Only
+            <span
+              style={{
+                fontSize: "0.75rem",
+                padding: "2px 8px",
+                borderRadius: "12px",
+                background: filterTab === "new_arrivals" ? "rgba(255,255,255,0.25)" : "#FEF3C7",
+                color: filterTab === "new_arrivals" ? "#ffffff" : "#92400E",
+                fontWeight: 700,
+              }}
+            >
+              {newArrivalsCount}
+            </span>
+          </button>
+        </div>
+
+        {/* Search */}
+        <div style={{ position: "relative", minWidth: "260px" }}>
+          <Search
+            size={16}
+            style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#94a3b8" }}
+          />
+          <input
+            type="text"
+            placeholder="Search by title or category..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={styles.formInput}
+            style={{ paddingLeft: "2.25rem", paddingRight: "1rem", margin: 0 }}
+          />
+        </div>
+      </div>
+
+      {/* FULL-WIDTH TABLE CARD */}
+      <div className={styles.card} style={{ width: "100%", maxWidth: "100%" }}>
         {loading ? (
-          <p style={{ padding: '2rem', textAlign: 'center' }}>Loading products...</p>
-        ) : products.length === 0 ? (
-          <p style={{ padding: '2rem', textAlign: 'center' }}>No products found.</p>
+          <div style={{ padding: "4rem", textAlign: "center", color: "var(--admin-text-muted)" }}>
+            Loading products catalog...
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div style={{ padding: "4rem", textAlign: "center", color: "var(--admin-text-muted)" }}>
+            <p style={{ fontSize: "1rem", marginBottom: "1rem" }}>
+              {filterTab === "new_arrivals"
+                ? "No products currently selected for New Arrivals. Switch to 'All Products' and click '+ Add to New Arrivals' on any product!"
+                : "No products found matching your criteria."}
+            </p>
+            {filterTab === "new_arrivals" && (
+              <button onClick={() => setFilterTab("all")} className={styles.primaryButton}>
+                View All Products
+              </button>
+            )}
+          </div>
         ) : (
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
+          <div className={styles.tableWrapper} style={{ width: "100%", overflowX: "auto" }}>
+            <table className={styles.table} style={{ width: "100%", tableLayout: "auto" }}>
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>Product Name</th>
-                  <th>Price</th>
-                  <th>Actions</th>
+                  <th style={{ width: "70px" }}>Image</th>
+                  <th style={{ width: "30%" }}>Product Name</th>
+                  <th style={{ width: "18%" }}>Category</th>
+                  <th style={{ width: "14%" }}>Price</th>
+                  <th style={{ width: "220px", textAlign: "center" }}>New Arrival Showcase</th>
+                  <th style={{ width: "150px", textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map(prod => (
-                  <tr key={prod._id}>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        {prod.product_main_image && <Image src={prod.product_main_image} alt={prod.product_title} width={48} height={48} className={styles.tableImage} />}
-                        {/* <span style={{ fontWeight: 600 }}>{prod.product_title}</span> */}
-                      </div>
-                    </td>
-                    <td>{prod.product_title}</td>
-                    <td>₹{Number(prod.product_price).toFixed(2)}</td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                        <Link href={`/admin/products/edit/${prod._id}`} className={styles.actionLink}>Edit</Link>
-                        <button onClick={() => setItemToDelete(prod._id || prod.id || null)} className={styles.actionDelete}>Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {filteredProducts.map((prod) => {
+                  const prodId = prod._id || prod.id || "";
+                  const isNewArrival = Boolean(prod.is_new_arrival);
+                  const isToggling = togglingId === prodId;
+
+                  return (
+                    <tr key={String(prodId)}>
+                      <td>
+                        <div
+                          style={{
+                            width: 48,
+                            height: 48,
+                            borderRadius: "8px",
+                            overflow: "hidden",
+                            position: "relative",
+                            background: "#f1f5f9",
+                            border: "1px solid var(--admin-border)",
+                          }}
+                        >
+                          {prod.product_main_image ? (
+                            <Image
+                              src={prod.product_main_image}
+                              alt={prod.product_title || "Product"}
+                              fill
+                              sizes="48px"
+                              style={{ objectFit: "cover" }}
+                            />
+                          ) : (
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: "#94a3b8",
+                              }}
+                            >
+                              <Package size={20} />
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <div style={{ fontWeight: 600, color: "var(--admin-primary)", fontSize: "0.95rem" }}>
+                          {prod.product_title}
+                        </div>
+                        {prod.product_description && (
+                          <div
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--admin-text-muted)",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              maxWidth: "340px",
+                              marginTop: "2px",
+                            }}
+                          >
+                            {prod.product_description}
+                          </div>
+                        )}
+                      </td>
+                      <td>
+                        <span
+                          style={{
+                            display: "inline-block",
+                            background: "#f1f5f9",
+                            color: "#475569",
+                            padding: "4px 10px",
+                            borderRadius: "6px",
+                            fontSize: "0.825rem",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {prod.product_category || "Unassigned"}
+                        </span>
+                      </td>
+                      <td>
+                        <span style={{ fontWeight: 700, color: "var(--admin-primary)", fontSize: "0.95rem" }}>
+                          ₹{Number(prod.product_price || 0).toLocaleString()}
+                        </span>
+                      </td>
+
+                      {/* DYNAMIC NEW ARRIVAL TOGGLE BUTTON & BADGE */}
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          type="button"
+                          disabled={isToggling}
+                          onClick={() => handleToggleNewArrival(prod)}
+                          title={isNewArrival ? "Click to remove from homepage New Arrivals" : "Click to feature in homepage New Arrivals"}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.45rem",
+                            padding: "0.45rem 0.9rem",
+                            borderRadius: "20px",
+                            fontSize: "0.825rem",
+                            fontWeight: 600,
+                            cursor: isToggling ? "wait" : "pointer",
+                            transition: "all 0.2s",
+                            border: isNewArrival ? "1px solid #F59E0B" : "1px solid var(--admin-border)",
+                            background: isNewArrival ? "#FFFBEB" : "#ffffff",
+                            color: isNewArrival ? "#B45309" : "#64748B",
+                            boxShadow: isNewArrival ? "0 2px 8px rgba(245, 158, 11, 0.15)" : "none",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isNewArrival) {
+                              e.currentTarget.style.borderColor = "#C49A45";
+                              e.currentTarget.style.color = "#C49A45";
+                              e.currentTarget.style.background = "#FEFCE8";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isNewArrival) {
+                              e.currentTarget.style.borderColor = "var(--admin-border)";
+                              e.currentTarget.style.color = "#64748B";
+                              e.currentTarget.style.background = "#ffffff";
+                            }
+                          }}
+                        >
+                          {isToggling ? (
+                            <span>Updating...</span>
+                          ) : isNewArrival ? (
+                            <>
+                              <Sparkles size={14} color="#D97706" />
+                              <span>★ In New Arrivals</span>
+                            </>
+                          ) : (
+                            <>
+                              <Plus size={14} />
+                              <span>+ Add to New Arrivals</span>
+                            </>
+                          )}
+                        </button>
+                      </td>
+
+                      <td style={{ textAlign: "right" }}>
+                        <div style={{ display: "flex", gap: "0.6rem", justifyContent: "flex-end", alignItems: "center" }}>
+                          <Link href={`/admin/products/edit/${prodId}`} className={styles.actionLink}>
+                            <Pencil size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: "3px" }} />
+                            Edit
+                          </Link>
+                          <button onClick={() => setItemToDelete(prod)} className={styles.actionDelete}>
+                            <Trash2 size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: "3px" }} />
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
       </div>
-
-      {itemToDelete !== null && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <div className={styles.modalIconWrapper} style={{ color: '#EF4444', background: '#FEF2F2' }}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </div>
-            <h3>Delete Product</h3>
-            <p>Are you sure you want to delete this product? This action cannot be undone.</p>
-            <div className={styles.modalActions}>
-              <button className={styles.btnCancel} onClick={() => setItemToDelete(null)}>Cancel</button>
-              <button className={styles.btnConfirmLogout} onClick={executeDelete}>Delete</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
+

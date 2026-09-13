@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "../page.module.css";
 import { fetchHeroProducts } from "../services/api";
 
@@ -277,7 +278,7 @@ export default function HeroProductWidget() {
         }
       }}
     >
-      <div className={styles.heroInfoCard} aria-live="polite">
+      <Link href="/shop" className={styles.heroInfoCard} aria-live="polite" style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }} title="View product in shop">
         <div className={styles.heroInfoCardImg}>
           <Image
             src={activeLamp.image}
@@ -288,13 +289,10 @@ export default function HeroProductWidget() {
           />
         </div>
         <div className={styles.heroInfoCardText}>
-          <span className={styles.heroInfoCardNum}>
-            /{String(activeIndex + 1).padStart(2, "0")}
-          </span>
           <span className={styles.heroInfoCardName}>{activeLamp.name}</span>
-          <span className={styles.heroInfoCardCount}>{activeLamp.price ?? activeLamp.count}</span>
+          <span className={styles.heroInfoCardCount}>₹{activeLamp.price ?? activeLamp.count}</span>
         </div>
-      </div>
+      </Link>
 
       <div
         className={styles.heroLamps}

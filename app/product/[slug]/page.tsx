@@ -6,14 +6,23 @@ import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { addToCart, openCart } from "../../store/cartSlice";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { fetchProductById, fetchProducts, Product } from "../../services/api";
+import { useEffect, useState, useRef } from "react";
+import {
+  fetchProductById,
+  fetchProducts,
+  addToWishlist,
+  removeFromWishlist,
+  checkWishlistStatus,
+  Product,
+} from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
 export default function ProductDetail() {
   const dispatch = useDispatch();
-  const { isAuthenticated, openLoginModal } = useAuth();
+  const { user, isAuthenticated, openLoginModal } = useAuth();
+  const userEmail = (user as Record<string, string>)?.email || "";
   const params = useParams();
+  const [wishlistItemId, setWishlistItemId] = useState<string | null>(null);
   
   // Data State
   const [product, setProduct] = useState<Product | null>(null);
@@ -24,6 +33,9 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(1);
   const [activeThumb, setActiveThumb] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const ctlGridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -44,6 +56,18 @@ export default function ProductDetail() {
     loadData();
   }, [params.slug]);
 
+  useEffect(() => {
+    if (product && userEmail) {
+      const prodId = product.id ? String(product.id) : undefined;
+      checkWishlistStatus(userEmail, prodId, product.product_title)
+        .then((res) => {
+          setIsWishlisted(res.is_wishlisted);
+          setWishlistItemId(res.item_id || null);
+        })
+        .catch(() => {});
+    }
+  }, [product, userEmail]);
+
   if (loading) {
     return <main className={styles.main}><p style={{padding: '2rem 6rem'}}>Loading product details...</p></main>;
   }
@@ -63,6 +87,41 @@ export default function ProductDetail() {
       return;
     }
     dispatch(addToCart(payload));
+    dispatch(openCart());
+  };
+
+  const handleToggleWishlist = async () => {
+    if (!product) return;
+    if (!isAuthenticated) {
+      openLoginModal(product, "Please log in to add items to your wishlist.");
+      return;
+    }
+
+    if (isWishlisted && wishlistItemId) {
+      setIsWishlisted(false);
+      try {
+        await removeFromWishlist(wishlistItemId);
+        setWishlistItemId(null);
+      } catch (err) {
+        console.error("Failed to remove from wishlist:", err);
+      }
+    } else {
+      setIsWishlisted(true);
+      try {
+        const prodId = product.id ? String(product.id) : undefined;
+        const item = await addToWishlist({
+          user_email: userEmail,
+          product_id: prodId,
+          product_title: product.product_title,
+          product_price: product.product_price,
+          product_image: product.product_main_image,
+          product_slug: params.slug ? String(params.slug) : undefined,
+        });
+        setWishlistItemId(item.id || item._id || null);
+      } catch (err) {
+        console.error("Failed to add to wishlist:", err);
+      }
+    }
   };
 
   return (
@@ -109,7 +168,7 @@ export default function ProductDetail() {
           </div>
 
           <div className={styles.priceRow}>
-            <div className={styles.price}>${product.product_price}</div>
+            <div className={styles.price}>₹{product.product_price}</div>
             <div className={styles.stockStatus}>In Stock</div>
           </div>
 
@@ -120,13 +179,19 @@ export default function ProductDetail() {
               <button onClick={() => setQty(qty + 1)}>+</button>
             </div>
             <button className={styles.btnPrimary} onClick={handleAddToBag}>Add To Bag</button>
-            <button className={styles.btnOutline}>Add To Wishlist</button>
+            <button
+              className={styles.btnOutline}
+              onClick={handleToggleWishlist}
+              style={isWishlisted ? { background: "#C49A45", color: "#fff", borderColor: "#C49A45" } : {}}
+            >
+              {isWishlisted ? "✓ In Wishlist" : "Add To Wishlist"}
+            </button>
           </div>
         </div>
 
         <div className={styles.heroRight}>
           <div className={styles.mainImageContainer}>
-            <Image src={product?.product_images?.[activeThumb] || product?.product_main_image || ""} alt={product?.product_title} fill style={{ objectFit: 'cover' }} />
+            <Image src={product?.product_images?.[activeThumb] || product?.product_main_image || ""} alt={product?.product_title || "Product"} fill style={{ objectFit: 'contain', padding: '1.25rem' }} priority />
           </div>
           <div className={styles.thumbnailsCol}>
             {product?.product_images?.map((thumb, idx) => (
@@ -196,7 +261,11 @@ export default function ProductDetail() {
         <div className={styles.reviewList}>
           {[
             { name: "Sarah Williams", date: "Oct 12, 2025", initial: "SW", text: "Absolutely stunning chandelier. It totally transformed my dining room. The installation was straightforward, but definitely recommend two people because of the weight." },
-            { name: "Paul Sanderson", date: "Sep 28, 2025", initial: "PS", text: "Very high quality materials. The brushed gold finish looks incredibly premium in person. The packaging was also top-notch, ensuring nothing was broken." }
+            { name: "Paul Sanderson", date: "Sep 28, 2025", initial: "PS", text: "Very high quality materials. The brushed gold finish looks incredibly premium in person. The packaging was also top-notch, ensuring nothing was broken." },
+            ...(showAllReviews ? [
+              { name: "Elena Rostova", date: "Aug 15, 2025", initial: "ER", text: "Exceeded all my expectations! The optical crystal elements reflect sunlight by day and create a warm, inviting glow by night." },
+              { name: "Marcus Chen", date: "Jul 04, 2025", initial: "MC", text: "The dimming range is flawless with zero flicker. Truly an architectural grade fixture with heirloom quality craftsmanship." }
+            ] : [])
           ].map((review, i) => (
             <div key={i} className={styles.reviewItem}>
               <div className={styles.reviewHeader}>
@@ -221,9 +290,23 @@ export default function ProductDetail() {
             </div>
           ))}
         </div>
-        <button className={styles.readAllBtn}>
-          Read all Reviews
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <button
+          className={styles.readAllBtn}
+          type="button"
+          onClick={() => setShowAllReviews(!showAllReviews)}
+        >
+          {showAllReviews ? "Show Fewer Reviews" : "Read all Reviews"}
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            style={{ transform: showAllReviews ? "rotate(180deg)" : "none", transition: "transform 0.25s" }}
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </button>
       </section>
 
@@ -248,18 +331,25 @@ export default function ProductDetail() {
         <p className={styles.sectionSub}>Shop</p>
         <h2 className={styles.sectionTitle}>COMPLETE THE LOOK</h2>
         
-        <div className={styles.ctlGrid}>
+        <div ref={ctlGridRef} className={styles.ctlGrid} style={{ scrollBehavior: "smooth", overflowX: "auto" }}>
           {relatedProducts.slice(0,3).map((prod, i) => (
             <div key={prod._id || i} className={styles.productCard}>
               <Link href={`/product/${prod._id}`}>
                 <div className={styles.productImageWrapper}>
-                  <Image src={prod.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.product_title} fill style={{ objectFit: 'contain' }} />
+                  <Image src={prod.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={prod.product_title} fill style={{ objectFit: 'contain', padding: '0.75rem' }} />
                   <button 
                     className={styles.addToCartBtn} 
                     onClick={(e) => {
                       e.preventDefault();
-                      openCart();
+                      e.stopPropagation();
+                      if (!isAuthenticated) {
+                        openLoginModal(prod, `Please log in to add ${prod.product_title || "this product"} to your bag.`);
+                        return;
+                      }
+                      dispatch(addToCart(prod));
+                      dispatch(openCart());
                     }}
+                    aria-label={`Add ${prod.product_title} to bag`}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <line x1="5" y1="12" x2="19" y2="12" />
@@ -271,7 +361,7 @@ export default function ProductDetail() {
               
               <div className={styles.productInfoRow}>
                 <h4 className={styles.productName}>{prod.product_title}</h4>
-                <div className={styles.productPrice}>${prod.product_price}</div>
+                <div className={styles.productPrice}>₹{prod.product_price}</div>
               </div>
               <div className={styles.productRating}>
                 <svg className={styles.starIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -285,10 +375,26 @@ export default function ProductDetail() {
 
         {/* Scroll Nav for Mobile */}
         <div className={styles.ctlNav}>
-          <button className={styles.ctlNavBtn}>
+          <button
+            className={styles.ctlNavBtn}
+            onClick={() => {
+              if (ctlGridRef.current) {
+                ctlGridRef.current.scrollBy({ left: -300, behavior: "smooth" });
+              }
+            }}
+            aria-label="Scroll left"
+          >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
           </button>
-          <button className={styles.ctlNavBtn}>
+          <button
+            className={styles.ctlNavBtn}
+            onClick={() => {
+              if (ctlGridRef.current) {
+                ctlGridRef.current.scrollBy({ left: 300, behavior: "smooth" });
+              }
+            }}
+            aria-label="Scroll right"
+          >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
         </div>

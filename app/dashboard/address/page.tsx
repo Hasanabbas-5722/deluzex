@@ -7,42 +7,16 @@ import {
   fetchUserAddresses,
   saveUserAddress,
   deleteUserAddress,
+  setDefaultUserAddress,
   SavedAddress,
 } from "../../services/api";
-
-const initialSampleAddresses: SavedAddress[] = [
-  {
-    type: "Home",
-    is_default: true,
-    first_name: "Soni",
-    last_name: "Patel",
-    street: "18, Sapphire Residency, Bodakdev",
-    city: "Ahmedabad",
-    state: "Gujarat",
-    pin_code: "380054",
-    phone: "+91 9982791722",
-    user_email: "soni.patel@example.com",
-  },
-  {
-    type: "Work",
-    is_default: false,
-    first_name: "Soni",
-    last_name: "Patel",
-    street: "402, Signature Tower, SG Highway",
-    city: "Ahmedabad",
-    state: "Gujarat",
-    pin_code: "380051",
-    phone: "+91 9982791722",
-    user_email: "soni.patel@example.com",
-  },
-];
 
 export default function AddressPage() {
   const { user } = useAuth();
   const userEmail = (user as Record<string, string>)?.email || "";
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);
-  const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Modal / Add Form State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -59,13 +33,10 @@ export default function AddressPage() {
     setLoading(true);
     try {
       const data = await fetchUserAddresses(userEmail);
-      if (data && data.length > 0) {
-        setAddresses(data);
-      } else {
-        setAddresses(initialSampleAddresses);
-      }
-    } catch {
-      setAddresses(initialSampleAddresses);
+      setAddresses(data || []);
+    } catch (err) {
+      console.error("Failed to load addresses from database:", err);
+      setAddresses([]);
     } finally {
       setLoading(false);
     }
@@ -95,48 +66,67 @@ export default function AddressPage() {
       is_default: addresses.length === 0,
     };
 
-    await saveUserAddress(newAddr);
-    setShowAddModal(false);
-    // Reset form
-    setFirstName("");
-    setLastName("");
-    setStreet("");
-    setCity("");
-    setState("");
-    setPinCode("");
-    setPhone("");
-    loadAddresses();
+    try {
+      await saveUserAddress(newAddr);
+      setShowAddModal(false);
+      // Reset form
+      setFirstName("");
+      setLastName("");
+      setStreet("");
+      setCity("");
+      setState("");
+      setPinCode("");
+      setPhone("");
+      await loadAddresses();
+    } catch (err) {
+      console.error("Failed to save address:", err);
+      alert("Failed to save address to database.");
+    }
+  };
+
+  const handleSetDefault = async (addr: SavedAddress, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const addrId = addr.id || addr._id;
+    if (!addrId) return;
+
+    try {
+      await setDefaultUserAddress(addrId);
+      setAddresses((prev) =>
+        prev.map((a) => ({
+          ...a,
+          is_default: (a.id || a._id) === addrId,
+        }))
+      );
+    } catch (err) {
+      console.error("Failed to set default address:", err);
+    }
   };
 
   const handleDelete = async (addr: SavedAddress, e: React.MouseEvent) => {
     e.stopPropagation();
     const addrId = addr.id || addr._id;
-    if (addrId) {
+    if (!addrId) return;
+    if (!window.confirm("Are you sure you want to delete this address?")) return;
+
+    try {
       await deleteUserAddress(addrId, userEmail);
+      setAddresses((prev) => prev.filter((a) => (a.id || a._id) !== addrId));
+      loadAddresses();
+    } catch (err) {
+      console.error("Failed to delete address:", err);
     }
-    setAddresses((prev) => prev.filter((a) => (a.id || a._id) !== addrId));
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.header} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div className={styles.header}>
         <div>
           <h1 className={styles.title}>My Addresses</h1>
           <p className={styles.subtitle}>Manage your saved addresses for a faster, one-click checkout.</p>
         </div>
         <button
-          className={styles.btnAdd || ""}
+          className={styles.btnAdd}
           onClick={() => setShowAddModal(true)}
-          style={{
-            padding: "0.75rem 1.5rem",
-            background: "#2B2B2B",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            fontWeight: 600,
-            cursor: "pointer",
-            transition: "background 0.3s",
-          }}
         >
           + Add New Address
         </button>
@@ -305,72 +295,134 @@ export default function AddressPage() {
       {/* Address Grid */}
       {loading ? (
         <p style={{ color: "#777", padding: "2rem 0" }}>Loading saved addresses...</p>
+      ) : addresses.length === 0 ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
+          <h3 className={styles.emptyTitle}>No Addresses Saved Yet</h3>
+          <p className={styles.emptySubtitle}>
+            Add your shipping and delivery address to enjoy seamless, faster checkout on all your orders.
+          </p>
+          <button
+            type="button"
+            className={styles.btnAddFirst}
+            onClick={() => setShowAddModal(true)}
+          >
+            + Add Your First Address
+          </button>
+        </div>
       ) : (
         <div className={styles.addressGrid}>
-          {addresses.map((addr, i) => (
-            <div
-              key={addr.id || addr._id || i}
-              className={`${styles.addressCard} ${selected === i ? styles.addressCardActive : ""}`}
-              onClick={() => setSelected(i)}
-            >
-              <div className={styles.topRow}>
-                {addr.is_default ? (
-                  <span className={styles.defaultBadge}>Default</span>
-                ) : (
-                  <span />
-                )}
-                <div className={`${styles.radioBtn} ${selected === i ? styles.radioBtnActive : ""}`}>
-                  {selected === i && <div className={styles.radioDot}></div>}
+          {addresses.map((addr, i) => {
+            const addrId = addr.id || addr._id || String(i);
+            const isSelected = selectedId ? selectedId === addrId : !!addr.is_default;
+            return (
+              <div
+                key={addrId}
+                className={`${styles.addressCard} ${isSelected ? styles.addressCardActive : ""}`}
+                onClick={() => {
+                  setSelectedId(addrId);
+                  if (!addr.is_default) {
+                    handleSetDefault(addr);
+                  }
+                }}
+              >
+                <div className={styles.topRow}>
+                  {addr.is_default ? (
+                    <span className={styles.defaultBadge}>Default</span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        setSelectedId(addrId);
+                        handleSetDefault(addr, e);
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#C89B60",
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        padding: 0,
+                      }}
+                    >
+                      Set as Default
+                    </button>
+                  )}
+                  <div
+                    className={`${styles.radioBtn} ${isSelected ? styles.radioBtnActive : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedId(addrId);
+                      if (!addr.is_default) {
+                        handleSetDefault(addr);
+                      }
+                    }}
+                  >
+                    {isSelected && <div className={styles.radioDot}></div>}
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.addressTypeRow}>
-                <svg
-                  className={styles.addressTypeIcon}
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-                <span className={styles.addressType}>{addr.type || "Home"}</span>
-              </div>
-
-              <div className={styles.personName}>
-                {addr.first_name} {addr.last_name}
-              </div>
-              <div className={styles.addressText}>
-                {addr.street}, {addr.city}, {addr.state} - {addr.pin_code}
-              </div>
-              <div className={styles.phoneText}>{addr.phone}</div>
-
-              <div className={styles.cardActions}>
-                <button
-                  className={styles.btnDelete}
-                  onClick={(e) => handleDelete(addr, e)}
-                >
+                <div className={styles.addressTypeRow}>
                   <svg
-                    width="14"
-                    height="14"
+                    className={styles.addressTypeIcon}
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                   >
-                    <polyline points="3 6 5 6 21 6" />
-                    <path d="M19 6l-1 14H6L5 6" />
-                    <path d="M10 11v6M14 11v6" />
-                    <path d="M9 6V4h6v2" />
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
                   </svg>
-                  Delete
-                </button>
+                  <span className={styles.addressType}>{addr.type || "Home"}</span>
+                </div>
+
+                <div className={styles.personName}>
+                  {addr.first_name} {addr.last_name}
+                </div>
+                <div className={styles.addressText}>
+                  {addr.street}, {addr.city}, {addr.state} - {addr.pin_code}
+                </div>
+                <div className={styles.phoneText}>{addr.phone}</div>
+
+                <div className={styles.cardActions}>
+                  <button
+                    className={styles.btnDelete}
+                    onClick={(e) => handleDelete(addr, e)}
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6l-1 14H6L5 6" />
+                      <path d="M10 11v6M14 11v6" />
+                      <path d="M9 6V4h6v2" />
+                    </svg>
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

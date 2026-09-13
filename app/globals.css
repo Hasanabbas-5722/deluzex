@@ -57,6 +57,15 @@ a {
   box-sizing: border-box;
 }
 
+img {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+img:not([data-nimg="fill"]) {
+  height: auto;
+}
+
 button {
   font-family: inherit;
   cursor: pointer;

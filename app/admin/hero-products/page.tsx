@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import Image from "next/image";
 import styles from "../admin.module.css";
 import {
@@ -12,6 +12,9 @@ import {
   AlertCircle,
   ImageIcon,
   X,
+  ArrowLeft,
+  Save,
+  Search,
 } from "lucide-react";
 import {
   fetchHeroProducts,
@@ -26,11 +29,14 @@ export default function AdminHeroProducts() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Modals state
-  const [showAddModal, setShowAddModal] = useState(false);
+  // View mode: 'table' | 'create' | 'edit' (100% full-page UI, zero modal popups)
+  const [viewMode, setViewMode] = useState<"table" | "create" | "edit">("table");
   const [editingProduct, setEditingProduct] = useState<HeroProduct | null>(null);
   const [itemToDelete, setItemToDelete] = useState<HeroProduct | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   // Form fields
   const [formData, setFormData] = useState({
@@ -56,21 +62,23 @@ export default function AdminHeroProducts() {
       setHeroProducts(data);
     } catch (err) {
       console.error("Failed to load hero products:", err);
+      setErrorMsg("Failed to load hero slider fixtures.");
     } finally {
       setLoading(false);
     }
   }
 
-  function openAddModal() {
+  function startCreate() {
     setErrorMsg("");
     setFormData({ name: "", price: "", alt: "", image: "" });
     setSelectedFile(null);
     setPreviewUrl("");
     setImageTab("file");
-    setShowAddModal(true);
+    setEditingProduct(null);
+    setViewMode("create");
   }
 
-  function openEditModal(prod: HeroProduct) {
+  function startEdit(prod: HeroProduct) {
     setErrorMsg("");
     setFormData({
       name: prod.name || "",
@@ -82,6 +90,13 @@ export default function AdminHeroProducts() {
     setPreviewUrl(prod.image || "");
     setImageTab(prod.image?.startsWith("http") || prod.image?.startsWith("/images") ? "url" : "file");
     setEditingProduct(prod);
+    setViewMode("edit");
+  }
+
+  function backToTable() {
+    setViewMode("table");
+    setEditingProduct(null);
+    setErrorMsg("");
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -135,8 +150,10 @@ export default function AdminHeroProducts() {
       }
 
       await createHeroProduct(body);
-      setShowAddModal(false);
-      loadHeroProducts();
+      setSuccessMsg(`Hero product "${formData.name}" added successfully.`);
+      setViewMode("table");
+      await loadHeroProducts();
+      setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to create hero product");
     } finally {
@@ -158,9 +175,9 @@ export default function AdminHeroProducts() {
 
     try {
       const body = new FormData();
-      if (formData.name.trim()) body.append("name", formData.name.trim());
-      if (formData.price) body.append("price", String(Number(formData.price)));
-      if (formData.alt.trim()) body.append("alt", formData.alt.trim());
+      body.append("name", formData.name.trim());
+      body.append("price", String(Number(formData.price)));
+      body.append("alt", formData.alt.trim());
       if (selectedFile) {
         body.append("image_file", selectedFile);
       } else if (formData.image.trim()) {
@@ -168,8 +185,11 @@ export default function AdminHeroProducts() {
       }
 
       await updateHeroProduct(prodId, body);
+      setSuccessMsg(`Hero product "${formData.name}" updated successfully.`);
+      setViewMode("table");
       setEditingProduct(null);
-      loadHeroProducts();
+      await loadHeroProducts();
+      setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to update hero product");
     } finally {
@@ -182,399 +202,583 @@ export default function AdminHeroProducts() {
     const prodId = itemToDelete._id || itemToDelete.id;
     if (!prodId) return;
 
-    setSubmitting(true);
+    setDeleting(true);
+    setErrorMsg("");
     try {
       await deleteHeroProduct(prodId);
+      setSuccessMsg(`Hero product "${itemToDelete.name}" deleted successfully.`);
       setItemToDelete(null);
-      loadHeroProducts();
+      await loadHeroProducts();
+      setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: any) {
-      alert("Failed to delete hero product: " + (err.message || err));
+      setErrorMsg(err.message || "Failed to delete hero product");
     } finally {
-      setSubmitting(false);
+      setDeleting(false);
     }
   }
 
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return heroProducts;
+    const q = searchQuery.toLowerCase();
+    return heroProducts.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        (p.alt && p.alt.toLowerCase().includes(q))
+    );
+  }, [heroProducts, searchQuery]);
+
   return (
-    <div className={styles.sectionContainer}>
-      {/* Header Row */}
-      <div className={styles.headerRow}>
+    <div className={styles.sectionContainer} style={{ width: "100%", maxWidth: "100%" }}>
+      {/* ===================== VIEW MODE: CREATE / EDIT (FULL PAGE) ===================== */}
+      {viewMode !== "table" ? (
         <div>
-          <h2 className={styles.sectionTitle} style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-            <Sparkles size={28} color="#C49A45" />
-            Hero Products
-          </h2>
-          <p className={styles.sectionSubtitle}>
-            Manage hero section showcase lamps and featured items displayed on the homepage slider.
-          </p>
-        </div>
-        <button onClick={openAddModal} className={styles.primaryButton}>
-          <Plus size={18} />
-          Add Hero Product
-        </button>
-      </div>
-
-      {/* Main Table Card */}
-      <div className={styles.card}>
-        <div style={{ padding: "1.25rem 1.5rem", borderBottom: "1px solid var(--admin-border)", background: "#f8fafc" }}>
-          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--admin-primary)", margin: 0 }}>
-            Showcase Lamps Catalog
-          </h3>
-          <p style={{ fontSize: "0.8rem", color: "var(--admin-text-muted)", margin: "0.25rem 0 0" }}>
-            {heroProducts.length} lamp{heroProducts.length !== 1 ? "s" : ""} active in the homepage carousel
-          </p>
-        </div>
-
-        {loading ? (
-          <p style={{ padding: "3rem", textAlign: "center", color: "var(--admin-text-muted)" }}>
-            Loading hero lamps...
-          </p>
-        ) : heroProducts.length === 0 ? (
-          <div style={{ padding: "3rem", textAlign: "center" }}>
-            <p style={{ color: "var(--admin-text-muted)", marginBottom: "1rem" }}>No hero products found.</p>
-            <button onClick={openAddModal} className={styles.primaryButton}>
-              <Plus size={18} /> Add Your First Lamp
+          {/* Back Navigation */}
+          <div style={{ marginBottom: "1.75rem" }}>
+            <button
+              type="button"
+              onClick={backToTable}
+              style={{
+                color: "var(--admin-text-muted)",
+                fontSize: "0.85rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                marginBottom: "0.75rem",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Back to Hero Products</span>
             </button>
+            <h2 className={styles.sectionTitle}>
+              {viewMode === "create" ? "Add Hero Product" : `Edit "${formData.name || "Hero Product"}"`}
+            </h2>
+            <p className={styles.sectionSubtitle}>
+              {viewMode === "create"
+                ? "Feature a standout fixture on the homepage hero carousel."
+                : "Update carousel pricing, photography, and accessibility description."}
+            </p>
           </div>
-        ) : (
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th style={{ width: "80px" }}>Preview</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Alt Description</th>
-                  <th style={{ textAlign: "right" }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {heroProducts.map((prod, idx) => {
-                  const id = prod._id || prod.id || String(idx);
-                  return (
-                    <tr key={id}>
-                      <td>
-                        <div
-                          style={{
-                            width: 48,
-                            height: 48,
-                            minWidth: 48,
-                            minHeight: 48,
-                            borderRadius: 10,
-                            overflow: "hidden",
-                            background: "#f1f5f9",
-                            border: "1px solid var(--admin-border)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {prod.image ? (
-                            <Image
-                              src={prod.image}
-                              alt={prod.alt || prod.name}
-                              width={48}
-                              height={48}
-                              style={{ width: 48, height: 48, objectFit: "cover", display: "block" }}
-                            />
-                          ) : (
-                            <ImageIcon size={20} color="#94a3b8" />
-                          )}
-                        </div>
-                      </td>
-                      <td style={{ fontWeight: 600, color: "var(--admin-primary)" }}>{prod.name}</td>
-                      <td style={{ fontWeight: 600, color: "var(--admin-primary)" }}>${Number(prod.price).toFixed(2)}</td>
-                      <td style={{ color: "var(--admin-text-muted)", maxWidth: "320px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.85rem" }}>
-                        {prod.alt}
-                      </td>
-                      <td style={{ textAlign: "right" }}>
-                        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end", alignItems: "center" }}>
-                          <button
-                            onClick={() => openEditModal(prod)}
-                            className={styles.actionLink}
-                            style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", border: "none", cursor: "pointer" }}
-                          >
-                            <Pencil size={14} /> Edit
-                          </button>
-                          <button
-                            onClick={() => setItemToDelete(prod)}
-                            className={styles.actionDelete}
-                            style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
-                          >
-                            <Trash2 size={14} /> Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
 
-      {/* Add Modal */}
-      {showAddModal && (
-        <div className={styles.modalOverlay} onClick={() => !submitting && setShowAddModal(false)}>
-          <div className={`${styles.modal} ${styles.modalLarge}`} onClick={(e) => e.stopPropagation()}>
-            <button className={styles.modalCloseBtn} onClick={() => setShowAddModal(false)}>
-              ✕
-            </button>
-            <div className={styles.modalIconWrapper} style={{ background: "rgba(196, 154, 69, 0.12)", color: "#C49A45" }}>
-              <Sparkles size={28} />
+          {errorMsg && (
+            <div
+              style={{
+                marginBottom: "1.5rem",
+                padding: "0.9rem 1.25rem",
+                background: "#fef2f2",
+                border: "1px solid #fecaca",
+                borderRadius: "10px",
+                color: "#991b1b",
+                fontSize: "0.9rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <AlertCircle size={16} />
+              <span>{errorMsg}</span>
             </div>
-            <h3 style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>Add Hero Product</h3>
-            <p style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>Create a new featured lamp to showcase on the homepage hero slider.</p>
+          )}
 
-            {errorMsg && (
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.65rem 0.9rem", borderRadius: "8px", background: "#fef2f2", border: "1px solid #fee2e2", color: "#b91c1c", fontSize: "0.85rem", marginBottom: "1rem" }}>
-                <AlertCircle size={16} style={{ flexShrink: 0 }} />
-                <span>{errorMsg}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleAddSubmit}>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Lamp Name *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Cylindrical Floor Lamp"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className={styles.formInput}
-                />
-              </div>
-
-              <div className={styles.gridCols2}>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Price ($) *</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    placeholder="231"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className={styles.formInput}
-                  />
-                </div>
+          {/* Full-Page 2-Column Form */}
+          <form onSubmit={viewMode === "create" ? handleAddSubmit : handleEditSubmit}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+                gap: "2rem",
+                alignItems: "start",
+              }}
+            >
+              {/* Left Column: Form Fields */}
+              <div className={styles.card} style={{ padding: "2rem" }}>
+                <h3 style={{ margin: "0 0 1.5rem", fontSize: "1.1rem", fontWeight: 700, color: "var(--admin-primary)" }}>
+                  Fixture Specifications
+                </h3>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Alt Description *</label>
+                  <label className={styles.formLabel}>Lamp Name *</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Modern gold cylinder floor lamp"
-                    value={formData.alt}
-                    onChange={(e) => setFormData({ ...formData, alt: e.target.value })}
+                    placeholder="e.g. Cylindrical Floor Lamp"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className={styles.formInput}
                   />
                 </div>
-              </div>
 
-              <div className={styles.formGroup}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
-                  <label className={styles.formLabel} style={{ margin: 0 }}>Product Image *</label>
-                  <div className={styles.tabSwitch}>
+                <div className={styles.gridCols2}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Price (₹) *</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      required
+                      placeholder="231"
+                      value={formData.price}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      className={styles.formInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Accessibility Alt Text *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Modern gold floor lamp"
+                      value={formData.alt}
+                      onChange={(e) => setFormData({ ...formData, alt: e.target.value })}
+                      className={styles.formInput}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formGroup} style={{ marginBottom: "2rem" }}>
+                  <label className={styles.formLabel}>Product Photograph *</label>
+
+                  <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.75rem" }}>
                     <button
                       type="button"
                       onClick={() => setImageTab("file")}
-                      className={`${styles.tabSwitchBtn} ${imageTab === "file" ? styles.tabSwitchBtnActive : ""}`}
+                      className={imageTab === "file" ? styles.tabBtnActive : styles.tabBtn}
+                      style={{ padding: "0.4rem 0.9rem", fontSize: "0.85rem", borderRadius: "6px" }}
                     >
                       Upload File
                     </button>
-                  </div>
-                </div>
-
-                {imageTab === "file" ? (
-                  <div className={styles.dropzone} onClick={() => fileInputRef.current?.click()}>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      style={{ display: "none" }}
-                    />
-                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#ffffff", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", color: "#64748b" }}>
-                      <Upload size={16} />
-                    </div>
-                    <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--admin-primary)" }}>
-                      {selectedFile ? selectedFile.name : "Click to choose an image file"}
-                    </span>
-                    <span style={{ fontSize: "0.75rem", color: "var(--admin-text-muted)" }}>PNG, JPG, WebP up to 5MB</span>
-                  </div>
-                ) : (
-                  <input
-                    type="text"
-                    placeholder="e.g. /images/lamp_modern_tall_1784107732736.jpg"
-                    value={formData.image}
-                    onChange={handleImageUrlChange}
-                    className={styles.formInput}
-                  />
-                )}
-
-                {previewUrl && (
-                  <div className={styles.previewCard}>
-                    <div style={{ width: 52, height: 52, minWidth: 52, minHeight: 52, borderRadius: 8, overflow: "hidden", border: "1px solid var(--admin-border)", background: "#ffffff" }}>
-                      <Image src={previewUrl} alt="Preview" width={52} height={52} style={{ width: 52, height: 52, objectFit: "cover", display: "block" }} />
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ margin: 0, fontSize: "0.82rem", fontWeight: 600, color: "var(--admin-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {selectedFile ? selectedFile.name : formData.image || "Selected Image"}
-                      </p>
-                      <p style={{ margin: 0, fontSize: "0.75rem", color: "#10b981" }}>Live preview active</p>
-                    </div>
-                    <button type="button" onClick={clearImage} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: "0.25rem" }}>
-                      <X size={18} />
+                    <button
+                      type="button"
+                      onClick={() => setImageTab("url")}
+                      className={imageTab === "url" ? styles.tabBtnActive : styles.tabBtn}
+                      style={{ padding: "0.4rem 0.9rem", fontSize: "0.85rem", borderRadius: "6px" }}
+                    >
+                      Image URL
                     </button>
                   </div>
-                )}
+
+                  {imageTab === "file" ? (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      style={{
+                        border: "2px dashed #cbd5e1",
+                        borderRadius: "10px",
+                        padding: "1.5rem",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        background: "#f8fafc",
+                        transition: "border-color 0.2s",
+                      }}
+                    >
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleFileChange}
+                      />
+                      <Upload size={28} color="#94a3b8" style={{ margin: "0 auto 0.5rem" }} />
+                      <p style={{ margin: "0 0 0.25rem", fontSize: "0.875rem", fontWeight: 600, color: "var(--admin-primary)" }}>
+                        {selectedFile ? selectedFile.name : "Click to select a photo"}
+                      </p>
+                      <span style={{ fontSize: "0.75rem", color: "var(--admin-text-muted)" }}>
+                        PNG, JPG, WEBP up to 5MB
+                      </span>
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="https://... or /images/..."
+                      value={formData.image}
+                      onChange={handleImageUrlChange}
+                      className={styles.formInput}
+                    />
+                  )}
+                </div>
+
+                <div style={{ display: "flex", gap: "0.75rem" }}>
+                  <button
+                    type="button"
+                    onClick={backToTable}
+                    className={styles.btnCancel}
+                    style={{ flex: 1, padding: "0.75rem" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className={styles.primaryButton}
+                    style={{ flex: 2, justifyContent: "center", padding: "0.75rem" }}
+                  >
+                    <Save size={18} />
+                    <span>{submitting ? "Saving Fixture..." : viewMode === "create" ? "Add Hero Fixture" : "Save Changes"}</span>
+                  </button>
+                </div>
               </div>
 
-              <div className={styles.modalActions}>
-                <button type="button" disabled={submitting} onClick={() => setShowAddModal(false)} className={styles.btnCancel}>
+              {/* Right Column: Live Hero Carousel Card Preview */}
+              <div className={styles.card} style={{ padding: "2rem" }}>
+                <h3 style={{ margin: "0 0 1.5rem", fontSize: "1.1rem", fontWeight: 700, color: "var(--admin-primary)" }}>
+                  Homepage Hero Preview
+                </h3>
+
+                <div
+                  style={{
+                    background: "#2A1F14",
+                    borderRadius: "16px",
+                    padding: "2rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "1.5rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "200px",
+                      height: "260px",
+                      borderRadius: "18px",
+                      background: "#fff",
+                      overflow: "hidden",
+                      boxShadow: "0 16px 36px rgba(0, 0, 0, 0.35)",
+                      border: "1.5px solid rgba(255, 255, 255, 0.35)",
+                    }}
+                  >
+                    {previewUrl ? (
+                      <Image
+                        src={previewUrl}
+                        alt={formData.alt || "Preview"}
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#94a3b8",
+                          gap: "0.5rem",
+                        }}
+                      >
+                        <ImageIcon size={40} />
+                        <span style={{ fontSize: "0.8rem" }}>Upload photo</span>
+                      </div>
+                    )}
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        padding: "16px 12px 10px",
+                        background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
+                        textAlign: "center",
+                      }}
+                    >
+                      <span style={{ fontSize: "0.85rem", color: "#cb9856", fontWeight: 700 }}>
+                        ₹{formData.price || "0"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: "center", color: "#fff" }}>
+                    <h4 style={{ margin: "0 0 0.25rem", fontSize: "1.1rem", fontFamily: "var(--font-libre), serif" }}>
+                      {formData.name || "Lamp Title"}
+                    </h4>
+                    <p style={{ margin: 0, fontSize: "0.8rem", color: "rgba(255,255,255,0.7)" }}>
+                      {formData.alt || "Lamp accessibility caption"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      ) : (
+        /* ===================== VIEW MODE: TABLE (FULL PAGE) ===================== */
+        <div>
+          {/* Top Header */}
+          <div className={styles.headerRow}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.25rem" }}>
+                <h2 className={styles.sectionTitle}>Hero Slider Management</h2>
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    background: "rgba(196, 154, 69, 0.12)",
+                    color: "#C49A45",
+                    padding: "3px 10px",
+                    borderRadius: "12px",
+                  }}
+                >
+                  {heroProducts.length} Hero Items
+                </span>
+              </div>
+              <p className={styles.sectionSubtitle}>
+                Control the luxury lighting collection showcased in the interactive hero slider on the homepage.
+              </p>
+            </div>
+
+            <button onClick={startCreate} className={styles.primaryButton}>
+              <Plus size={18} />
+              <span>Add Hero Product</span>
+            </button>
+          </div>
+
+          {/* Success Banner */}
+          {successMsg && (
+            <div
+              style={{
+                marginBottom: "1.5rem",
+                padding: "0.9rem 1.25rem",
+                background: "#ecfdf5",
+                border: "1px solid #a7f3d0",
+                borderRadius: "10px",
+                color: "#065f46",
+                fontSize: "0.9rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <span>✓</span>
+              <span>{successMsg}</span>
+            </div>
+          )}
+
+          {/* Error Banner */}
+          {errorMsg && (
+            <div
+              style={{
+                marginBottom: "1.5rem",
+                padding: "0.9rem 1.25rem",
+                background: "#fef2f2",
+                border: "1px solid #fecaca",
+                borderRadius: "10px",
+                color: "#991b1b",
+                fontSize: "0.9rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <AlertCircle size={16} />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
+          {/* INLINE DELETE CONFIRMATION BANNER (Strictly zero modal popup / zero background blur) */}
+          {itemToDelete && (
+            <div
+              style={{
+                marginBottom: "1.75rem",
+                padding: "1.25rem 1.75rem",
+                background: "#FEF2F2",
+                border: "1px solid #FECACA",
+                borderRadius: "12px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "1.5rem",
+                flexWrap: "wrap",
+                boxShadow: "0 4px 12px rgba(239, 68, 68, 0.08)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: "50%",
+                    background: "#FEE2E2",
+                    color: "#DC2626",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Trash2 size={22} />
+                </div>
+                <div>
+                  <h4 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 700, color: "#991B1B" }}>
+                    Confirm Slider Fixture Deletion
+                  </h4>
+                  <p style={{ margin: "0.25rem 0 0", fontSize: "0.875rem", color: "#B91C1C" }}>
+                    Are you sure you want to remove <strong>&quot;{itemToDelete.name}&quot;</strong> from the homepage slider? This action cannot be undone.
+                  </p>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => setItemToDelete(null)}
+                  className={styles.btnCancel}
+                  style={{ background: "#ffffff", border: "1px solid #E5E7EB", padding: "0.65rem 1.25rem" }}
+                >
                   Cancel
                 </button>
-                <button type="submit" disabled={submitting} className={styles.primaryButton} style={{ padding: "0.65rem 1.35rem", borderRadius: "8px" }}>
-                  {submitting ? "Saving..." : "Create Hero Product"}
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={executeDelete}
+                  className={styles.btnDeleteConfirm}
+                  style={{ padding: "0.65rem 1.5rem", background: "#DC2626", color: "#fff", border: "none", borderRadius: "8px", fontWeight: 600, cursor: "pointer" }}
+                >
+                  {deleting ? "Removing..." : "Remove Fixture"}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Modal */}
-      {editingProduct && (
-        <div className={styles.modalOverlay} onClick={() => !submitting && setEditingProduct(null)}>
-          <div className={`${styles.modal} ${styles.modalLarge}`} onClick={(e) => e.stopPropagation()}>
-            <button className={styles.modalCloseBtn} onClick={() => setEditingProduct(null)}>
-              ✕
-            </button>
-            <div className={styles.modalIconWrapper} style={{ background: "rgba(59, 130, 246, 0.1)", color: "#3b82f6" }}>
-              <Pencil size={26} />
             </div>
-            <h3 style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>Edit Hero Product</h3>
-            <p style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>Update hero lamp attributes or replace showcase image.</p>
+          )}
 
-            {errorMsg && (
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.65rem 0.9rem", borderRadius: "8px", background: "#fef2f2", border: "1px solid #fee2e2", color: "#b91c1c", fontSize: "0.85rem", marginBottom: "1rem" }}>
-                <AlertCircle size={16} style={{ flexShrink: 0 }} />
-                <span>{errorMsg}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleEditSubmit}>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Lamp Name *</label>
+          {/* Main Table Card (Full Width) */}
+          <div className={styles.card} style={{ width: "100%", maxWidth: "100%" }}>
+            {/* Search Bar */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.25rem 1.5rem", borderBottom: "1px solid var(--admin-border)" }}>
+              <div style={{ position: "relative", width: "100%", maxWidth: "340px" }}>
+                <Search size={16} color="var(--admin-text-muted)" style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)" }} />
                 <input
                   type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Search hero fixtures..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className={styles.formInput}
+                  style={{ paddingLeft: "36px", height: "38px", fontSize: "0.875rem" }}
                 />
               </div>
 
-              <div className={styles.gridCols2}>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Price ($) *</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className={styles.formInput}
-                  />
-                </div>
+              <span style={{ fontSize: "0.85rem", color: "var(--admin-text-muted)" }}>
+                Showing {filteredProducts.length} of {heroProducts.length} hero fixtures
+              </span>
+            </div>
 
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Alt Description *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.alt}
-                    onChange={(e) => setFormData({ ...formData, alt: e.target.value })}
-                    className={styles.formInput}
-                  />
-                </div>
+            {loading ? (
+              <div style={{ padding: "4rem 2rem", textAlign: "center", color: "var(--admin-text-muted)" }}>
+                Loading hero slider fixtures...
               </div>
-
-              <div className={styles.formGroup}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
-                  <label className={styles.formLabel} style={{ margin: 0 }}>Replace Image</label>
-                 
-                </div>
-                  <div className={styles.dropzone} onClick={() => fileInputRef.current?.click()}>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      style={{ display: "none" }}
-                    />
-                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#ffffff", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", color: "#64748b" }}>
-                      <Upload size={16} />
-                    </div>
-                    <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--admin-primary)" }}>
-                      {selectedFile ? selectedFile.name : "Click to select a new image file"}
-                    </span>
-                    <span style={{ fontSize: "0.75rem", color: "var(--admin-text-muted)" }}>Leaves current image unchanged if omitted</span>
-                  </div>
-                
-
-                {previewUrl && (
-                  <div className={styles.previewCard}>
-                    <div style={{ width: 52, height: 52, minWidth: 52, minHeight: 52, borderRadius: 8, overflow: "hidden", border: "1px solid var(--admin-border)", background: "#ffffff" }}>
-                      <Image src={previewUrl} alt="Preview" width={52} height={52} style={{ width: 52, height: 52, objectFit: "cover", display: "block" }} />
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ margin: 0, fontSize: "0.82rem", fontWeight: 600, color: "var(--admin-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {selectedFile ? selectedFile.name : formData.image || "Current Image"}
-                      </p>
-                      <p style={{ margin: 0, fontSize: "0.75rem", color: "#10b981" }}>Preview of showcase lamp</p>
-                    </div>
-                    <button type="button" onClick={clearImage} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: "0.25rem" }}>
-                      <X size={18} />
-                    </button>
-                  </div>
+            ) : filteredProducts.length === 0 ? (
+              <div style={{ padding: "4rem 2rem", textAlign: "center", color: "var(--admin-text-muted)" }}>
+                <Sparkles size={40} color="#cbd5e1" style={{ margin: "0 auto 1rem" }} />
+                <h4 style={{ margin: "0 0 0.5rem", color: "var(--admin-primary)", fontSize: "1.05rem" }}>
+                  {searchQuery ? "No matching fixtures" : "No hero fixtures created yet"}
+                </h4>
+                <p style={{ margin: "0 0 1.25rem", fontSize: "0.875rem" }}>
+                  {searchQuery ? "Try refining your search query." : "Add fixtures to appear in the rotating homepage hero card."}
+                </p>
+                {!searchQuery && (
+                  <button onClick={startCreate} className={styles.primaryButton} style={{ margin: "0 auto" }}>
+                    <Plus size={16} /> Add First Hero Fixture
+                  </button>
                 )}
               </div>
+            ) : (
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "80px" }}>Image</th>
+                      <th>Fixture Name</th>
+                      <th>Price</th>
+                      <th>Accessibility Alt Text</th>
+                      <th style={{ textAlign: "right", width: "160px" }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredProducts.map((prod, idx) => {
+                      const prodId = prod._id || prod.id || idx;
+                      return (
+                        <tr key={prodId}>
+                          <td>
+                            <div
+                              style={{
+                                width: 48,
+                                height: 48,
+                                borderRadius: "8px",
+                                overflow: "hidden",
+                                position: "relative",
+                                background: "#f1f5f9",
+                                border: "1px solid var(--admin-border)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              {prod.image ? (
+                                <Image
+                                  src={prod.image}
+                                  alt={prod.alt || prod.name}
+                                  fill
+                                  sizes="48px"
+                                  style={{ objectFit: "cover" }}
+                                />
+                              ) : (
+                                <ImageIcon size={20} color="#94a3b8" />
+                              )}
+                            </div>
+                          </td>
 
-              <div className={styles.modalActions}>
-                <button type="button" disabled={submitting} onClick={() => setEditingProduct(null)} className={styles.btnCancel}>
-                  Cancel
-                </button>
-                <button type="submit" disabled={submitting} className={styles.primaryButton} style={{ padding: "0.65rem 1.35rem", borderRadius: "8px" }}>
-                  {submitting ? "Saving..." : "Save Changes"}
-                </button>
+                          <td style={{ fontWeight: 600, color: "var(--admin-primary)", fontSize: "0.95rem" }}>
+                            {prod.name}
+                          </td>
+
+                          <td style={{ fontWeight: 600, color: "var(--admin-primary)" }}>
+                            ₹{Number(prod.price).toFixed(2)}
+                          </td>
+
+                          <td style={{ color: "var(--admin-text-muted)", maxWidth: "320px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "0.85rem" }}>
+                            {prod.alt}
+                          </td>
+
+                          <td style={{ textAlign: "right" }}>
+                            <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end", alignItems: "center" }}>
+                              <button
+                                type="button"
+                                onClick={() => startEdit(prod)}
+                                className={styles.actionButton}
+                                style={{ background: "#f1f5f9", padding: "0.4rem 0.75rem", fontSize: "0.8rem", borderRadius: "6px" }}
+                              >
+                                <Pencil size={13} color="#475569" />
+                                <span>Edit</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => setItemToDelete(prod)}
+                                className={styles.actionButton}
+                                style={{
+                                  background: "#fef2f2",
+                                  color: "#b91c1c",
+                                  border: "1px solid #fee2e2",
+                                  padding: "0.4rem 0.75rem",
+                                  fontSize: "0.8rem",
+                                  borderRadius: "6px",
+                                }}
+                              >
+                                <Trash2 size={13} />
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {itemToDelete !== null && (
-        <div className={styles.modalOverlay} onClick={() => !submitting && setItemToDelete(null)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalIconWrapper} style={{ color: "#EF4444", background: "#FEF2F2" }}>
-              <Trash2 size={28} />
-            </div>
-            <h3 style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>Delete Hero Product</h3>
-            <p style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
-              Are you sure you want to remove <strong>{itemToDelete.name}</strong> from the homepage slider? This action cannot be undone.
-            </p>
-            <div className={styles.modalActions}>
-              <button disabled={submitting} className={styles.btnCancel} onClick={() => setItemToDelete(null)}>
-                Cancel
-              </button>
-              <button disabled={submitting} className={styles.btnConfirmLogout} onClick={executeDelete}>
-                {submitting ? "Deleting..." : "Delete Lamp"}
-              </button>
-            </div>
+            )}
           </div>
         </div>
       )}

@@ -1,93 +1,273 @@
+"use client";
+
+import { useEffect, useState, useMemo } from "react";
 import styles from "./blogs.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { fetchBlogs, Blog } from "../services/api";
+
+const CATEGORIES = [
+  "All Blogs",
+  "Design & Inspiration",
+  "Architectural Blogs",
+  "Products Blogs",
+  "Buying Guide",
+  "Case Study",
+];
 
 export default function Blogs() {
-  const blogs = [
-    { id: 1, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/category_chandelier_1784107756268.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read", isFeatured: true },
-    { id: 2, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/about_chandelier_1784107790569.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-    { id: 3, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/category_chandelier_1784107756268.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-    { id: 4, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/category_chandelier_1784107756268.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-    { id: 5, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/lamp_classic_1784107722127.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-    { id: 6, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/project_lounge_1784107767735.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-    { id: 7, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/category_chandelier_1784107756268.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-    { id: 8, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/category_chandelier_1784107756268.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-    { id: 9, title: "How To Choose The Perfect Chandelier For Your Home", image: "/images/category_chandelier_1784107756268.jpg", category: "Design & Inspiration", author: "De Luzex", date: "June 02, 2024", readTime: "5 min read" },
-  ];
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState("All Blogs");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [visibleLimit, setVisibleLimit] = useState(6);
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      try {
+        const data = await fetchBlogs();
+        setBlogs(data);
+      } catch (err) {
+        console.error("Failed to load blogs:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  const handleCategoryChange = (cat: string) => {
+    setActiveCategory(cat);
+    setVisibleLimit(6);
+  };
+
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    setVisibleLimit(6);
+  };
+
+  const filteredBlogs = useMemo(() => {
+    return blogs.filter((blog) => {
+      // Category filter
+      if (activeCategory !== "All Blogs") {
+        if (blog.category !== activeCategory) {
+          return false;
+        }
+      }
+
+      // Search filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesTitle = blog.title?.toLowerCase().includes(q);
+        const matchesAuthor = blog.author?.toLowerCase().includes(q);
+        const matchesCategory = blog.category?.toLowerCase().includes(q);
+        const matchesExcerpt = blog.excerpt?.toLowerCase().includes(q);
+        return matchesTitle || matchesAuthor || matchesCategory || matchesExcerpt;
+      }
+
+      return true;
+    });
+  }, [blogs, activeCategory, searchQuery]);
+
+  function formatDate(isoOrStr?: string) {
+    if (!isoOrStr) return "June 02, 2024";
+    try {
+      const d = new Date(isoOrStr);
+      if (isNaN(d.getTime())) return isoOrStr;
+      return d.toLocaleDateString("en-US", {
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      });
+    } catch {
+      return "June 02, 2024";
+    }
+  }
 
   return (
     <main className={styles.main}>
       {/* HERO SECTION */}
       <section className={styles.hero}>
         <div className={styles.heroBg}>
-          <Image src="/images/hero_bg_1784107713316.jpg" alt="Hero Background" fill style={{ objectFit: 'cover' }} priority />
+          <Image
+            src="/images/hero_bg_1784107713316.jpg"
+            alt="Hero Background"
+            fill
+            style={{ objectFit: "cover" }}
+            priority
+          />
         </div>
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
-          <p className={styles.heroSub}>INSIGHTS & INSPIRATION</p>
+          <p className={styles.heroSub}>INSIGHTS &amp; INSPIRATION</p>
           <h1 className={styles.heroTitle}>The Art Of Lighting</h1>
           <p className={styles.heroDesc}>
-            Explore Design Trends, Lighting Inspiration, And Expert Insights For<br/>Creating Extraordinary Interiors.
+            Explore Design Trends, Lighting Inspiration, And Expert Insights For
+            <br />
+            Creating Extraordinary Interiors.
           </p>
-          <button className={styles.btnOutlineHero}>Read Article</button>
+          {blogs.length > 0 && (
+            <Link
+              href={`/blogs/${blogs[0].slug || blogs[0].id || blogs[0]._id}`}
+              className={styles.btnOutlineHero}
+              style={{ display: "inline-block", textDecoration: "none" }}
+            >
+              Read Article
+            </Link>
+          )}
         </div>
       </section>
 
       {/* FILTER BAR */}
       <section className={styles.filterSection}>
         <div className={styles.filters}>
-          <button className={`${styles.filterBtn} ${styles.activeFilter}`}>All Blogs</button>
-          <button className={styles.filterBtn}>Architectural Blogs</button>
-          <button className={styles.filterBtn}>Products Blogs</button>
-          <button className={styles.filterBtn}>Projects</button>
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => handleCategoryChange(cat)}
+                className={`${styles.filterBtn} ${isActive ? styles.activeFilter : ""}`}
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
         <div className={styles.searchAndAdd}>
           <div className={styles.searchBox}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" placeholder="Search articles ..." />
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              placeholder="Search articles ..."
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+            />
           </div>
-          <button className={styles.btnAddBlog}>+ Add Your Blog</button>
+          <Link href="/admin/blogs" className={styles.btnAddBlog} style={{ textDecoration: "none" }}>
+            + Add Your Blog
+          </Link>
         </div>
       </section>
 
       {/* BLOG GRID */}
       <section className={styles.blogGridSection}>
-        <div className={styles.blogGrid}>
-          {blogs.map((blog) => (
-            <Link href={`/blogs/${blog.id}`} key={blog.id} className={styles.blogCard}>
-              <div className={styles.blogImage}>
-                <Image src={blog.image} alt={blog.title} fill style={{ objectFit: 'cover' }} />
-                {blog.isFeatured && (
-                  <div className={styles.authorBadge}>
-                    <div className={styles.authorAvatar}></div>
-                    <span>{blog.author}</span>
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "4rem 0", color: "#666" }}>
+            Loading luxury articles...
+          </div>
+        ) : filteredBlogs.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "4rem 0", color: "#666" }}>
+            <p style={{ fontSize: "1.1rem", marginBottom: "1rem" }}>
+              No articles found matching &quot;{searchQuery || activeCategory}&quot;.
+            </p>
+            <button
+              onClick={() => {
+                handleCategoryChange("All Blogs");
+                handleSearchChange("");
+              }}
+              className={styles.btnPrimaryRounded}
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          <div className={styles.blogGrid}>
+            {filteredBlogs.slice(0, visibleLimit).map((blog) => {
+              const targetSlug = blog.slug || blog.id || blog._id;
+              const coverImg =
+                blog.image || "/images/category_chandelier_1784107756268.jpg";
+
+              return (
+                <Link
+                  href={`/blogs/${targetSlug}`}
+                  key={blog.id || blog._id || blog.slug}
+                  className={styles.blogCard}
+                >
+                  <div className={styles.blogImage}>
+                    <Image
+                      src={coverImg}
+                      alt={blog.title}
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                    {blog.is_featured && (
+                      <div className={styles.authorBadge}>
+                        <div className={styles.authorAvatar}></div>
+                        <span>{blog.author || "De Luzex"}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className={styles.blogContent}>
-                <p className={styles.blogCategory}>{blog.category}</p>
-                <h3 className={styles.blogTitle}>{blog.title}</h3>
-                <div className={styles.blogFooter}>
-                  <span>{blog.date} • {blog.readTime}</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-        <div className={styles.centerBtn}>
-          <button className={styles.btnPrimaryRounded}>Show More</button>
-        </div>
+                  <div className={styles.blogContent}>
+                    <p className={styles.blogCategory}>{blog.category || "Design & Inspiration"}</p>
+                    <h3 className={styles.blogTitle}>{blog.title}</h3>
+                    <div className={styles.blogFooter}>
+                      <span>
+                        {formatDate(blog.created_at)} • {blog.read_time || "5 min read"}
+                      </span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
+        {filteredBlogs.length > visibleLimit && (
+          <div className={styles.centerBtn}>
+            <button
+              className={styles.btnPrimaryRounded}
+              type="button"
+              onClick={() => setVisibleLimit((prev) => prev + 6)}
+            >
+              Show More ({filteredBlogs.length - visibleLimit} Remaining)
+            </button>
+          </div>
+        )}
       </section>
 
       {/* CTA SECTION */}
       <section className={styles.ctaSection}>
         <div className={styles.ctaContent}>
-          <h2 className={styles.ctaTitle}>Crafting Light For<br/>Extraordinary Interiors</h2>
-          <p>We Create Timeless Lighting Pieces That Blend Artistry, Craftsmanship, And<br/>Innovation To Elevate Every Space.</p>
+          <h2 className={styles.ctaTitle}>
+            Crafting Light For
+            <br />
+            Extraordinary Interiors
+          </h2>
+          <p>
+            We Create Timeless Lighting Pieces That Blend Artistry, Craftsmanship, And
+            <br />
+            Innovation To Elevate Every Space.
+          </p>
           <div className={styles.ctaButtons}>
-            <button className={styles.btnPrimaryRounded}>Book A Consultation</button>
-            <button className={styles.btnOutlineRounded}>Shop</button>
+            <Link href="/contact" className={styles.btnPrimaryRounded} style={{ textDecoration: "none" }}>
+              Book A Consultation
+            </Link>
+            <Link href="/shop" className={styles.btnOutlineRounded} style={{ textDecoration: "none" }}>
+              Shop
+            </Link>
           </div>
         </div>
       </section>

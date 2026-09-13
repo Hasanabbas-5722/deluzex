@@ -5,17 +5,22 @@ import styles from "./Header.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { openCart } from "../store/cartSlice";
 import { useSidebar } from "../context/SidebarContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { RootState } from "../store/store";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const dispatch = useDispatch();
   const { sidebarOpen, toggleSidebar } = useSidebar();
   const { isAdmin } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const { cartItems } = useSelector((state: RootState) => state.cart);
 
   const isHome = pathname === "/";
@@ -29,6 +34,21 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/shop?category=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
 
   // On home: transparent → scrolled solid. On other pages: always solid.
   const headerClass = isHome
@@ -75,6 +95,7 @@ export default function Header() {
 
       <nav className={styles.nav}>
         <Link href="/">Lighting</Link>
+        <Link href="/categories">Categories</Link>
         <Link href="/shop">Shop</Link>
         <Link href="/projects">Projects</Link>
         <Link href="/blogs">Blogs</Link>
@@ -88,17 +109,50 @@ export default function Header() {
       </nav>
 
       <div className={styles.headerIcons}>
-        <Link href="/dashboard/profile" className={styles.userIcon} aria-label="My Profile">
-          <Image src="/images/avatar_woman_1784107804209.jpg" alt="User" width={24} height={24} className={styles.userAvatar} />
-        </Link>
-        <button className={styles.iconBtn}>
+        {searchOpen && (
+          <form onSubmit={handleSearchSubmit} style={{ display: "flex", alignItems: "center" }}>
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search lamps, chandeliers..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                background: "rgba(255,255,255,0.9)",
+                border: "1px solid #C49A45",
+                borderRadius: "20px",
+                padding: "0.35rem 0.85rem",
+                fontSize: "0.85rem",
+                color: "#111",
+                outline: "none",
+                width: "180px",
+              }}
+            />
+          </form>
+        )}
+        <button
+          className={styles.iconBtn}
+          type="button"
+          onClick={() => {
+            if (searchOpen && searchQuery.trim()) {
+              handleSearchSubmit({ preventDefault: () => {} } as any);
+            } else {
+              setSearchOpen(!searchOpen);
+            }
+          }}
+          aria-label="Search"
+        >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </button>
+
+        <Link href="/dashboard/profile" className={styles.userIcon} aria-label="My Profile">
+          <Image src="/images/avatar_woman_1784107804209.jpg" alt="User" width={24} height={24} className={styles.userAvatar} />
+        </Link>
         <div className={styles.cartIconWrapper}>
-          <button className={styles.iconBtn} onClick={() => dispatch(openCart())}>
+          <button className={styles.iconBtn} onClick={() => dispatch(openCart())} aria-label="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />

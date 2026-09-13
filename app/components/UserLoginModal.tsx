@@ -196,6 +196,7 @@ export default function UserLoginModal() {
                 alt={pendingCartProduct.product_title || pendingCartProduct.name || "Product"}
                 fill
                 sizes="44px"
+                style={{ objectFit: "contain" }}
                 className={styles.productThumb}
               />
             </div>

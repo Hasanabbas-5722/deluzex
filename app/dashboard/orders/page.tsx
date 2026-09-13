@@ -22,17 +22,24 @@ function StatusBadge({ status }: { status: string }) {
   const cls =
     s === "delivered"
       ? styles.statusDelivered
-      : s === "processing"
-      ? styles.statusProcessing
       : s === "shipped"
       ? styles.statusShipped
       : s === "cancelled"
       ? styles.statusCancelled
+      : s === "paid" || s === "processing" || s === "cod"
+      ? styles.statusProcessing
       : styles.statusPending;
+
+  const displayStatus =
+    s === "paid"
+      ? "Paid (Processing)"
+      : s === "pending"
+      ? "Processing"
+      : status || "Processing";
 
   return (
     <span className={`${styles.statusBadge} ${cls}`}>
-      ● {status || "Processing"}
+      ● {displayStatus}
     </span>
   );
 }
@@ -43,6 +50,11 @@ function formatCurrency(num: number | string | undefined): string {
   if (isNaN(n)) return "₹0";
   return `₹${n.toLocaleString("en-IN")}`;
 }
+
+const isOrderProcessing = (status?: string) => {
+  const s = (status || "").toLowerCase();
+  return s === "processing" || s === "pending" || s === "paid" || s === "confirmed" || s === "cod" || s === "placed";
+};
 
 export default function OrdersPage() {
   const { user } = useAuth();
@@ -76,7 +88,7 @@ export default function OrdersPage() {
   // Compute tab counts
   const tabCounts: Record<string, number> = {
     All: orders.length,
-    Processing: orders.filter((o) => (o.status || "").toLowerCase() === "processing").length,
+    Processing: orders.filter((o) => isOrderProcessing(o.status)).length,
     Shipped: orders.filter((o) => (o.status || "").toLowerCase() === "shipped").length,
     Delivered: orders.filter((o) => (o.status || "").toLowerCase() === "delivered").length,
     Cancelled: orders.filter((o) => (o.status || "").toLowerCase() === "cancelled").length,
@@ -84,8 +96,11 @@ export default function OrdersPage() {
 
   // Filter orders by search & tab
   const filteredOrders = orders.filter((order) => {
+    const s = (order.status || "").toLowerCase();
     const statusMatch =
-      activeTab === "All" || (order.status || "").toLowerCase() === activeTab.toLowerCase();
+      activeTab === "All" ||
+      s === activeTab.toLowerCase() ||
+      (activeTab === "Processing" && isOrderProcessing(order.status));
 
     const q = search.toLowerCase().trim();
     if (!q) return statusMatch;
@@ -124,7 +139,7 @@ export default function OrdersPage() {
     if (s === "cancelled") return 0;
     return 1;
   };
-  console.log("orders::::::", orders)
+
   return (
     <div className={styles.container}>
       {/* Header */}

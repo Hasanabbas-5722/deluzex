@@ -28,6 +28,7 @@ export default function EditProduct() {
 
   const [mainImage, setMainImage] = useState<File | null>(null);
   const [galleryImages, setGalleryImages] = useState<(File | null)[]>([null, null, null, null]);
+  const [isNewArrival, setIsNewArrival] = useState(false);
 
   useEffect(() => {
     fetchCategories().then(setCategories).catch(console.error);
@@ -53,6 +54,7 @@ export default function EditProduct() {
 
           setCurrentMainImage(data.product_main_image || "");
           setCurrentGallery(parsedGallery);
+          setIsNewArrival(Boolean(data.is_new_arrival));
 
           setFormData({
             product_title: data.product_title || "",
@@ -101,6 +103,7 @@ export default function EditProduct() {
       Object.entries(formData).forEach(([key, value]) => {
         payload.append(key, value);
       });
+      payload.append("is_new_arrival", String(isNewArrival));
       
       if (mainImage) {
         payload.append("product_main_image", mainImage);
@@ -126,7 +129,7 @@ export default function EditProduct() {
   };
 
   return (
-    <div className={styles.sectionContainer}>
+    <div className={styles.sectionContainer} style={{ width: '100%', maxWidth: '100%' }}>
       <div style={{ marginBottom: '2rem' }}>
         <Link href="/admin/products" style={{ color: 'var(--color-text-light)', fontSize: '0.85rem', display: 'inline-block', marginBottom: '1rem' }}>
           &larr; Back to Products
@@ -134,7 +137,7 @@ export default function EditProduct() {
         <h2 className={styles.sectionTitle}>Edit Product</h2>
       </div>
 
-      <div style={{ background: 'var(--color-white)', borderRadius: '12px', padding: '2rem', maxWidth: '800px', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
+      <div style={{ background: 'var(--color-white)', borderRadius: '12px', padding: '2rem', width: '100%', maxWidth: '100%', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
         {loading ? (
           <p>Loading product details...</p>
         ) : (
@@ -146,7 +149,7 @@ export default function EditProduct() {
             </div>
 
             <div>
-              <label style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)' }}>Price ($) *</label>
+              <label style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)' }}>Price (₹) *</label>
               <input required type="number" step="0.01" name="product_price" value={formData.product_price} onChange={handleChange} style={inputStyle} />
             </div>
 
@@ -199,6 +202,60 @@ export default function EditProduct() {
             </div>
 
             <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '1.5rem', marginTop: '1rem' }}>
+              <div style={{
+                background: isNewArrival ? '#FFFBEB' : '#f8fafc',
+                border: isNewArrival ? '1px solid #F59E0B' : '1px solid var(--admin-border)',
+                borderRadius: '10px',
+                padding: '1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                transition: 'all 0.2s',
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: isNewArrival ? '#92400E' : 'var(--admin-primary)', fontSize: '0.95rem' }}>
+                    <span>★ Feature in Homepage New Arrivals Carousel</span>
+                    {isNewArrival && (
+                      <span style={{ fontSize: '0.75rem', background: '#FEF3C7', color: '#B45309', padding: '2px 8px', borderRadius: '12px', fontWeight: 700 }}>
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ margin: '0.35rem 0 0', fontSize: '0.825rem', color: 'var(--admin-text-muted)' }}>
+                    When enabled, this product will immediately show up in the New Arrivals carousel on the homepage.
+                  </p>
+                </div>
+                <label style={{ position: 'relative', display: 'inline-block', width: '48px', height: '26px', cursor: 'pointer', flexShrink: 0 }}>
+                  <input
+                    type="checkbox"
+                    checked={isNewArrival}
+                    onChange={(e) => setIsNewArrival(e.target.checked)}
+                    style={{ opacity: 0, width: 0, height: 0 }}
+                  />
+                  <span style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundColor: isNewArrival ? '#C49A45' : '#cbd5e1',
+                    borderRadius: '34px',
+                    transition: '0.2s',
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      height: '20px',
+                      width: '20px',
+                      left: isNewArrival ? '24px' : '4px',
+                      bottom: '3px',
+                      backgroundColor: 'white',
+                      borderRadius: '50%',
+                      transition: '0.2s',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                    }} />
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '1.5rem', marginTop: '0.5rem' }}>
               <label style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)' }}>Description *</label>
               <textarea required name="product_description" value={formData.product_description} onChange={handleChange} style={{ ...inputStyle, minHeight: '120px' }} />
             </div>

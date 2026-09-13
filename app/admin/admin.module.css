@@ -19,6 +19,90 @@
   padding: 0;
 }
 
+.adminRoot h1,
+.adminRoot h2,
+.adminRoot h3,
+.adminRoot h4,
+.adminRoot h5,
+.adminRoot h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.btnAdd {
+  background: var(--admin-primary);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+.btnAdd:hover {
+  background: var(--admin-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+}
+
+.tableCard {
+  background: var(--admin-surface);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--admin-border);
+  overflow: hidden;
+}
+
+.adminTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.btnSave {
+  background: var(--admin-primary);
+  color: #ffffff;
+  padding: 0.65rem 1.35rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+.btnSave:hover {
+  background: var(--admin-primary-hover);
+}
+
+.btnSave:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnDeleteConfirm {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnDeleteConfirm:hover {
+  background: #dc2626;
+}
+
 .dashboardContainer {
   display: flex;
   min-height: 100vh;
@@ -164,9 +248,10 @@
 
 /* ─── Premium UI Elements ─── */
 .sectionContainer {
-  max-width: 1200px;
-  margin: 0 auto;
-  animation: fadeIn 0.4s ease-out forwards;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 @keyframes fadeIn {
@@ -226,6 +311,8 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   border: 1px solid var(--admin-border);
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .tableWrapper {
@@ -325,31 +412,111 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.25);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
 }
 
 .modal {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 2.25rem;
+  border-radius: 12px;
   width: 100%;
-  max-width: 460px;
-  max-height: 88vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
-  animation: adminModalFadeIn 0.25s ease-out;
-  border: 1px solid var(--admin-border);
+  max-width: 480px;
+  max-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: adminModalFadeIn 0.15s ease-out;
+  border: 1px solid #e2e8f0;
   position: relative;
+  overflow: hidden;
+  margin: auto;
 }
 
 .modalLarge {
-  max-width: 540px;
+  max-width: 520px;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  letter-spacing: -0.01em;
+}
+
+.modalDesc {
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+  margin: 0.2rem 0 0;
+  text-align: left;
+}
+
+.modalCloseBtnInline {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.modalCloseBtnInline:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.modalBody {
+  padding: 1.15rem 1.25rem;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  scrollbar-width: thin;
+}
+
+.modalFooter {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.modalConfirmCard {
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .modalCloseBtn {
@@ -377,11 +544,13 @@
 }
 
 .tabSwitch {
-  display: flex;
+  display: inline-flex;
   background: #f1f5f9;
   border-radius: 8px;
   padding: 3px;
   gap: 3px;
+  width: fit-content;
+  border: 1px solid var(--admin-border);
 }
 
 .tabSwitchBtn {
@@ -394,6 +563,7 @@
   cursor: pointer;
   color: #64748b;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .tabSwitchBtnActive {

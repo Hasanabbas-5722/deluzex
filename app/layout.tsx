@@ -8,6 +8,7 @@ import CartSidebar from "./components/CartSidebar";
 import MainSidebar from "./components/MainSidebar";
 import UserLoginModal from "./components/UserLoginModal";
 import ConsoleBanner from "./components/ConsoleBanner";
+import VisitorTracker from "./components/VisitorTracker";
 
 const libre = Libre_Caslon_Display({
   weight: "400",
@@ -44,6 +45,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${libre.variable} ${italianno.variable}`}>
         <AuthProvider>
+          <VisitorTracker />
           <SidebarProvider>
             <ReduxProvider>
               <Header />

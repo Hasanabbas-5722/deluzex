@@ -28,13 +28,13 @@ export default function ProfilePage() {
   const userRecord = user as Record<string, string> | null;
 
   const [firstName, setFirstName] = useState(() =>
-    getInitialUserValue("first_name", userRecord?.name?.split(" ")[0] || "Soni", userRecord)
+    getInitialUserValue("first_name", userRecord?.first_name || userRecord?.name?.split(" ")[0] || "Hasanabbas", userRecord)
   );
   const [lastName, setLastName] = useState(() =>
-    getInitialUserValue("last_name", userRecord?.name?.split(" ").slice(1).join(" ") || "Patel", userRecord)
+    getInitialUserValue("last_name", userRecord?.last_name || userRecord?.name?.split(" ").slice(1).join(" ") || "Chaudhary", userRecord)
   );
   const [email, setEmail] = useState(() =>
-    getInitialUserValue("email", "soni.patel@deluzex.com", userRecord)
+    getInitialUserValue("email", "Hasanabbas@gmail.com", userRecord)
   );
   const [phone, setPhone] = useState(() =>
     getInitialUserValue("phone", "+91 9982791722", userRecord)
@@ -46,10 +46,13 @@ export default function ProfilePage() {
     getInitialUserValue("country", "India", userRecord)
   );
 
-  // Password fields
+  // Password fields and visibility toggles
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
@@ -58,7 +61,7 @@ export default function ProfilePage() {
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   useEffect(() => {
@@ -67,12 +70,12 @@ export default function ProfilePage() {
     fetchUserProfile()
       .then((profile) => {
         if (!isMounted) return;
-        setFirstName(profile.first_name || "");
-        setLastName(profile.last_name || "");
-        setEmail(profile.email || "");
-        setPhone(profile.phone || "");
-        setCity(profile.city || "");
-        setCountry(profile.country || "");
+        if (profile.first_name) setFirstName(profile.first_name);
+        if (profile.last_name) setLastName(profile.last_name);
+        if (profile.email) setEmail(profile.email);
+        if (profile.phone) setPhone(profile.phone);
+        if (profile.city) setCity(profile.city);
+        if (profile.country) setCountry(profile.country);
         localStorage.setItem("user", JSON.stringify(profile));
       })
       .catch((error: Error) => {
@@ -91,6 +94,19 @@ export default function ProfilePage() {
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!firstName.trim()) {
+      showToast("Please enter your first name.");
+      return;
+    }
+    if (!lastName.trim()) {
+      showToast("Please enter your last name.");
+      return;
+    }
+    if (!email.trim() || !email.includes("@")) {
+      showToast("Please enter a valid email address.");
+      return;
+    }
+
     setIsSavingProfile(true);
     try {
       const updatedUser = await updateUserProfile({
@@ -103,7 +119,7 @@ export default function ProfilePage() {
       });
       const token = localStorage.getItem("authToken") || "";
       login(token, updatedUser);
-      showToast("Profile details updated successfully!");
+      showToast("Personal information saved successfully!");
     } catch (error) {
       showToast(error instanceof Error ? error.message : "Failed to update profile.");
     } finally {
@@ -113,16 +129,20 @@ export default function ProfilePage() {
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentPassword) {
-      alert("Please enter your current password.");
+    if (!currentPassword.trim()) {
+      showToast("Please enter your current password.");
       return;
     }
     if (newPassword.length < 6) {
-      alert("New password must be at least 6 characters long.");
+      showToast("New password must be at least 6 characters long.");
       return;
     }
     if (newPassword !== confirmPassword) {
-      alert("New passwords do not match.");
+      showToast("New password and confirm password do not match.");
+      return;
+    }
+    if (currentPassword === newPassword) {
+      showToast("New password must be different from current password.");
       return;
     }
 
@@ -135,13 +155,14 @@ export default function ProfilePage() {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      showToast("Password changed successfully!");
+      showToast("Password updated successfully!");
     } catch (error) {
       showToast(error instanceof Error ? error.message : "Failed to update password.");
     } finally {
       setIsUpdatingPassword(false);
     }
   };
+
 
   return (
     <div className={styles.container}>
@@ -287,41 +308,105 @@ export default function ProfilePage() {
             <form onSubmit={handleUpdatePassword}>
               <div className={styles.formGroup}>
                 <label className={styles.label}>Current Password</label>
-                <input
-                  type="password"
-                  placeholder="Enter current password"
-                  className={styles.input}
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
+                <div className={styles.passwordWrapper}>
+                  <input
+                    type={showCurrentPassword ? "text" : "password"}
+                    placeholder="Enter current password"
+                    className={styles.input}
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className={styles.passwordToggleBtn}
+                    onClick={() => setShowCurrentPassword((prev) => !prev)}
+                    aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                  >
+                    {showCurrentPassword ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>New Password</label>
-                  <input
-                    type="password"
-                    placeholder="At least 6 characters"
-                    className={styles.input}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
+                  <div className={styles.passwordWrapper}>
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      placeholder="At least 6 characters"
+                      className={styles.input}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={styles.passwordToggleBtn}
+                      onClick={() => setShowNewPassword((prev) => !prev)}
+                      aria-label={showNewPassword ? "Hide password" : "Show password"}
+                    >
+                      {showNewPassword ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                          <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Confirm New Password</label>
-                  <input
-                    type="password"
-                    placeholder="Confirm new password"
-                    className={styles.input}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
+                  <div className={styles.passwordWrapper}>
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirm new password"
+                      className={styles.input}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={styles.passwordToggleBtn}
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                          <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
 
               <button type="submit" className={styles.btnSave} disabled={isUpdatingPassword}>
                 {isUpdatingPassword ? "Updating..." : "Update Password"}
               </button>
+
             </form>
           </div>
         </div>

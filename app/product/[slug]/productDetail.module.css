@@ -190,7 +190,8 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  min-height: 200px;
+  min-height: 450px;
+  aspect-ratio: 1;
 }
 
 .thumbnailsCol {
@@ -517,7 +518,8 @@
   background: #F5F5F5;
   border-radius: 12px;
   aspect-ratio: 1;
-  padding: 2rem;
+  padding: 1.5rem;
+  overflow: hidden;
 }
 
 .addToCartBtn {

@@ -187,6 +187,35 @@
   cursor: not-allowed;
 }
 
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.passwordWrapper .input {
+  padding-right: 42px;
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.passwordToggleBtn:hover {
+  color: #C89B60;
+}
+
 .btnSave {
   padding: 0.9rem 2rem;
   background: #2B2B2B;

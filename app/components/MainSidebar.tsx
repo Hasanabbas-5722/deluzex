@@ -30,6 +30,7 @@ export default function MainSidebar() {
         </div>
         <nav className={styles.nav}>
           <Link href="/" onClick={() => setSidebarOpen(false)}>Lighting</Link>
+          <Link href="/categories" onClick={() => setSidebarOpen(false)}>Categories</Link>
           <Link href="/shop" onClick={() => setSidebarOpen(false)}>Shop</Link>
           <Link href="/projects" onClick={() => setSidebarOpen(false)}>Projects</Link>
           <Link href="/blogs" onClick={() => setSidebarOpen(false)}>Blogs</Link>

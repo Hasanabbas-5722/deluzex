@@ -1,26 +1,31 @@
 "use client";
-import React, { useState } from "react";
-import styles from "./wishlist.module.css";
 
-const initialItems = [
-  { id: 1, name: "Aurora Crstal Candeller", price: "$1200" },
-  { id: 2, name: "Aurora Crstal Candeller", price: "$1200" },
-  { id: 3, name: "Aurora Crstal Candeller", price: "$1200" },
-  { id: 4, name: "Aurora Crstal Candeller", price: "$1200" },
-  { id: 5, name: "Aurora Crstal Candeller", price: "$1200" },
-];
+import React, { useEffect, useState } from "react";
+import styles from "./wishlist.module.css";
+import { useDispatch } from "react-redux";
+import { addToCart, openCart } from "../../store/cartSlice";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../context/AuthContext";
+import {
+  fetchUserWishlist,
+  removeFromWishlist,
+  WishlistItem,
+} from "../../services/api";
 
 // Placeholder pendant lamp image using a gradient background
 function LampPlaceholder() {
   return (
-    <div style={{
-      width: "100%",
-      aspectRatio: "1",
-      background: "linear-gradient(135deg, #c5b49a 0%, #8a7560 100%)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        aspectRatio: "1",
+        background: "linear-gradient(135deg, #c5b49a 0%, #8a7560 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <svg width="64" height="80" viewBox="0 0 64 80" fill="none">
         {/* Chain */}
         <line x1="32" y1="0" x2="32" y2="18" stroke="#d4c5a9" strokeWidth="2" />
@@ -37,29 +42,94 @@ function LampPlaceholder() {
 }
 
 export default function WishlistPage() {
-  const [items, setItems] = useState(initialItems);
-  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { user } = useAuth();
+  const userEmail = (user as Record<string, string>)?.email || "";
 
-  const removeItem = (id: number) => {
-    setItems(items.filter(item => item.id !== id));
+  const [items, setItems] = useState<WishlistItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
+
+  const loadWishlist = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await fetchUserWishlist(userEmail);
+      setItems(data || []);
+    } catch (err) {
+      console.error("Failed to load wishlist from database:", err);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [userEmail]);
+
+  useEffect(() => {
+    loadWishlist();
+  }, [loadWishlist]);
+
+  const removeItem = async (item: WishlistItem) => {
+    const itemId = item.id || item._id;
+    if (!itemId) return;
+
+    // Optimistic UI update
+    setItems((prev) => prev.filter((i) => (i.id || i._id) !== itemId));
+    try {
+      await removeFromWishlist(itemId);
+    } catch (err) {
+      console.error("Failed to remove item from wishlist:", err);
+      loadWishlist();
+    }
   };
 
-  const filtered = items.filter(item =>
-    item.name.toLowerCase().includes(search.toLowerCase())
+  const handleAddToCart = (item: WishlistItem) => {
+    const rawPrice = String(item.product_price).replace(/[^\d.]/g, "");
+    dispatch(
+      addToCart({
+        id: item.product_id || item.id || item._id || String(Date.now()),
+        _id: item.product_id || item.id || item._id || String(Date.now()),
+        product_title: item.product_title,
+        product_price: rawPrice || "0",
+        product_main_image: item.product_image || "/images/lamp_modern_tall_1784107732736.jpg",
+      })
+    );
+    dispatch(openCart());
+  };
+
+  const handleMoveAllToCart = () => {
+    items.forEach((item) => {
+      const rawPrice = String(item.product_price).replace(/[^\d.]/g, "");
+      dispatch(
+        addToCart({
+          id: item.product_id || item.id || item._id || String(Date.now()),
+          _id: item.product_id || item.id || item._id || String(Date.now()),
+          product_title: item.product_title,
+          product_price: rawPrice || "0",
+          product_main_image: item.product_image || "/images/lamp_modern_tall_1784107732736.jpg",
+        })
+      );
+    });
+    dispatch(openCart());
+  };
+
+  const filtered = items.filter((item) =>
+    item.product_title.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>My Wishlist</h1>
-        <p className={styles.subtitle}>Your Favourite lighting pieces,saved for you.</p>
+        <p className={styles.subtitle}>Your favourite lighting pieces, saved for you.</p>
       </div>
 
       {/* Toolbar */}
       <div className={styles.toolbar}>
         <div className={styles.searchBox}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
           <input
             type="text"
@@ -68,24 +138,94 @@ export default function WishlistPage() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <button className={styles.btnMoveAll}>Move All To Cart</button>
+        <button
+          className={styles.btnMoveAll}
+          type="button"
+          onClick={handleMoveAllToCart}
+          disabled={items.length === 0}
+        >
+          Move All To Cart
+        </button>
       </div>
 
       {/* Product Grid */}
       <div className={styles.productGrid}>
-        {filtered.map((item) => (
-          <div key={item.id} className={styles.productCard}>
-            <div className={styles.imgWrapper}>
-              <LampPlaceholder />
-              <button className={styles.removeBtn} onClick={() => removeItem(item.id)}>✕</button>
+        {loading ? (
+          <p style={{ gridColumn: "1 / -1", textAlign: "center", padding: "3rem 1rem", color: "#777" }}>
+            Loading your wishlist...
+          </p>
+        ) : filtered.length === 0 ? (
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
             </div>
-            <div className={styles.productInfo}>
-              <div className={styles.productName}>{item.name}</div>
-              <div className={styles.productPrice}>{item.price}</div>
-              <button className={styles.btnAddToCart}>Add To Cart</button>
-            </div>
+            <h3 className={styles.emptyTitle}>
+              {search ? "No Matching Items Found" : "Your Wishlist is Empty"}
+            </h3>
+            <p className={styles.emptySubtitle}>
+              {search
+                ? `No pieces found matching "${search}". Try searching for something else.`
+                : "Explore our curated collection of luxury illumination and save pieces you adore."}
+            </p>
+            <button
+              type="button"
+              className={styles.btnAddFirst}
+              onClick={() => router.push("/shop")}
+            >
+              Explore Collection
+            </button>
           </div>
-        ))}
+        ) : (
+          filtered.map((item, idx) => {
+            const itemId = item.id || item._id || String(idx);
+            const hasImg = item.product_image && !imgErrors[itemId];
+            const displayPrice =
+              typeof item.product_price === "number"
+                ? `₹${item.product_price}`
+                : item.product_price.startsWith("₹")
+                ? item.product_price
+                : `₹${item.product_price}`;
+
+            return (
+              <div key={itemId} className={styles.productCard}>
+                <div className={styles.imgWrapper}>
+                  {hasImg ? (
+                    <img
+                      src={item.product_image!}
+                      alt={item.product_title}
+                      className={styles.productImg}
+                      onError={() =>
+                        setImgErrors((prev) => ({ ...prev, [itemId]: true }))
+                      }
+                    />
+                  ) : (
+                    <LampPlaceholder />
+                  )}
+                  <button
+                    className={styles.removeBtn}
+                    onClick={() => removeItem(item)}
+                    aria-label="Remove item"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className={styles.productInfo}>
+                  <div className={styles.productName}>{item.product_title}</div>
+                  <div className={styles.productPrice}>{displayPrice}</div>
+                  <button
+                    className={styles.btnAddToCart}
+                    type="button"
+                    onClick={() => handleAddToCart(item)}
+                  >
+                    Add To Cart
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
 
       {/* Footer Banner */}
@@ -97,11 +237,23 @@ export default function WishlistPage() {
             </svg>
           </div>
           <div className={styles.footerText}>
-            <h4>Dont see something you like?</h4>
-            <p>Explore <a href="/shop" style={{ color: "var(--color-primary)" }}>our latest collection</a> and find the perfect lighting for your space.</p>
+            <h4>Don&apos;t see something you like?</h4>
+            <p>
+              Explore{" "}
+              <a href="/shop" style={{ color: "var(--color-primary)" }}>
+                our latest collection
+              </a>{" "}
+              and find the perfect lighting for your space.
+            </p>
           </div>
         </div>
-        <button className={styles.btnExplore}>Explore Our Collection</button>
+        <button
+          className={styles.btnExplore}
+          type="button"
+          onClick={() => router.push("/shop")}
+        >
+          Explore Our Collection
+        </button>
       </div>
     </div>
   );

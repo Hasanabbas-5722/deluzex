@@ -4,7 +4,16 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "../../context/AuthContext";
-import { fetchUserOrders, fetchUserAddresses, fetchUserCards, UserOrder, SavedAddress, SavedCard } from "../../services/api";
+import {
+  fetchUserOrders,
+  fetchUserAddresses,
+  fetchUserCards,
+  fetchUserWishlist,
+  UserOrder,
+  SavedAddress,
+  SavedCard,
+  WishlistItem,
+} from "../../services/api";
 import styles from "./overview.module.css";
 
 const quickActions = [
@@ -31,11 +40,13 @@ export default function OverviewPage() {
   const [orders, setOrders] = useState<UserOrder[]>([]);
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);
   const [cards, setCards] = useState<SavedCard[]>([]);
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
 
   useEffect(() => {
     fetchUserOrders(userEmail).then((res) => setOrders(res || []));
     fetchUserAddresses(userEmail).then((res) => setAddresses(res || []));
     fetchUserCards(userEmail).then((res) => setCards(res || []));
+    fetchUserWishlist(userEmail).then((res) => setWishlist(res || []));
   }, [userEmail]);
 
   const defaultAddress = addresses.find((a) => a.is_default) || addresses[0];
@@ -52,9 +63,9 @@ export default function OverviewPage() {
       <div className={styles.statsRow}>
         {[
           { label: "Orders", value: orders.length, icon: "M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z M3 6h18 M16 10a4 4 0 0 1-8 0", href: "/dashboard/orders" },
-          { label: "Wishlist Items", value: 12, icon: "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z", href: "/dashboard/wishlist", iconBg: "#fff0f0", iconColor: "#ef4444" },
-          { label: "Saved Addresses", value: addresses.length || 2, icon: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z", href: "/dashboard/address", iconBg: "#fdf5ea", iconColor: "var(--color-primary)" },
-          { label: "Payment Methods", value: cards.length || 2, icon: "M21 4H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z M1 10h22", href: "/dashboard/payments" },
+          { label: "Wishlist Items", value: wishlist.length, icon: "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z", href: "/dashboard/wishlist", iconBg: "#fff0f0", iconColor: "#ef4444" },
+          { label: "Saved Addresses", value: addresses.length, icon: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z", href: "/dashboard/address", iconBg: "#fdf5ea", iconColor: "var(--color-primary)" },
+          { label: "Payment Methods", value: cards.length, icon: "M21 4H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z M1 10h22", href: "/dashboard/payments" },
         ].map((stat, i) => (
           <div key={i} className={styles.statCard}>
             <div className={styles.statIconRow}>
@@ -113,36 +124,6 @@ export default function OverviewPage() {
                   </div>
                 );
               })}
-            </div>
-          </div>
-
-          {/* Featured Collections */}
-          <div className={styles.card}>
-            <div className={styles.cardHeader}>
-              <div className={styles.cardTitle}>Recommended Lighting</div>
-              <Link href="/shop" className={styles.btnSmall}>
-                Explore Shop
-              </Link>
-            </div>
-            <div className={styles.recentViewGrid}>
-              {[
-                { title: "Vera Crystal Chandelier", price: "₹1,94,900", img: "/images/category_chandeliers_1784107850024.png" },
-                { title: "Luxe Minimalist Sconce", price: "₹34,900", img: "/images/category_wall_lights_1784107870198.png" },
-                { title: "Italian Marble Lamp", price: "₹48,500", img: "/images/category_table_lamps_1784107890251.png" },
-              ].map((prod, i) => (
-                <div key={i} className={styles.productCard}>
-                  <div style={{ background: "#f0ebe3", aspectRatio: "1", position: "relative", overflow: "hidden", borderRadius: "8px" }}>
-                    <Image src={prod.img} alt={prod.title} fill style={{ objectFit: "cover" }} />
-                  </div>
-                  <div className={styles.productInfo}>
-                    <div className={styles.productName}>{prod.title}</div>
-                    <div className={styles.productPrice}>{prod.price}</div>
-                    <div className={styles.productStars}>
-                      <span style={{ color: "#f59e0b" }}>★</span> 4.9 ( 120+ Reviews )
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>

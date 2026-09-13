@@ -64,6 +64,51 @@ export interface Category {
   description?: string | null;
 }
 
+export interface Testimonial {
+  _id?: string;
+  id?: string;
+  author_name: string;
+  author_title?: string | null;
+  text: string;
+  rating: number;
+  avatar_url?: string | null;
+  created_at?: string;
+}
+
+export interface Blog {
+  _id?: string;
+  id?: string | number;
+  title: string;
+  slug?: string;
+  category: string;
+  author: string;
+  read_time: string;
+  excerpt?: string | null;
+  content: string;
+  image: string;
+  is_featured?: boolean;
+  status: string; // "Published" | "Draft"
+  sequence: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Project {
+  _id?: string;
+  id?: string | number;
+  title: string;
+  location?: string | null;
+  category?: string;
+  subtitle?: string | null;
+  description?: string | null;
+  installations_count?: string | null;
+  image_url?: string;
+  gallery_images?: string[];
+  is_featured?: boolean;
+  sequence?: number;
+  created_at?: string;
+}
+
 export interface Product {
   _id?: string | number;
   id?: string | number;
@@ -164,32 +209,112 @@ function getResponseData<T>(body: { data?: T } | T): T {
 }
 
 export async function fetchUserProfile(): Promise<UserProfile> {
-  const res = await fetch(`${API_BASE_URL}/auth/me`, {
-    headers: getAuthHeaders(),
-    cache: "no-store",
-  });
-  if (!res.ok) throw await getApiError(res, "Failed to fetch profile.");
-  return getResponseData<UserProfile>(await res.json());
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/me`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = getResponseData<UserProfile>(await res.json());
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(data));
+      }
+      return data;
+    }
+  } catch {
+    // Network or offline fallback
+  }
+
+  if (typeof window !== "undefined") {
+    try {
+      const local = JSON.parse(localStorage.getItem("user") || "null");
+      if (local && (local.email || local.first_name)) {
+        return local;
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  throw new Error("Could not validate credentials");
 }
 
 export async function updateUserProfile(profile: UserProfileUpdate): Promise<UserProfile> {
-  const res = await fetch(`${API_BASE_URL}/auth/me`, {
-    method: "PATCH",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(profile),
-  });
-  if (!res.ok) throw await getApiError(res, "Failed to update profile.");
-  return getResponseData<UserProfile>(await res.json());
+  // Update local storage first so user profile updates immediately
+  if (typeof window !== "undefined") {
+    try {
+      const stored = JSON.parse(localStorage.getItem("user") || "{}");
+      const merged = { ...stored, ...profile };
+      localStorage.setItem("user", JSON.stringify(merged));
+    } catch {
+      // ignore
+    }
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/me`, {
+      method: "PATCH",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(profile),
+    });
+    if (res.ok) {
+      const data = getResponseData<UserProfile>(await res.json());
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(data));
+      }
+      return data;
+    }
+    const err = await getApiError(res, "Failed to update profile.");
+    // If validation error from backend (like email in use), throw to show user
+    if (res.status === 400) {
+      throw err;
+    }
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("already in use")) {
+      throw err;
+    }
+    console.warn("Backend update failed, saved to local profile:", err);
+  }
+
+  // Fallback to local profile object if offline or remote API has issues
+  const localUser = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user") || "{}") : {};
+  return {
+    id: localUser.id || "user_local",
+    first_name: profile.first_name || localUser.first_name || "",
+    last_name: profile.last_name || localUser.last_name || "",
+    email: profile.email || localUser.email || "",
+    phone: profile.phone || localUser.phone || "",
+    city: profile.city || localUser.city || "",
+    country: profile.country || localUser.country || "",
+    is_verified: Boolean(localUser.is_verified),
+    is_admin: Boolean(localUser.is_admin),
+    created_at: localUser.created_at || new Date().toISOString(),
+  };
 }
 
 export async function updateUserPassword(password: PasswordUpdate): Promise<void> {
-  const res = await fetch(`${API_BASE_URL}/auth/me/password`, {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(password),
-  });
-  if (!res.ok) throw await getApiError(res, "Failed to update password.");
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/me/password`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(password),
+    });
+    if (!res.ok) {
+      throw await getApiError(res, "Failed to update password.");
+    }
+    return;
+  } catch (error) {
+    if (error instanceof Error && (error.message.includes("Current password") || error.message.includes("least 6"))) {
+      throw error;
+    }
+    // If backend is offline or network error, save timestamp locally
+    if (typeof window !== "undefined") {
+      localStorage.setItem("deluzex_password_updated_at", new Date().toISOString());
+    }
+    return;
+  }
 }
+
 
 export async function deleteUserProfile(): Promise<void> {
   const res = await fetch(`${API_BASE_URL}/auth/me`, {
@@ -283,6 +408,21 @@ export async function deleteProduct(id: string | number) {
   return res.json();
 }
 
+export async function toggleProductNewArrival(id: string | number, isNewArrival?: boolean): Promise<Product> {
+  const url = `${API_BASE_URL}/products/${id}/new-arrival`;
+  const res = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      ...getAuthHeaders(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(isNewArrival !== undefined ? { is_new_arrival: isNewArrival } : {})
+  });
+  if (!res.ok) throw new Error('Failed to update product new arrival status');
+  const data = await res.json();
+  return data.data || data;
+}
+
 export async function createCategory(categoryData: JsonObject) {
   const res = await fetch(`${API_BASE_URL}/categories`, {
     method: 'POST',
@@ -367,6 +507,259 @@ export async function deleteHeroProduct(id: string | number) {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error("Failed to delete hero product");
+  return res.json();
+}
+
+// TESTIMONIALS (CUSTOMER STORIES)
+export async function fetchTestimonials(): Promise<Testimonial[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/testimonials`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch testimonials");
+    const data = await res.json();
+    return Array.isArray(data) ? data : data.data || [];
+  } catch (error) {
+    logger.error("API", "Error fetching testimonials:", error);
+    return [];
+  }
+}
+
+export async function createTestimonial(testimonialData: ApiMutationBody) {
+  const isFormData = testimonialData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/testimonials`, {
+    method: "POST",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? testimonialData : JSON.stringify(testimonialData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to create testimonial");
+  }
+  return res.json();
+}
+
+export async function updateTestimonial(id: string | number, testimonialData: ApiMutationBody) {
+  const isFormData = testimonialData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/testimonials/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? testimonialData : JSON.stringify(testimonialData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to update testimonial");
+  }
+  return res.json();
+}
+
+export async function deleteTestimonial(id: string | number) {
+  const res = await fetch(`${API_BASE_URL}/testimonials/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to delete testimonial");
+  }
+  return res.json();
+}
+
+// ==========================================
+// BLOGS API
+// ==========================================
+
+export async function fetchBlogs(queryParams?: URLSearchParams | string): Promise<Blog[]> {
+  try {
+    const queryStr = queryParams ? `?${queryParams.toString()}` : "";
+    const res = await fetch(`${API_BASE_URL}/blogs${queryStr}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch blogs");
+    const data = await res.json();
+    return Array.isArray(data) ? data : data.data || [];
+  } catch (error) {
+    logger.error("API", "Error fetching blogs:", error);
+    return [];
+  }
+}
+
+export async function fetchBlogBySlugOrId(idOrSlug: string): Promise<Blog | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/blogs/${idOrSlug}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error(`Failed to fetch blog ${idOrSlug}`);
+    const data = await res.json();
+    return data.data || data || null;
+  } catch (error) {
+    logger.error("API", `Error fetching blog ${idOrSlug}:`, error);
+    return null;
+  }
+}
+
+export async function createBlog(blogData: ApiMutationBody): Promise<Blog> {
+  const isFormData = blogData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/blogs`, {
+    method: "POST",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? blogData : JSON.stringify(blogData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to create blog");
+  }
+  return res.json();
+}
+
+export async function updateBlog(id: string | number, blogData: ApiMutationBody): Promise<Blog> {
+  const isFormData = blogData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/blogs/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? blogData : JSON.stringify(blogData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to update blog");
+  }
+  return res.json();
+}
+
+export async function deleteBlog(id: string | number) {
+  const res = await fetch(`${API_BASE_URL}/blogs/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to delete blog");
+  }
+  return res.json();
+}
+
+export async function swapBlogSequence(id: string | number, direction: "up" | "down") {
+  const res = await fetch(`${API_BASE_URL}/blogs/${id}/swap?direction=${direction}`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || `Failed to move blog ${direction}`);
+  }
+  return res.json();
+}
+
+export async function reorderBlogs(items: { id: string; sequence: number }[]) {
+  const res = await fetch(`${API_BASE_URL}/blogs/reorder`, {
+    method: "PATCH",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(items),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to reorder blogs");
+  }
+  return res.json();
+}
+
+// ==========================================
+// PROJECTS API
+// ==========================================
+
+export async function fetchProjects(queryParams?: URLSearchParams | string): Promise<Project[]> {
+  try {
+    const queryStr = queryParams ? `?${queryParams.toString()}` : "";
+    const res = await fetch(`${API_BASE_URL}/projects${queryStr}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch projects");
+    const data = await res.json();
+    return Array.isArray(data) ? data : data.data || [];
+  } catch (error) {
+    logger.error("API", "Error fetching projects:", error);
+    return [];
+  }
+}
+
+export async function fetchProjectById(id: string | number): Promise<Project | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/projects/${id}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error(`Failed to fetch project ${id}`);
+    const data = await res.json();
+    return data.data || data || null;
+  } catch (error) {
+    logger.error("API", `Error fetching project ${id}:`, error);
+    return null;
+  }
+}
+
+export async function createProject(projectData: ApiMutationBody): Promise<Project> {
+  const isFormData = projectData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/projects`, {
+    method: "POST",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? projectData : JSON.stringify(projectData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to create project");
+  }
+  return res.json();
+}
+
+export async function updateProject(id: string | number, projectData: ApiMutationBody): Promise<Project> {
+  const isFormData = projectData instanceof FormData;
+  const res = await fetch(`${API_BASE_URL}/projects/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(isFormData),
+    body: isFormData ? projectData : JSON.stringify(projectData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to update project");
+  }
+  return res.json();
+}
+
+export async function deleteProject(id: string | number) {
+  const res = await fetch(`${API_BASE_URL}/projects/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to delete project");
+  }
+  return res.json();
+}
+
+export async function toggleProjectFeatured(id: string | number): Promise<Project> {
+  const res = await fetch(`${API_BASE_URL}/projects/${id}/featured`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to toggle project featured status");
+  }
+  return res.json();
+}
+
+export async function swapProjectSequence(id: string | number, direction: "up" | "down") {
+  const res = await fetch(`${API_BASE_URL}/projects/${id}/swap?direction=${direction}`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || `Failed to move project ${direction}`);
+  }
   return res.json();
 }
 
@@ -568,214 +961,230 @@ export interface SavedCard {
   created_at?: string;
 }
 
+export interface WishlistItem {
+  id?: string;
+  _id?: string;
+  user_email: string;
+  product_id?: string | null;
+  product_title: string;
+  product_price: string | number;
+  product_image?: string | null;
+  product_slug?: string | null;
+  created_at?: string;
+}
+
 // Addresses API
 export async function fetchUserAddresses(email?: string): Promise<SavedAddress[]> {
-  const localKey = `deluzex_addresses_${email ? email.toLowerCase().trim() : "default"}`;
-  let localData: SavedAddress[] = [];
-  if (typeof window !== "undefined") {
-    try {
-      const stored = localStorage.getItem(localKey);
-      if (stored) localData = JSON.parse(stored);
-    } catch {
-      // ignore
-    }
-  }
-
   try {
     const query = email ? `?email=${encodeURIComponent(email)}` : "";
     const res = await fetch(`${API_BASE_URL}/user/addresses${query}`, {
       headers: getAuthHeaders(),
+      cache: "no-store",
     });
     if (res.ok) {
       const data = await res.json();
       const serverList: SavedAddress[] = Array.isArray(data) ? data : data.data || [];
-      if (serverList.length > 0) {
-        if (typeof window !== "undefined") {
-          localStorage.setItem(localKey, JSON.stringify(serverList));
-        }
-        return serverList;
-      }
+      return serverList;
     }
   } catch (error) {
-    console.warn("Could not fetch remote addresses, using cached:", error);
+    console.warn("Could not fetch addresses from server:", error);
   }
-
-  return localData;
+  return [];
 }
 
 export async function saveUserAddress(address: SavedAddress): Promise<SavedAddress> {
-  const addressId = address.id || address._id || `addr_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-  const normalizedAddress: SavedAddress = {
-    ...address,
-    id: addressId,
-    _id: addressId,
-    created_at: address.created_at || new Date().toISOString(),
+  const payload = {
+    user_email: address.user_email || "customer@deluzex.com",
+    type: address.type || "Home",
+    first_name: address.first_name,
+    last_name: address.last_name || "",
+    street: address.street,
+    city: address.city,
+    state: address.state,
+    pin_code: address.pin_code,
+    phone: address.phone,
+    is_default: Boolean(address.is_default),
   };
 
-  const localKey = `deluzex_addresses_${address.user_email ? address.user_email.toLowerCase().trim() : "default"}`;
-  if (typeof window !== "undefined") {
-    try {
-      const current = await fetchUserAddresses(address.user_email);
-      const existsIndex = current.findIndex(
-        (a) =>
-          (a.street === address.street && a.pin_code === address.pin_code) ||
-          a.id === addressId ||
-          a._id === addressId
-      );
-      if (existsIndex >= 0) {
-        current[existsIndex] = { ...current[existsIndex], ...normalizedAddress };
-      } else {
-        current.unshift(normalizedAddress);
-      }
-      localStorage.setItem(localKey, JSON.stringify(current));
-    } catch {
-      // ignore
-    }
+  const res = await fetch(`${API_BASE_URL}/user/addresses`, {
+    method: "POST",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to save address to database");
   }
 
-  try {
-    const res = await fetch(`${API_BASE_URL}/user/addresses`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-      body: JSON.stringify(normalizedAddress),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      return data.data || data;
-    }
-  } catch (error) {
-    console.warn("Could not save address to server, stored locally:", error);
-  }
-
-  return normalizedAddress;
+  const data = await res.json();
+  return data.data || data;
 }
 
 export async function deleteUserAddress(addressId: string, email?: string): Promise<boolean> {
-  const localKey = `deluzex_addresses_${email ? email.toLowerCase().trim() : "default"}`;
-  if (typeof window !== "undefined") {
-    try {
-      const current = await fetchUserAddresses(email);
-      const filtered = current.filter((a) => a.id !== addressId && a._id !== addressId);
-      localStorage.setItem(localKey, JSON.stringify(filtered));
-    } catch {
-      // ignore
-    }
-  }
-
   try {
     const res = await fetch(`${API_BASE_URL}/user/addresses/${addressId}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });
     return res.ok;
-  } catch {
-    return true;
-  }
-}
-
-// Cards API
-export async function fetchUserCards(email?: string): Promise<SavedCard[]> {
-  const localKey = `deluzex_cards_${email ? email.toLowerCase().trim() : "default"}`;
-  let localData: SavedCard[] = [];
-  if (typeof window !== "undefined") {
-    try {
-      const stored = localStorage.getItem(localKey);
-      if (stored) localData = JSON.parse(stored);
-    } catch {
-      // ignore
-    }
-  }
-
-  try {
-    const query = email ? `?email=${encodeURIComponent(email)}` : "";
-    const res = await fetch(`${API_BASE_URL}/user/cards${query}`, {
-      headers: getAuthHeaders(),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const serverList: SavedCard[] = Array.isArray(data) ? data : data.data || [];
-      if (serverList.length > 0) {
-        if (typeof window !== "undefined") {
-          localStorage.setItem(localKey, JSON.stringify(serverList));
-        }
-        return serverList;
-      }
-    }
   } catch (error) {
-    console.warn("Could not fetch remote cards, using cached:", error);
+    console.error("Failed to delete address:", error);
+    return false;
   }
-
-  return localData;
 }
 
-export async function saveUserCard(card: SavedCard): Promise<SavedCard> {
-  const cardId = card.id || card._id || `card_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-  const normalizedCard: SavedCard = {
-    ...card,
-    id: cardId,
-    _id: cardId,
-    created_at: card.created_at || new Date().toISOString(),
-  };
-
-  const localKey = `deluzex_cards_${card.user_email ? card.user_email.toLowerCase().trim() : "default"}`;
-  if (typeof window !== "undefined") {
-    try {
-      const current = await fetchUserCards(card.user_email);
-      const existsIndex = current.findIndex(
-        (c) =>
-          (c.card_last4 === card.card_last4 && c.expiry === card.expiry) ||
-          c.id === cardId ||
-          c._id === cardId
-      );
-      if (existsIndex >= 0) {
-        current[existsIndex] = { ...current[existsIndex], ...normalizedCard };
-      } else {
-        current.unshift(normalizedCard);
-      }
-      localStorage.setItem(localKey, JSON.stringify(current));
-    } catch {
-      // ignore
-    }
-  }
-
+export async function setDefaultUserAddress(addressId: string): Promise<SavedAddress | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/user/cards`, {
-      method: "POST",
+    const res = await fetch(`${API_BASE_URL}/user/addresses/${addressId}/default`, {
+      method: "PUT",
       headers: getAuthHeaders(),
-      body: JSON.stringify(normalizedCard),
     });
     if (res.ok) {
       const data = await res.json();
       return data.data || data;
     }
   } catch (error) {
-    console.warn("Could not save card to server, stored locally:", error);
+    console.error("Failed to set default address:", error);
   }
+  return null;
+}
 
-  return normalizedCard;
+// Cards API
+export async function fetchUserCards(email?: string): Promise<SavedCard[]> {
+  try {
+    const query = email ? `?email=${encodeURIComponent(email)}` : "";
+    const res = await fetch(`${API_BASE_URL}/user/cards${query}`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const serverList: SavedCard[] = Array.isArray(data) ? data : data.data || [];
+      return serverList;
+    }
+  } catch (error) {
+    console.error("Failed to fetch user cards from server:", error);
+  }
+  return [];
+}
+
+export async function saveUserCard(card: SavedCard): Promise<SavedCard> {
+  const res = await fetch(`${API_BASE_URL}/user/cards`, {
+    method: "POST",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(card),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to save card");
+  }
+  const data = await res.json();
+  return data.data || data;
+}
+
+export async function setDefaultUserCard(cardId: string): Promise<SavedCard> {
+  const res = await fetch(`${API_BASE_URL}/user/cards/${cardId}/default`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to set default card");
+  }
+  const data = await res.json();
+  return data.data || data;
 }
 
 export async function deleteUserCard(cardId: string, email?: string): Promise<boolean> {
-  const localKey = `deluzex_cards_${email ? email.toLowerCase().trim() : "default"}`;
-  if (typeof window !== "undefined") {
-    try {
-      const current = await fetchUserCards(email);
-      const filtered = current.filter((c) => c.id !== cardId && c._id !== cardId);
-      localStorage.setItem(localKey, JSON.stringify(filtered));
-    } catch {
-      // ignore
-    }
-  }
+  const res = await fetch(`${API_BASE_URL}/user/cards/${cardId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  return res.ok;
+}
 
+// ==========================================
+// WISHLIST API
+// ==========================================
+
+export async function fetchUserWishlist(email?: string): Promise<WishlistItem[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/user/cards/${cardId}`, {
-      method: "DELETE",
+    const query = email ? `?email=${encodeURIComponent(email)}` : "";
+    const res = await fetch(`${API_BASE_URL}/user/wishlist${query}`, {
       headers: getAuthHeaders(),
+      cache: "no-store",
     });
-    return res.ok;
-  } catch {
-    return true;
+    if (res.ok) {
+      const data = await res.json();
+      return Array.isArray(data) ? data : data.data || [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch wishlist items from server:", error);
   }
+  return [];
+}
+
+export async function addToWishlist(item: Partial<WishlistItem>): Promise<WishlistItem> {
+  const res = await fetch(`${API_BASE_URL}/user/wishlist`, {
+    method: "POST",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to add to wishlist");
+  }
+  const data = await res.json();
+  return data.data || data;
+}
+
+export async function removeFromWishlist(itemId: string): Promise<boolean> {
+  const res = await fetch(`${API_BASE_URL}/user/wishlist/${itemId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  return res.ok;
+}
+
+export async function clearUserWishlist(email: string): Promise<boolean> {
+  const res = await fetch(`${API_BASE_URL}/user/wishlist?email=${encodeURIComponent(email)}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  return res.ok;
+}
+
+export async function checkWishlistStatus(
+  email: string,
+  productId?: string,
+  productTitle?: string
+): Promise<{ is_wishlisted: boolean; item_id?: string | null }> {
+  try {
+    const params = new URLSearchParams({ email });
+    if (productId) params.append("product_id", productId);
+    if (productTitle) params.append("product_title", productTitle);
+
+    const res = await fetch(`${API_BASE_URL}/user/wishlist/check?${params.toString()}`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (error) {
+    console.error("Failed to check wishlist status:", error);
+  }
+  return { is_wishlisted: false, item_id: null };
 }
 
 // --- USER ORDERS API ---
@@ -926,7 +1335,7 @@ export async function fetchUserOrders(email?: string): Promise<UserOrder[]> {
       const rawList = (Array.isArray(data)
         ? data
         : data.data || data.orders || data.items || []) as Record<string, unknown>[];
-      if (Array.isArray(rawList)) {
+      if (Array.isArray(rawList) && rawList.length > 0) {
         const normalizedList = rawList.map(normalizeUserOrder);
         if (typeof window !== "undefined") {
           localStorage.setItem(localKey, JSON.stringify(normalizedList));
@@ -939,7 +1348,7 @@ export async function fetchUserOrders(email?: string): Promise<UserOrder[]> {
   }
 
   // 2. Fallback Attempt: GET /api/v1/orders?email=...
-  if (email) {
+  if (email && email.trim()) {
     try {
       const query = `?email=${encodeURIComponent(email.trim())}`;
       const res = await fetch(`${API_BASE_URL}/orders${query}`, {
@@ -951,7 +1360,7 @@ export async function fetchUserOrders(email?: string): Promise<UserOrder[]> {
         const rawList = (Array.isArray(data)
           ? data
           : data.data || data.orders || data.items || []) as Record<string, unknown>[];
-        if (Array.isArray(rawList)) {
+        if (Array.isArray(rawList) && rawList.length > 0) {
           const normalizedList = rawList.map(normalizeUserOrder);
           if (typeof window !== "undefined") {
             localStorage.setItem(localKey, JSON.stringify(normalizedList));
@@ -964,7 +1373,27 @@ export async function fetchUserOrders(email?: string): Promise<UserOrder[]> {
     }
   }
 
-  // 3. Fallback to cached local orders if available
+  // 3. Global Attempt: GET /api/v1/orders
+  try {
+    const res = await fetch(`${API_BASE_URL}/orders`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const rawList = (Array.isArray(data)
+        ? data
+        : data.data || data.orders || data.items || []) as Record<string, unknown>[];
+      if (Array.isArray(rawList) && rawList.length > 0) {
+        const normalizedList = rawList.map(normalizeUserOrder);
+        return normalizedList;
+      }
+    }
+  } catch (error) {
+    console.warn("Error calling GET /orders global fallback:", error);
+  }
+
+  // 4. Fallback to cached local orders if available
   if (localData.length > 0) {
     return localData.map((d) => normalizeUserOrder(d as unknown as Record<string, unknown>));
   }
@@ -1083,5 +1512,366 @@ export async function cancelUserOrder(orderId: string, email?: string): Promise<
   }
 }
 
+export async function subscribeNewsletter(email: string): Promise<{ success: boolean; message: string }> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/newsletter/subscribe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim().toLowerCase() }),
+    });
+
+    if (res.ok) {
+      return { success: true, message: "Thank you for subscribing to De Luzex updates!" };
+    }
+
+    const data = await res.json().catch(() => null);
+    if (res.status === 400 && data?.detail?.toLowerCase().includes("already")) {
+      return { success: true, message: "You are already subscribed to our newsletter." };
+    }
+
+    return {
+      success: false,
+      message: data?.detail || "Could not subscribe at this moment. Please try again.",
+    };
+  } catch {
+    // If backend is offline or network fails, store locally so user has smooth experience
+    if (typeof window !== "undefined") {
+      try {
+        const stored = JSON.parse(localStorage.getItem("deluzex_newsletter_subscribers") || "[]");
+        if (!stored.includes(email.trim().toLowerCase())) {
+          stored.push(email.trim().toLowerCase());
+          localStorage.setItem("deluzex_newsletter_subscribers", JSON.stringify(stored));
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return { success: true, message: "Thank you for subscribing to De Luzex updates!" };
+  }
+}
+
+// ==========================================
+// SITE CONTENT (CMS) API
+// ==========================================
+
+export interface SiteContent<T = Record<string, any>> {
+  _id?: string;
+  id?: string;
+  key: string;
+  data: T;
+  updated_at?: string;
+}
+
+export async function fetchSiteContent<T = Record<string, any>>(key: string): Promise<T | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/content/${key}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error(`Failed to fetch content block for ${key}`);
+    const doc: SiteContent<T> = await res.json();
+    return doc.data || null;
+  } catch (error) {
+    logger.error("API", `Error fetching content for ${key}:`, error);
+    return null;
+  }
+}
+
+export async function fetchAllSiteContent(): Promise<SiteContent[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/content`, {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch all site content");
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    logger.error("API", "Error fetching all site content:", error);
+    return [];
+  }
+}
+
+export async function updateSiteContent(key: string, data: Record<string, any>): Promise<SiteContent> {
+  const res = await fetch(`${API_BASE_URL}/content/${key}`, {
+    method: "PUT",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ data }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || `Failed to update content for ${key}`);
+  }
+  return res.json();
+}
+
+export async function uploadCmsImage(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(`${API_BASE_URL}/content/upload-image`, {
+    method: "POST",
+    headers: getAuthHeaders(true),
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || err.message || "Failed to upload image");
+  }
+
+  const result = await res.json();
+  return result.url;
+}
+
+// ==========================================
+// VISITOR TRACKING & ANALYTICS API
+// ==========================================
+
+export interface VisitorLogItem {
+  id: string;
+  visitor_id: string;
+  session_id: string;
+  path: string;
+  referrer?: string;
+  ip_address?: string;
+  device_type: "Desktop" | "Mobile" | "Tablet" | string;
+  browser: string;
+  os: string;
+  is_member: boolean;
+  user_email?: string | null;
+  user_name?: string | null;
+  user_id?: string | null;
+  created_at: string;
+}
+
+export interface AnalyticsStats {
+  total_page_views: number;
+  total_unique_visitors: number;
+  total_member_visitors: number;
+  total_guest_visitors: number;
+  active_now: number;
+  devices: {
+    desktop: number;
+    mobile: number;
+    tablet: number;
+  };
+  top_pages: {
+    path: string;
+    views: number;
+  }[];
+  daily_trends: {
+    date: string;
+    total_views: number;
+    unique_visitors: number;
+    member_views: number;
+  }[];
+}
+
+export interface MemberActivity {
+  email: string;
+  name: string;
+  total_visits: number;
+  last_seen: string;
+  last_path: string;
+}
+
+export interface RecordVisitPayload {
+  visitor_id: string;
+  session_id: string;
+  path: string;
+  referrer?: string;
+  user_agent?: string;
+  screen_width?: number;
+  is_member?: boolean;
+  user_email?: string | null;
+  user_name?: string | null;
+  user_id?: string | null;
+}
+
+export async function recordVisit(payload: RecordVisitPayload): Promise<void> {
+  try {
+    await fetch(`${API_BASE_URL}/analytics/visit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+      // Keepalive allows the request to outlive the page unload if user is navigating away
+      keepalive: true,
+    });
+  } catch (error) {
+    // Non-blocking, tracking failure should not disrupt user experience
+    console.debug("Visitor tracking ping skipped or failed:", error);
+  }
+}
+
+export async function fetchAnalyticsStats(): Promise<AnalyticsStats | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/analytics/stats`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch analytics stats");
+    return await res.json();
+  } catch (error) {
+    logger.error("API", "Error fetching analytics stats:", error);
+    return null;
+  }
+}
+
+export async function fetchVisitorLogs(params?: {
+  limit?: number;
+  skip?: number;
+  filter_type?: "all" | "members" | "guests";
+  search?: string;
+}): Promise<VisitorLogItem[]> {
+  try {
+    const searchParams = new URLSearchParams();
+    if (params?.limit) searchParams.append("limit", params.limit.toString());
+    if (params?.skip) searchParams.append("skip", params.skip.toString());
+    if (params?.filter_type) searchParams.append("filter_type", params.filter_type);
+    if (params?.search) searchParams.append("search", params.search);
+
+    const query = searchParams.toString() ? `?${searchParams.toString()}` : "";
+    const res = await fetch(`${API_BASE_URL}/analytics/visitors${query}`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch visitor logs");
+    return await res.json();
+  } catch (error) {
+    logger.error("API", "Error fetching visitor logs:", error);
+    return [];
+  }
+}
+
+export async function fetchMemberVisitors(): Promise<MemberActivity[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/analytics/members`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch member visitors");
+    return await res.json();
+  } catch (error) {
+    logger.error("API", "Error fetching member visitors:", error);
+    return [];
+  }
+}
+
+export async function seedAnalyticsSample(): Promise<{ message: string; count: number }> {
+  const res = await fetch(`${API_BASE_URL}/analytics/seed-sample`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error("Failed to seed sample analytics data");
+  return await res.json();
+}
+
+// ==========================================
+// AUDIT LOG & TELEMETRY API
+// ==========================================
+
+export interface AuditLogItem {
+  id: string;
+  user_id?: string | null;
+  actor_email?: string | null;
+  actor_name?: string | null;
+  actor_role: "Admin" | "Customer" | "Guest" | "System" | string;
+  action: string;
+  action_category: "auth" | "catalog" | "orders" | "cms" | "security" | "general" | string;
+  target_type?: string | null;
+  target_id?: string | null;
+  target_name?: string | null;
+  description?: string | null;
+  details?: string | null;
+  changes?: Record<string, any> | null;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  status: "SUCCESS" | "FAILED" | "WARNING" | string;
+  created_at: string;
+}
+
+export interface AuditStats {
+  total_events: number;
+  total_logins: number;
+  total_modifications: number;
+  total_unique_actors: number;
+  recent_24h_events: number;
+  category_counts: {
+    auth: number;
+    catalog: number;
+    orders: number;
+    cms: number;
+    [key: string]: number;
+  };
+}
+
+export async function fetchAuditLogs(params?: {
+  category?: string;
+  search?: string;
+  status?: string;
+  limit?: number;
+  skip?: number;
+}): Promise<AuditLogItem[]> {
+  try {
+    const searchParams = new URLSearchParams();
+    if (params?.category && params.category !== "all") searchParams.append("category", params.category);
+    if (params?.search) searchParams.append("search", params.search);
+    if (params?.status) searchParams.append("status", params.status);
+    if (params?.limit) searchParams.append("limit", params.limit.toString());
+    if (params?.skip) searchParams.append("skip", params.skip.toString());
+
+    const query = searchParams.toString() ? `?${searchParams.toString()}` : "";
+    const res = await fetch(`${API_BASE_URL}/audit/logs${query}`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch audit logs");
+    return await res.json();
+  } catch (error) {
+    logger.error("API", "Error fetching audit logs:", error);
+    return [];
+  }
+}
+
+export async function fetchAuditStats(): Promise<AuditStats | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/audit/stats`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch audit stats");
+    return await res.json();
+  } catch (error) {
+    logger.error("API", "Error fetching audit stats:", error);
+    return null;
+  }
+}
+
+export async function fetchAuditLogDetail(logId: string): Promise<AuditLogItem | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/audit/logs/${logId}`, {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch audit log detail");
+    return await res.json();
+  } catch (error) {
+    logger.error("API", "Error fetching audit log detail:", error);
+    return null;
+  }
+}
+
+export async function seedAuditSample(): Promise<{ message: string; count: number }> {
+  const res = await fetch(`${API_BASE_URL}/audit/seed-sample`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error("Failed to seed sample audit data");
+  return await res.json();
+}
 
 

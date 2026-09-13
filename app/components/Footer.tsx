@@ -1,8 +1,53 @@
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Footer.module.css";
+import { subscribeNewsletter, fetchSiteContent } from "../services/api";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+  const [settings, setSettings] = useState<any>(null);
+
+  React.useEffect(() => {
+    fetchSiteContent("site_settings").then(setSettings).catch(() => {});
+  }, []);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanEmail = email.trim();
+    if (!cleanEmail || !cleanEmail.includes("@") || !cleanEmail.includes(".")) {
+      setStatus("error");
+      setMessage("Please enter a valid email address.");
+      return;
+    }
+
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await subscribeNewsletter(cleanEmail);
+      if (res.success) {
+        setStatus("success");
+        setMessage(res.message);
+        setEmail("");
+        setTimeout(() => {
+          setStatus("idle");
+          setMessage("");
+        }, 5000);
+      } else {
+        setStatus("error");
+        setMessage(res.message);
+      }
+    } catch {
+      setStatus("error");
+      setMessage("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <footer className={styles.footer}>
       {/* Top border golden line */}
@@ -27,27 +72,27 @@ export default function Footer() {
 
           {/* Social icons */}
           <div className={styles.socialIcons}>
-            <a href="#" className={styles.socialIcon} aria-label="WhatsApp">
+            <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="WhatsApp">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
             </a>
-            <a href="#" className={styles.socialIcon} aria-label="LinkedIn">
+            <a href={settings?.social_links?.linkedin || "https://linkedin.com/"} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="LinkedIn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/>
               </svg>
             </a>
-            <a href="#" className={styles.socialIcon} aria-label="Twitter">
+            <a href={settings?.social_links?.twitter || "https://twitter.com/"} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="Twitter">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
               </svg>
             </a>
-            <a href="#" className={styles.socialIcon} aria-label="Facebook">
+            <a href={settings?.social_links?.facebook || "https://facebook.com/"} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="Facebook">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
               </svg>
             </a>
-            <a href="#" className={styles.socialIcon} aria-label="Instagram">
+            <a href={settings?.social_links?.instagram || "https://instagram.com/"} target="_blank" rel="noopener noreferrer" className={styles.socialIcon} aria-label="Instagram">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
@@ -57,7 +102,7 @@ export default function Footer() {
           </div>
 
           <hr className={styles.footerDivider} />
-          <p className={styles.copyright}>© 2026 DeLuzex. All rights reserved.</p>
+          <p className={styles.copyright}>{settings?.footer_copyright || "© 2026 DeLuzex. All rights reserved."}</p>
         </div>
 
         {/* Right column */}
@@ -65,34 +110,68 @@ export default function Footer() {
           {/* Newsletter */}
           <div className={styles.newsletterBlock}>
             <h4 className={styles.newsletterTitle}>Be Updated With Us</h4>
-            <div className={styles.newsletterInput}>
-              <input type="email" placeholder="Enter your email address" />
-              <button className={styles.newsletterBtn}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </button>
-            </div>
+            <form className={styles.newsletterForm} onSubmit={handleSubscribe}>
+              <div
+                className={`${styles.newsletterInput} ${
+                  status === "error" ? styles.inputError : ""
+                } ${status === "success" ? styles.inputSuccess : ""}`}
+              >
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (status !== "idle") setStatus("idle");
+                  }}
+                  placeholder="Enter your email address"
+                  aria-label="Email address for newsletter"
+                  required
+                />
+                <button
+                  type="submit"
+                  className={styles.newsletterBtn}
+                  disabled={status === "loading"}
+                  aria-label="Subscribe to newsletter"
+                >
+                  {status === "loading" ? (
+                    <span className={styles.spinner} />
+                  ) : status === "success" ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              {message && (
+                <p className={status === "success" ? styles.newsletterSuccess : styles.newsletterError}>
+                  {message}
+                </p>
+              )}
+            </form>
           </div>
 
           {/* Footer links */}
           <div className={styles.footerLinks}>
             <div className={styles.linkGroup}>
               <h5 className={styles.linkGroupTitle}>Explore</h5>
-              <Link href="/shop">Chandeliers</Link>
-              <Link href="/shop">Pendant Lights</Link>
-              <Link href="/shop">Wall Lights</Link>
-              <Link href="/shop">Table Lamps</Link>
-              <Link href="/shop">New Arrivals</Link>
-              <Link href="/shop">Best Sellers</Link>
+              <Link href="/shop?category=Chandeliers">Chandeliers</Link>
+              <Link href="/shop?category=Pendant%20Lights">Pendant Lights</Link>
+              <Link href="/shop?category=Wall%20Lights">Wall Lights</Link>
+              <Link href="/shop?category=Table%20Lamps">Table Lamps</Link>
+              <Link href="/shop?sort=newest">New Arrivals</Link>
+              <Link href="/shop?sort=popular">Best Sellers</Link>
             </div>
             <div className={styles.linkGroup}>
               <h5 className={styles.linkGroupTitle}>Company</h5>
               <Link href="/about">About Us</Link>
               <Link href="/projects">Our Projects</Link>
               <Link href="/contact">Contact</Link>
-              <Link href="#">Shipping &amp; Delivery</Link>
-              <Link href="#">Privacy Policy</Link>
+              <Link href="/shipping">Shipping &amp; Delivery</Link>
+              <Link href="/privacy">Privacy Policy</Link>
             </div>
           </div>
         </div>
@@ -100,3 +179,4 @@ export default function Footer() {
     </footer>
   );
 }
+

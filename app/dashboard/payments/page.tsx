@@ -7,29 +7,9 @@ import {
   fetchUserCards,
   saveUserCard,
   deleteUserCard,
+  setDefaultUserCard,
   SavedCard,
 } from "../../services/api";
-
-const initialSampleCards: SavedCard[] = [
-  {
-    card_type: "visa",
-    card_holder: "MIKE JOHN",
-    card_number_masked: "5871  6650  8710  2334",
-    card_last4: "2334",
-    expiry: "12/27",
-    is_default: true,
-    user_email: "mike.john@example.com",
-  },
-  {
-    card_type: "mastercard",
-    card_holder: "MIKE JOHN",
-    card_number_masked: "4012  8888  8888  3322",
-    card_last4: "3322",
-    expiry: "12/27",
-    is_default: false,
-    user_email: "mike.john@example.com",
-  },
-];
 
 const CARD_GRADIENTS: Record<string, string> = {
   visa: "linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%)",
@@ -81,7 +61,7 @@ export default function PaymentsPage() {
   const { user } = useAuth();
   const userEmail = (user as Record<string, string>)?.email || "";
   const [cards, setCards] = useState<SavedCard[]>([]);
-  const [selected, setSelected] = useState(0);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Add Card Modal State
@@ -95,13 +75,16 @@ export default function PaymentsPage() {
     setLoading(true);
     try {
       const data = await fetchUserCards(userEmail);
+      setCards(data || []);
       if (data && data.length > 0) {
-        setCards(data);
+        const defaultCard = data.find((c) => c.is_default) || data[0];
+        setSelectedId(defaultCard.id || defaultCard._id || null);
       } else {
-        setCards(initialSampleCards);
+        setSelectedId(null);
       }
-    } catch {
-      setCards(initialSampleCards);
+    } catch (err) {
+      console.error("Failed to load cards from database:", err);
+      setCards([]);
     } finally {
       setLoading(false);
     }
@@ -138,17 +121,17 @@ export default function PaymentsPage() {
   const handleSaveCard = async (e: React.FormEvent) => {
     e.preventDefault();
     const rawCard = cardNumber.replace(/\s/g, "");
-    if (!cardHolder || rawCard.length < 15 || cardExpiry.length < 5) {
+    if (!cardHolder.trim() || rawCard.length < 15 || cardExpiry.length < 5) {
       alert("Please fill in valid card details.");
       return;
     }
 
     const last4 = rawCard.slice(-4);
-    const masked = `•••• •••• •••• ${last4}`;
+    const masked = `${rawCard.slice(0, 4)}  ${rawCard.length >= 8 ? rawCard.slice(4, 8) : "••••"}  ${rawCard.length >= 12 ? rawCard.slice(8, 12) : "••••"}  ${last4}`;
 
     const newCard: SavedCard = {
       user_email: userEmail || "customer@deluzex.com",
-      card_holder: cardHolder.toUpperCase(),
+      card_holder: cardHolder.trim().toUpperCase(),
       card_number_masked: masked,
       card_last4: last4,
       card_type: cardType,
@@ -156,21 +139,51 @@ export default function PaymentsPage() {
       is_default: cards.length === 0,
     };
 
-    await saveUserCard(newCard);
-    setShowModal(false);
-    setCardHolder("");
-    setCardNumber("");
-    setCardExpiry("");
-    loadCards();
+    try {
+      await saveUserCard(newCard);
+      setShowModal(false);
+      setCardHolder("");
+      setCardNumber("");
+      setCardExpiry("");
+      await loadCards();
+    } catch (err) {
+      console.error("Failed to save card:", err);
+      alert("Failed to save card to database.");
+    }
+  };
+
+  const handleSetDefault = async (card: SavedCard, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const cardId = card.id || card._id;
+    if (!cardId) return;
+
+    setSelectedId(cardId);
+    try {
+      await setDefaultUserCard(cardId);
+      setCards((prev) =>
+        prev.map((c) => ({
+          ...c,
+          is_default: (c.id || c._id) === cardId,
+        }))
+      );
+    } catch (err) {
+      console.error("Failed to set default card:", err);
+    }
   };
 
   const handleDeleteCard = async (card: SavedCard, e: React.MouseEvent) => {
     e.stopPropagation();
     const cardId = card.id || card._id;
-    if (cardId) {
+    if (!cardId) return;
+    if (!window.confirm("Are you sure you want to remove this card?")) return;
+
+    try {
       await deleteUserCard(cardId, userEmail);
+      setCards((prev) => prev.filter((c) => (c.id || c._id) !== cardId));
+      await loadCards();
+    } catch (err) {
+      console.error("Failed to delete card:", err);
     }
-    setCards((prev) => prev.filter((c) => (c.id || c._id) !== cardId));
   };
 
   return (
@@ -325,25 +338,59 @@ export default function PaymentsPage() {
       {/* Card Grid */}
       {loading ? (
         <p style={{ color: "#777", padding: "2rem 0" }}>Loading saved cards...</p>
+      ) : cards.length === 0 ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+          </div>
+          <h3 className={styles.emptyTitle}>No Saved Cards Yet</h3>
+          <p className={styles.emptySubtitle}>
+            Save your debit or credit cards for a fast, one-click checkout experience.
+          </p>
+          <button
+            type="button"
+            className={styles.btnAddFirst}
+            onClick={() => setShowModal(true)}
+          >
+            + Add Your First Card
+          </button>
+        </div>
       ) : (
         <div className={styles.cardGrid}>
           {cards.map((card, i) => {
-            const isSelected = selected === i;
+            const cardId = card.id || card._id || String(i);
+            const isSelected = selectedId ? selectedId === cardId : !!card.is_default;
             const gradient = CARD_GRADIENTS[card.card_type] || CARD_GRADIENTS.other;
             return (
               <div
-                key={card.id || card._id || i}
+                key={cardId}
                 className={`${styles.cardUiWrapper} ${isSelected ? styles.cardUiSelected : ""}`}
-                onClick={() => setSelected(i)}
+                onClick={() => handleSetDefault(card)}
               >
                 {/* Selection indicator */}
                 <div className={styles.cardSelectRow}>
                   <span className={styles.cardSelectLabel}>
-                    {card.is_default || isSelected
+                    {card.is_default
                       ? `✓ Saved Card •••• ${card.card_last4}`
                       : `${card.card_type.toUpperCase()} •••• ${card.card_last4}`}
                   </span>
-                  <div className={`${styles.radioBtn} ${isSelected ? styles.radioBtnActive : ""}`}>
+                  <div
+                    className={`${styles.radioBtn} ${isSelected ? styles.radioBtnActive : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSetDefault(card);
+                    }}
+                  >
                     {isSelected && <div className={styles.radioDot} />}
                   </div>
                 </div>
@@ -372,11 +419,11 @@ export default function PaymentsPage() {
 
                   <div className={styles.cardBottomRow}>
                     <div>
-                      <div className={styles.cardFieldLabel}>Card Holder</div>
+                      <div className={styles.cardFieldLabel}>CARD HOLDER</div>
                       <div className={styles.cardFieldValue}>{card.card_holder}</div>
                     </div>
                     <div>
-                      <div className={styles.cardFieldLabel}>Expires</div>
+                      <div className={styles.cardFieldLabel}>EXPIRES</div>
                       <div className={styles.cardFieldValue}>{card.expiry}</div>
                     </div>
                   </div>

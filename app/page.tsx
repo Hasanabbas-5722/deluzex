@@ -1,13 +1,23 @@
+import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./page.module.css";
-import { fetchCategories, fetchProducts } from "./services/api";
+import { fetchCategories, fetchProducts, fetchTestimonials, fetchProjects, fetchSiteContent } from "./services/api";
 import AddToCartButton from "./components/AddToCartButton";
 import HeroProductWidget from "./components/HeroProductWidget";
 import AnimatedCounter from "./components/animations/AnimatedCounter";
+import NewArrivalsCarousel from "./components/NewArrivalsCarousel";
+import CustomerStoriesCarousel from "./components/CustomerStoriesCarousel";
 
 export default async function Home() {
-  const categories = await fetchCategories();
-  const products = await fetchProducts("limit=8");
+  const [categories, products, newArrivalProducts, testimonials, featuredProjects, cmsHome] = await Promise.all([
+    fetchCategories(),
+    fetchProducts("limit=8"),
+    fetchProducts("is_new_arrival=true"),
+    fetchTestimonials(),
+    fetchProjects("is_featured=true"),
+    fetchSiteContent("homepage"),
+  ]);
 
   return (
     <main className={styles.main}>
@@ -17,21 +27,34 @@ export default async function Home() {
       <section className={styles.hero}>
         {/* Background image */}
         <div className={styles.heroBg}>
-          <Image src="/images/hero_bg.png" alt="" fill style={{ objectFit: 'cover', height: '100%' }} />
+          <Image
+            src={cmsHome?.hero?.bg_image || "/images/hero_bg.png"}
+            alt="Hero Background"
+            fill
+            style={{ objectFit: 'cover', height: '100%' }}
+          />
         </div>
         <div className={styles.heroOverlay}></div>
 
         {/* Left content */}
         <div className={styles.heroLeft}>
-          <p className={styles.heroTagline}>Celebrate Every Moment with</p>
-          <h1 className={styles.heroTitle}>Where Lights become Art</h1>
+          <p className={styles.heroTagline}>{cmsHome?.hero?.tagline || "Celebrate Every Moment with"}</p>
+          <h1 className={styles.heroTitle}>{cmsHome?.hero?.title || "Where Lights become Art"}</h1>
           <p className={styles.heroDesc}>
-            Crafted With Exceptional Materials And Refined Details To Elevate<br />
-            Modern Living Spaces.
+            {cmsHome?.hero?.description || (
+              <>
+                Crafted With Exceptional Materials And Refined Details To Elevate<br />
+                Modern Living Spaces.
+              </>
+            )}
           </p>
           <div className={styles.heroBtns}>
-            <a href="/shop"><button className={styles.btnExplore}>Explore Collection</button></a>
-          <a href=""><button className={styles.btncatalogue}>View Catalogue</button></a>
+            <Link href={cmsHome?.hero?.btn_explore_link || "/shop"} className={styles.btnExplore}>
+              {cmsHome?.hero?.btn_explore_text || "Explore Collection"}
+            </Link>
+            <Link href={cmsHome?.hero?.btn_catalogue_link || "/categories"} className={styles.btncatalogue}>
+              {cmsHome?.hero?.btn_catalogue_text || "View Catalogue"}
+            </Link>
           </div>
         </div>
 
@@ -43,8 +66,11 @@ export default async function Home() {
       {/* Figma: 1440x392, large mixed-color text, centered */}
       <section className={styles.statementSection}>
         <p className={styles.statementText}>
-          <span className={styles.statementGold}>Discover lighting crafted with precision and elegance, blending timeless design,</span>
-          {" "}exceptional quality, and warm illumination to transform every space.
+          <span className={styles.statementGold}>
+            {cmsHome?.statement?.highlight_text || "Discover lighting crafted with precision and elegance, blending timeless design,"}
+          </span>
+          {" "}
+          {cmsHome?.statement?.sub_text || "exceptional quality, and warm illumination to transform every space."}
         </p>
       </section>
 
@@ -57,38 +83,59 @@ export default async function Home() {
         </div>
         <div className={styles.categoryGrid}>
           {categories.length > 0 ? (
-            categories.slice(0, 4).map((cat, i: number) => (
-              <div key={cat.id || i} className={`${styles.catCard} ${i === 1 ? styles.catCardActive : ''}`}>
-                <Image src={cat.image_url || "/images/category_chandelier_1784107756268.jpg"} alt={cat.name || "Category"} fill style={{ objectFit: "cover" }} />
-                
+            categories.slice(0, 4).map((cat, i: number) => {
+              const catIdentifier = cat.name || cat._id || cat.id || "All";
+              return (
+                <Link
+                  key={cat.id || cat._id || i}
+                  href={`/shop?category=${encodeURIComponent(catIdentifier)}`}
+                  className={`${styles.catCard} ${i === 1 ? styles.catCardActive : ''}`}
+                >
+                  <Image
+                    src={cat.image_url || "/images/category_chandelier_1784107756268.jpg"}
+                    alt={cat.name || "Category"}
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
                   <div className={styles.catCardLabel}>
                     <span>{cat.name}</span>
                   </div>
-                
-              </div>
-            ))
+                </Link>
+              );
+            })
           ) : (
             <>
               {/* Fallback layout if no API data */}
-              <div className={styles.catCard}>
-                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
-              </div>
-              <div className={`${styles.catCard} ${styles.catCardActive}`}>
-                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Chandeliers" fill style={{ objectFit: "cover" }} />
+              <Link href={`/shop?category=${encodeURIComponent("Pendant Lights")}`} className={styles.catCard}>
+                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Pendant Lights" fill style={{ objectFit: "cover" }} />
+                <div className={styles.catCardLabel}>
+                  <span>Pendant Lights</span>
+                </div>
+              </Link>
+              <Link href={`/shop?category=${encodeURIComponent("Chandeliers")}`} className={`${styles.catCard} ${styles.catCardActive}`}>
+                <Image src="/images/about_chandelier_1784107790569.jpg" alt="Chandeliers" fill style={{ objectFit: "cover" }} />
                 <div className={styles.catCardLabel}>
                   <span>Chandeliers</span>
                 </div>
-              </div>
-              <div className={styles.catCard}>
-                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
-              </div>
-              <div className={styles.catCard}>
-                <Image src="/images/category_chandelier_1784107756268.jpg" alt="Category" fill style={{ objectFit: "cover" }} />
-              </div>
+              </Link>
+              <Link href={`/shop?category=${encodeURIComponent("COB")}`} className={styles.catCard}>
+                <Image src="/images/project_lobby_1784107778993.jpg" alt="COB" fill style={{ objectFit: "cover" }} />
+                <div className={styles.catCardLabel}>
+                  <span>COB</span>
+                </div>
+              </Link>
+              <Link href={`/shop?category=${encodeURIComponent("Table Lamps")}`} className={styles.catCard}>
+                <Image src="/images/lamp_black_gold_1784107745696.jpg" alt="Table Lamps" fill style={{ objectFit: "cover" }} />
+                <div className={styles.catCardLabel}>
+                  <span>Table Lamps</span>
+                </div>
+              </Link>
             </>
           )}
         </div>
-        <button className={styles.btnExploreCat}>Explore Categories</button>
+        <Link href="/categories" className={styles.btnExploreCat}>
+          Explore Categories
+        </Link>
       </section>
       
       {/* ===================== FEATURED PROJECTS SECTION ===================== */}
@@ -96,36 +143,77 @@ export default async function Home() {
       <section className={styles.projectsSection}>
         <h2 className={styles.projectsTitle}>Our Featured Projects.</h2>
         <div className={styles.projectGrid}>
-          <div className={styles.projectCard}>
-            <Image src="/images/project_lounge_1784107767735.jpg" alt="Luxury Villa Residence" fill style={{ objectFit: "cover", borderRadius: "20px" }} />
-            <div className={styles.projectCardLabel}>
-              <div className={styles.projectCardLabelText}>
-                <span className={styles.projectCardLabelTitle}>Luxury Villa Residence</span>
-                <span className={styles.projectCardLabelSub}>Ahmedabad</span>
-              </div>
-              <button className={styles.projectArrowBtn}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className={styles.projectCard}>
-            <Image src="/images/project_lobby_1784107778993.jpg" alt="Luxury Villa Residence" fill style={{ objectFit: "cover", borderRadius: "20px" }} />
-            <div className={styles.projectCardLabel}>
-              <div className={styles.projectCardLabelText}>
-                <span className={styles.projectCardLabelTitle}>Luxury Villa Residence</span>
-                <span className={styles.projectCardLabelSub}>Ahmedabad</span>
-              </div>
-              <button className={styles.projectArrowBtn}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
+          {featuredProjects && featuredProjects.length > 0 ? (
+            featuredProjects.slice(0, 2).map((proj) => (
+              <Link key={proj.id || proj._id} href="/projects" className={styles.projectCard}>
+                <Image
+                  src={proj.image_url || "/images/project_lounge_1784107767735.jpg"}
+                  alt={proj.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                />
+                <div className={styles.projectCardLabel}>
+                  <div className={styles.projectCardLabelText}>
+                    <span className={styles.projectCardLabelTitle}>{proj.title}</span>
+                    <span className={styles.projectCardLabelSub}>{proj.location || "Global"}</span>
+                  </div>
+                  <span className={styles.projectArrowBtn}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <>
+              <Link href="/projects" className={styles.projectCard}>
+                <Image
+                  src="/images/project_lounge_1784107767735.jpg"
+                  alt="Luxury Villa Residence"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                />
+                <div className={styles.projectCardLabel}>
+                  <div className={styles.projectCardLabelText}>
+                    <span className={styles.projectCardLabelTitle}>Luxury Villa Residence</span>
+                    <span className={styles.projectCardLabelSub}>London, UK</span>
+                  </div>
+                  <span className={styles.projectArrowBtn}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
+              <Link href="/projects" className={styles.projectCard}>
+                <Image
+                  src="/images/project_lobby_1784107778993.jpg"
+                  alt="Grand Hotel Lobby"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                />
+                <div className={styles.projectCardLabel}>
+                  <div className={styles.projectCardLabelText}>
+                    <span className={styles.projectCardLabelTitle}>The Grand Hotel Lobby</span>
+                    <span className={styles.projectCardLabelSub}>Paris, France</span>
+                  </div>
+                  <span className={styles.projectArrowBtn}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
+            </>
+          )}
         </div>
-        <button className={styles.btnExploreProjects}>Explore All Projects</button>
+        <Link href="/projects" className={styles.btnExploreProjects}>
+          Explore All Projects
+        </Link>
       </section>
 
       {/* ===================== NEW ARRIVALS SECTION ===================== */}
@@ -138,71 +226,45 @@ export default async function Home() {
             And Timeless Elegance For Modern Interiors.
           </p>
         </div>
-        <div className={styles.newArrivalsMarquee}>
-          <div className={styles.marqueeTrack}>
-            {[1, 2].map((keyGroup) => (
-              <div key={keyGroup} className={styles.marqueeGroupArrivals}>
-                {products.length > 0 ? (
-                  products.map((product, i: number) => (
-                    <div key={`${keyGroup}-${product._id || i}`} className={styles.productCard}>
-                      <div className={styles.productCardImg}>
-                        <Image src={product.product_main_image || "/images/lamp_modern_tall_1784107732736.jpg"} alt={product.product_title || "Product"} fill style={{ objectFit: "cover" }} />
-                        <AddToCartButton product={product} />
-                      </div>
-                      <div className={styles.productCardInfo}>
-                        <div className={styles.productCardLeft}>
-                          <h4 className={styles.productCardName}>{product.product_title || "Product Name"}</h4>
-                          <div className={styles.productCardRating}>
-                            <span className={styles.productStar}>★</span>
-                            <span className={styles.productRatingText}>{product.product_rating || "4.8"} ( 300 Reviews )</span>
-                          </div>
-                        </div>
-                        <div className={styles.productCardRight}>
-                          <span className={styles.productCardPrice}>₹{product.product_price}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p style={{ textAlign: 'center', width: '100%' }}>No products found.</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className={styles.arrowGroup}>
-          <button className={styles.arrowOutline}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <button className={styles.arrowSolid}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
-        </div>
+        <NewArrivalsCarousel products={newArrivalProducts.length > 0 ? newArrivalProducts : products} />
       </section>
 
 
       {/* ===================== ABOUT US SECTION ===================== */}
       {/* Figma: 1440x1076, left text + right image, stats row with images at bottom */}
+      {/* ===================== ABOUT US SECTION ===================== */}
+      {/* Figma: 1440x1076, left text + right image, stats row with images at bottom */}
       <section className={styles.aboutSection}>
         <div className={styles.aboutInner}>
           <div className={styles.aboutLeft}>
-            <p className={styles.aboutLabel}>ABOUT US</p>
-            <h2 className={styles.aboutTitle}>Illuminate Every Space With<br />Elegance</h2>
+            <p className={styles.aboutLabel}>{cmsHome?.story?.subtitle || "ABOUT US"}</p>
+            <h2 className={styles.aboutTitle}>
+              {cmsHome?.story?.title ? (
+                cmsHome.story.title.split("\n").map((line: string, i: number) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i === 0 && <br />}
+                  </React.Fragment>
+                ))
+              ) : (
+                <>Illuminate Every Space With<br />Elegance</>
+              )}
+            </h2>
             <div className={styles.aboutDivider}></div>
             <p className={styles.aboutDesc}>
-              From Statement Chandeliers To Designer Wall Lights, Every Piece<br />
-              Is Crafted To Inspire.
+              {cmsHome?.story?.description || (
+                <>
+                  From Statement Chandeliers To Designer Wall Lights, Every Piece<br />
+                  Is Crafted To Inspire.
+                </>
+              )}
             </p>
-            <button className={styles.btnDiscoverStory}>
+            <Link href="/about" className={styles.btnDiscoverStory}>
               Discover Our Story
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
-            </button>
+            </Link>
             <div className={styles.aboutFeatures}>
               <div className={styles.aboutFeatureItem}>
                 <div className={styles.aboutFeatureIcon}>
@@ -210,7 +272,7 @@ export default async function Home() {
                     <polygon points="6 3 18 3 22 9 12 22 2 9 6 3"></polygon>
                   </svg>
                 </div>
-                <span>Premium Craftmanship</span>
+                <span>Premium Craftsmanship</span>
               </div>
               <div className={styles.aboutFeatureDivider}></div>
               <div className={styles.aboutFeatureItem}>
@@ -236,7 +298,7 @@ export default async function Home() {
           </div>
           <div className={styles.aboutRight}>
             <Image
-              src="/images/about_chandelier_1784107790569.jpg"
+              src={cmsHome?.story?.image || "/images/about_chandelier_1784107790569.jpg"}
               alt="Chandelier"
               fill
               style={{ objectFit: "cover", borderRadius: "12px" }}
@@ -246,34 +308,32 @@ export default async function Home() {
 
         {/* Stats Row - 4 image cards with overlaid text */}
         <div className={styles.statsRow}>
-          <div className={styles.statCard}>
-            <Image src="/images/project_lounge_1784107767735.jpg" alt="Years of excellence" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
-            <div className={styles.statOverlay}>
-              <AnimatedCounter target={10} suffix="+" className={styles.statNum} duration={2} />
-              <span className={styles.statLabel}>Years Of Excellence</span>
-            </div>
-          </div>
-          <div className={styles.statCard}>
-            <Image src="/images/about_chandelier_1784107790569.jpg" alt="Client satisfaction" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
-            <div className={styles.statOverlay}>
-              <AnimatedCounter target={98} suffix="%" className={styles.statNum} duration={2.2} />
-              <span className={styles.statLabel}>Client Satisfaction</span>
-            </div>
-          </div>
-          <div className={styles.statCard}>
-            <Image src="/images/project_lobby_1784107778993.jpg" alt="Lighting installations" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
-            <div className={styles.statOverlay}>
-              <AnimatedCounter target={500} suffix="+" className={styles.statNum} duration={2.4} />
-              <span className={styles.statLabel}>Lighting Installations</span>
-            </div>
-          </div>
-          <div className={styles.statCard}>
-            <Image src="/images/project_lounge_1784107767735.jpg" alt="Happy customers" fill style={{ objectFit: "cover", borderRadius: "8px" }} />
-            <div className={styles.statOverlay}>
-              <AnimatedCounter target={50} suffix="K+" className={styles.statNum} duration={2} />
-              <span className={styles.statLabel}>Happy Customers</span>
-            </div>
-          </div>
+          {(cmsHome?.story?.stats && cmsHome.story.stats.length === 4
+            ? cmsHome.story.stats
+            : [
+                { number: "10+", label: "Years Of Excellence", image: "/images/project_lounge_1784107767735.jpg" },
+                { number: "98%", label: "Client Satisfaction", image: "/images/about_chandelier_1784107790569.jpg" },
+                { number: "500+", label: "Lighting Installations", image: "/images/project_lobby_1784107778993.jpg" },
+                { number: "50K+", label: "Happy Customers", image: "/images/project_lounge_1784107767735.jpg" }
+              ]
+          ).map((st: any, idx: number) => {
+            const numVal = parseInt(st.number.replace(/\D/g, ""), 10) || 10;
+            const suffixVal = st.number.replace(/[0-9]/g, "") || "+";
+            return (
+              <div key={idx} className={styles.statCard}>
+                <Image
+                  src={st.image || "/images/project_lounge_1784107767735.jpg"}
+                  alt={st.label}
+                  fill
+                  style={{ objectFit: "cover", borderRadius: "8px" }}
+                />
+                <div className={styles.statOverlay}>
+                  <AnimatedCounter target={numVal} suffix={suffixVal} className={styles.statNum} duration={2 + idx * 0.2} />
+                  <span className={styles.statLabel}>{st.label}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -281,79 +341,29 @@ export default async function Home() {
       {/* Figma: 1440x856, large Libre Caslon title, 3 testimonial cards, nav arrows */}
       <section className={styles.storiesSection}>
         <h2 className={styles.storiesTitle}>CUSTOMER STORIES</h2>
-        <div className={styles.storiesMarquee}>
-          <div className={styles.marqueeTrack}>
-            {[1, 2].map((keyGroup) => (
-              <div key={keyGroup} className={styles.marqueeGroupStories}>
-                <div className={styles.storyCard}>
-                  <div className={styles.storyStars}>★★★★☆</div>
-                  <p className={styles.storyText}>
-                    The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
-                  </p>
-                  <div className={styles.storyAuthor}>
-                    <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
-                    <div className={styles.storyAuthorInfo}>
-                      <h5>Anna Clark</h5>
-                      <span>Interior Designer</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.storyCard}>
-                  <div className={styles.storyStars}>★★★★☆</div>
-                  <p className={styles.storyText}>
-                    The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
-                  </p>
-                  <div className={styles.storyAuthor}>
-                    <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
-                    <div className={styles.storyAuthorInfo}>
-                      <h5>Anna Clark</h5>
-                      <span>Interior Designer</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.storyCard}>
-                  <div className={styles.storyStars}>★★★★☆</div>
-                  <p className={styles.storyText}>
-                    The quality and craftsmanship are truly exceptional. The chandelier we chose became the highlight of our home.
-                  </p>
-                  <div className={styles.storyAuthor}>
-                    <Image src="/images/avatar_woman_1784107804209.jpg" alt="Anna Clark" width={56} height={56} className={styles.storyAvatar} />
-                    <div className={styles.storyAuthorInfo}>
-                      <h5>Anna Clark</h5>
-                      <span>Interior Designer</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className={styles.arrowGroup}>
-          <button className={styles.arrowOutline}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <button className={styles.arrowSolid}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
-        </div>
+        <CustomerStoriesCarousel initialStories={testimonials} />
       </section>
 
       {/* ===================== CTA SECTION ===================== */}
       {/* Figma: 1440x518, cream textured bg, big serif title, 2 buttons */}
       <section className={styles.ctaSection}>
         <div className={styles.ctaInner}>
-          <h2 className={styles.ctaTitle}>Discover Timeless Lighting</h2>
+          <h2 className={styles.ctaTitle}>{cmsHome?.cta?.title || "Discover Timeless Lighting"}</h2>
           <p className={styles.ctaDesc}>
-            Elevate Your Interiors With Premium Lighting Collections Crafted To Bring Warmth,<br />
-            Elegance, And Sophistication To Every Space.
+            {cmsHome?.cta?.description || (
+              <>
+                Elevate Your Interiors With Premium Lighting Collections Crafted To Bring Warmth,<br />
+                Elegance, And Sophistication To Every Space.
+              </>
+            )}
           </p>
           <div className={styles.ctaBtns}>
-            <button className={styles.ctaBtnPrimary}>Shop Lighting</button>
-            <button className={styles.ctaBtnOutline}>Learn more</button>
+            <Link href={cmsHome?.cta?.btn_primary_link || "/shop"} scroll={true} className={styles.ctaBtnPrimary}>
+              {cmsHome?.cta?.btn_primary_text || "Shop Lighting"}
+            </Link>
+            <Link href={cmsHome?.cta?.btn_secondary_link || "/about"} scroll={true} className={styles.ctaBtnOutline}>
+              {cmsHome?.cta?.btn_secondary_text || "Learn more"}
+            </Link>
           </div>
         </div>
       </section>
