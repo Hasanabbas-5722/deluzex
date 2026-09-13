@@ -846,7 +846,15 @@ export async function fetchPaymentMethods(): Promise<PaymentMethod[]> {
 }
 
 export async function createPaymentOrder(
-  payload: OrderPayload & { payment_method: string; razorpay_method: string }
+  payload: OrderPayload & {
+    payment_method: string;
+    razorpay_method: string;
+    idempotency_key?: string;
+    existing_order_id?: string;
+    upi_vpa?: string;
+    card_last4?: string;
+    bank_code?: string;
+  }
 ) {
   const res = await fetch(`${API_BASE_URL}/payments/create-order`, {
     method: "POST",
@@ -862,6 +870,8 @@ export async function createPaymentOrder(
     amount: number;
     currency: string;
     key_id: string;
+    is_resumed?: boolean;
+    is_already_paid?: boolean;
   };
 }
 
@@ -881,7 +891,12 @@ export async function verifyPayment(payload: {
   return data as { success: boolean; order_id: string; message: string };
 }
 
-export async function createCodOrder(payload: OrderPayload) {
+export async function createCodOrder(
+  payload: OrderPayload & {
+    idempotency_key?: string;
+    existing_order_id?: string;
+  }
+) {
   const res = await fetch(`${API_BASE_URL}/payments/cod`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -890,6 +905,147 @@ export async function createCodOrder(payload: OrderPayload) {
   const data = await res.json();
   if (!res.ok) throw new Error(data.detail || "Failed to place order");
   return data as { success: boolean; order_id: string; message: string };
+}
+
+export interface ServerPaymentPayload {
+  email: string;
+  phone: string;
+  shipping_address: {
+    first_name: string;
+    last_name: string;
+    street: string;
+    city: string;
+    state: string;
+    pin_code: string;
+  };
+  items: Array<{
+    product_id: string;
+    title: string;
+    price: number;
+    quantity: number;
+    image?: string;
+  }>;
+  subtotal: number;
+  gst: number;
+  delivery: number;
+  total: number;
+  payment_method: "card" | "upi" | "cod" | "netbanking" | "wallet";
+  idempotency_key?: string;
+  existing_order_id?: string;
+  card?: {
+    number: string;
+    name: string;
+    expiry: string;
+    cvv: string;
+  };
+  upi_vpa?: string;
+  bank_code?: string;
+}
+
+export interface ServerPaymentResponse {
+  success: boolean;
+  order_id: string;
+  payment_id?: string;
+  status: string;
+  message: string;
+  is_resumed?: boolean;
+  is_already_paid?: boolean;
+  error_code?: string;
+  error_description?: string;
+  can_resume?: boolean;
+}
+
+export async function processServerPayment(payload: ServerPaymentPayload): Promise<ServerPaymentResponse> {
+  const res = await fetch(`${API_BASE_URL}/payments/process-server-payment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.detail || data.message || "Failed to process payment on server.");
+  }
+  return data;
+}
+
+export interface InitiateUpiPayload {
+  email: string;
+  phone: string;
+  shipping_address: {
+    first_name: string;
+    last_name: string;
+    street: string;
+    city: string;
+    state: string;
+    pin_code: string;
+  };
+  items: Array<{
+    product_id: string;
+    title: string;
+    price: number;
+    quantity: number;
+    image?: string;
+  }>;
+  subtotal: number;
+  gst: number;
+  delivery: number;
+  total: number;
+  upi_vpa: string;
+  idempotency_key?: string;
+  existing_order_id?: string;
+}
+
+export interface InitiateUpiResponse {
+  success: boolean;
+  order_id: string;
+  razorpay_order_id?: string;
+  upi_vpa: string;
+  amount: number;
+  status: string;
+  message: string;
+  payment_url?: string;
+  expires_in_seconds: number;
+}
+
+export async function initiateUpiPayment(payload: InitiateUpiPayload): Promise<InitiateUpiResponse> {
+  const res = await fetch(`${API_BASE_URL}/payments/initiate-upi`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || data.message || "Failed to initiate UPI request.");
+  return data;
+}
+
+export interface PaymentStatusCheckResponse {
+  success: boolean;
+  order_id: string;
+  status: string;
+  payment_id?: string;
+  message: string;
+  error_description?: string;
+}
+
+export async function checkPaymentStatus(orderId: string): Promise<PaymentStatusCheckResponse> {
+  const res = await fetch(`${API_BASE_URL}/payments/status/${orderId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Failed to check payment status.");
+  return data;
+}
+
+export async function confirmUpiApproval(orderId: string, simulatedStatus: "approved" | "declined" = "approved"): Promise<PaymentStatusCheckResponse> {
+  const res = await fetch(`${API_BASE_URL}/payments/confirm-upi-approval`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ order_id: orderId, simulated_status: simulatedStatus }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Failed to confirm payment.");
+  return data;
 }
 
 export interface PaymentFailurePayload {

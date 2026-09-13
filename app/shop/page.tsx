@@ -412,7 +412,7 @@ function ShopContent() {
                   <div className={styles.productImageWrapper}>
                     <Link
                       href={`/product/${pId}`}
-                      style={{ display: "block", width: "100%", height: "100%", position: "relative", overflow: "hidden" }}
+                      style={{ display: "block", width: "100%", height: "100%", position: "relative", overflow: "hidden", borderRadius: "10px" }}
                     >
                       <Image
                         src={
@@ -421,7 +421,8 @@ function ShopContent() {
                         }
                         alt={product.product_title}
                         fill
-                        style={{ objectFit: "contain" }}
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                        style={{ objectFit: "cover" }}
                       />
                     </Link>
 

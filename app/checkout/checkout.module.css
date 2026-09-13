@@ -587,6 +587,192 @@
   background: #C89B60;
 }
 
+/* PAYMENT RECOVERY & IDEMPOTENCY BANNER */
+.recoveryBanner {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-left: 4px solid #D97706;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.08);
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.recoveryIcon {
+  color: #D97706;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.recoveryContent {
+  flex: 1;
+}
+
+.recoveryTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #92400E;
+  margin: 0 0 0.25rem 0;
+}
+
+.recoveryDesc {
+  font-size: 0.85rem;
+  color: #78350F;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.45;
+}
+
+.recoveryActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btnResumeOrder {
+  background: #D97706;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnResumeOrder:hover {
+  background: #B45309;
+}
+
+.btnSwitchMethod {
+  background: #ffffff;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+  border-radius: 6px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnSwitchMethod:hover {
+  background: #FEF3C7;
+}
+
+/* UPI IN-PAGE OPTIONS */
+.upiSubTabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 0.25rem;
+  border-radius: 8px;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.upiSubTab {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.upiSubTabActive {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.upiAppsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .upiAppsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.upiAppBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.upiAppBtn:hover,
+.upiAppBtnActive {
+  border-color: #C89B60;
+  background: #FFFDF9;
+  color: #8C6228;
+}
+
+.inPageQrCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.qrImageFrame {
+  padding: 0.75rem;
+  background: #ffffff;
+  border: 2px solid #C89B60;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(200, 155, 96, 0.15);
+}
+
+.qrCountdown {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+/* COD SECTION */
+.codCard {
+  background: #FAF9F6;
+  border: 1px solid rgba(200, 155, 96, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.codNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #57534E;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 900px) {
   .container {
     padding: 6rem 1.5rem 3rem;
@@ -635,4 +821,288 @@
     width: 60px;
     height: 60px;
   }
+}
+
+/* ==========================================================================
+   UPI IN-APP APPROVAL & REAL-TIME VERIFICATION MODAL
+   ========================================================================== */
+.upiOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.upiModal {
+  background: #ffffff;
+  border: 1px solid rgba(200, 155, 96, 0.35);
+  border-radius: 16px;
+  max-width: 520px;
+  width: 100%;
+  padding: 2.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(200, 155, 96, 0.15);
+  text-align: center;
+  position: relative;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.upiModalIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(200, 155, 96, 0.12);
+  color: #C89B60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  position: relative;
+}
+
+.upiPulseRing {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid #C89B60;
+  animation: pulseExpand 2s infinite ease-out;
+}
+
+@keyframes pulseExpand {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  70% { transform: scale(1.2); opacity: 0; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+.upiModalTitle {
+  font-family: var(--font-caslon, serif);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.upiModalSubtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.5;
+}
+
+.upiCollectHighlight {
+  background: #FFFDF9;
+  border: 1px solid rgba(200, 155, 96, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upiHighlightLabel {
+  font-size: 0.78rem;
+  color: #78350F;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.upiHighlightVpa {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: monospace;
+}
+
+.upiHighlightAmount {
+  font-family: var(--font-caslon, serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #C89B60;
+}
+
+.upiStepsList {
+  text-align: left;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.84rem;
+  color: #334155;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.upiStepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.upiStepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #C89B60;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.upiTimerBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #D97706;
+  background: #FEF3C7;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+}
+
+.upiModalActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.autoDetectBox {
+  background: #FFFDF9;
+  border: 1px solid rgba(200, 155, 96, 0.35);
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 16px rgba(200, 155, 96, 0.08);
+  text-align: left;
+}
+
+.radarWaveContainer {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.radarDot {
+  width: 12px;
+  height: 12px;
+  background: #C89B60;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(200, 155, 96, 0.8);
+}
+
+.radarRing1,
+.radarRing2 {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #C89B60;
+  opacity: 0.8;
+  animation: radarWave 2s infinite cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+.radarRing2 {
+  animation-delay: 1s;
+}
+
+@keyframes radarWave {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.autoDetectContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.autoDetectStatus {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.autoDetectSub {
+  font-size: 0.78rem;
+  color: #78350F;
+  line-height: 1.4;
+}
+
+.btnCancelUpi {
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.btnCancelUpi:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.btnOpenUpiLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #C89B60;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.btnOpenUpiLink:hover {
+  background: #b3884e;
+  color: #ffffff;
 }

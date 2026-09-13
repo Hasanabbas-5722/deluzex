@@ -32,6 +32,7 @@ export interface RazorpayOptions {
     confirm_close?: boolean;
     backdropclose?: boolean;
   };
+  [key: string]: any;
 }
 
 export interface RazorpaySuccessResponse {
