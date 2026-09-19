@@ -16,12 +16,39 @@ export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { sidebarOpen, toggleSidebar } = useSidebar();
-  const { isAdmin } = useAuth();
+  const { isAuthenticated, user, isAdmin } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { cartItems } = useSelector((state: RootState) => state.cart);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const userRecord = user as Record<string, any> | null;
+  const localAvatar = mounted && typeof window !== "undefined" ? localStorage.getItem("user_avatar") : null;
+  const avatarUrl =
+    userRecord?.avatar_url ||
+    userRecord?.avatar ||
+    userRecord?.image_url ||
+    userRecord?.image ||
+    userRecord?.profile_image ||
+    userRecord?.photo_url ||
+    userRecord?.picture ||
+    localAvatar;
+
+  useEffect(() => {
+    setAvatarError(false);
+  }, [avatarUrl]);
+
+  const firstName = userRecord?.first_name || (typeof userRecord?.name === "string" ? userRecord.name.split(" ")[0] : "");
+  const lastName = userRecord?.last_name || (typeof userRecord?.name === "string" ? userRecord.name.split(" ").slice(1).join(" ") : "");
+  const displayName = [firstName, lastName].filter(Boolean).join(" ") || userRecord?.email || "My Profile";
+  const initial = (firstName?.[0] || userRecord?.email?.[0] || "U").toUpperCase();
 
   const isHome = pathname === "/";
 
@@ -148,9 +175,32 @@ export default function Header() {
           </svg>
         </button>
 
-        <Link href="/dashboard/profile" className={styles.userIcon} aria-label="My Profile">
-          <Image src="/images/avatar_woman_1784107804209.jpg" alt="User" width={24} height={24} className={styles.userAvatar} />
-        </Link>
+        {mounted && isAuthenticated ? (
+          <Link href="/dashboard/profile" className={styles.userIcon} aria-label={displayName}>
+            {avatarUrl && !avatarError ? (
+              <Image
+                src={avatarUrl}
+                alt={displayName}
+                width={28}
+                height={28}
+                unoptimized
+                className={styles.userAvatar}
+                onError={() => setAvatarError(true)}
+              />
+            ) : (
+              <span className={styles.userInitials} title={displayName}>
+                {initial}
+              </span>
+            )}
+          </Link>
+        ) : (
+          <Link href="/login" className={styles.iconBtn} aria-label="Sign In / Login">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </Link>
+        )}
         <div className={styles.cartIconWrapper}>
           <button className={styles.iconBtn} onClick={() => dispatch(openCart())} aria-label="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

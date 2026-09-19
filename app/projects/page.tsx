@@ -242,10 +242,10 @@ export default function Projects() {
                 project.image_url || "/images/project_lounge_1784107767735.jpg";
 
               return (
-                <div
+                <Link
                   key={project.id || project._id}
+                  href={`/projects/${project._id || project.id}`}
                   className={styles.projectCard}
-                  onClick={() => setSelectedProject(project)}
                 >
                   <Image
                     src={coverImg}
@@ -277,7 +277,7 @@ export default function Projects() {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

@@ -104,9 +104,18 @@ export interface Project {
   installations_count?: string | null;
   image_url?: string;
   gallery_images?: string[];
+  year?: string | null;
+  scope?: string | null;
+  area?: string | null;
+  client?: string | null;
   is_featured?: boolean;
   sequence?: number;
   created_at?: string;
+}
+
+export interface ProductSpecification {
+  key: string;
+  value: string;
 }
 
 export interface Product {
@@ -119,7 +128,7 @@ export interface Product {
   description?: string;
   reviews_count?: number;
   product_title: string;
-  product_price: string;
+  product_price: string | number;
   product_description: string;
   product_category: string;
   product_material?: string;
@@ -132,6 +141,24 @@ export interface Product {
   is_new_arrival?: boolean;
   product_main_image?: string;
   product_images?: string[];
+
+  // Technical Specifications & Reference Design Fields
+  sku?: string;
+  stock_status?: string;
+  in_stock?: boolean;
+  price_prefix?: string;
+  price_note?: string;
+  dimensions?: string;
+  finish?: string;
+  material?: string;
+  colorway?: string;
+  piece_weight?: string;
+  care?: string;
+  moq_rule?: string;
+  replenishment?: string;
+  whatsapp_number?: string;
+  phone_number?: string;
+  specifications?: ProductSpecification[];
 }
 
 export interface UserProfile {
@@ -686,13 +713,28 @@ export async function fetchProjects(queryParams?: URLSearchParams | string): Pro
 }
 
 export async function fetchProjectById(id: string | number): Promise<Project | null> {
+  const strId = String(id);
   try {
-    const res = await fetch(`${API_BASE_URL}/projects/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/projects/${encodeURIComponent(strId)}`, {
       cache: "no-store",
     });
-    if (!res.ok) throw new Error(`Failed to fetch project ${id}`);
-    const data = await res.json();
-    return data.data || data || null;
+    if (res.ok) {
+      const data = await res.json();
+      return data.data || data || null;
+    }
+  } catch {
+    // fallback
+  }
+
+  try {
+    const all = await fetchProjects();
+    const found = all.find(
+      (p) =>
+        String(p._id) === strId ||
+        String(p.id) === strId ||
+        p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") === strId.toLowerCase()
+    );
+    return found || null;
   } catch (error) {
     logger.error("API", `Error fetching project ${id}:`, error);
     return null;

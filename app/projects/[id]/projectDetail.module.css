@@ -1,0 +1,449 @@
+/* ==========================================================================
+   PROJECT DETAIL PAGE
+   Matches Figma design:
+   - Hero with full-bleed background & floating glassmorphism card
+   - Metadata bar (Year, Project Type, Scope)
+   - Gallery images: 2-column grid on laptop/desktop, 1-column stacked on mobile
+   ========================================================================== */
+
+.main {
+  width: 100%;
+  min-height: 100vh;
+  background: #FAFAF8;
+}
+
+/* ===================== HERO SECTION ===================== */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 130px 24px 60px;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+}
+
+.backBtn {
+  position: absolute;
+  top: 90px;
+  left: 32px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.backBtn:hover {
+  background: rgba(200, 155, 96, 0.85);
+  transform: translateX(-2px);
+}
+
+/* Floating Card */
+.heroCard {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 780px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  padding: 44px 40px 36px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.cardCategory {
+  font-family: var(--font-libre), serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #C89B60;
+  margin: 0 0 10px;
+}
+
+.cardTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 46px;
+  font-weight: 400;
+  color: #2B2B2B;
+  line-height: 1.15;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.cardDivider {
+  width: 36px;
+  height: 2px;
+  background: #C89B60;
+  margin: 0 auto 14px;
+  border-radius: 2px;
+}
+
+.cardSubtitle {
+  font-size: 14px;
+  color: #888888;
+  font-style: italic;
+  margin: 0 0 16px;
+}
+
+.cardDescription {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555555;
+  max-width: 620px;
+  margin: 0 auto 28px;
+}
+
+/* 3-column Meta Bar */
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 24px;
+  gap: 16px;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.metaItem:last-child {
+  border-right: none;
+}
+
+.metaLabel {
+  font-size: 12px;
+  color: #888888;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metaValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2B2B2B;
+}
+
+/* ===================== GALLERY SECTION ===================== */
+.gallerySection {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 32px 90px;
+  width: 100%;
+}
+
+.galleryHeader {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.galleryTagline {
+  font-family: var(--font-libre), serif;
+  font-size: 14px;
+  color: #C89B60;
+  font-style: italic;
+  margin: 0 0 6px;
+}
+
+.galleryTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #2B2B2B;
+  margin: 0;
+}
+
+/* LAPTOP / DESKTOP VIEW: 2 GRID ITEMS IN ONE ROW */
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  width: 100%;
+}
+
+.galleryCard {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #EFEFEF;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  cursor: pointer;
+}
+
+.galleryCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+}
+
+.galleryImg {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.galleryCard:hover .galleryImg {
+  transform: scale(1.03);
+}
+
+.galleryOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 60%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  color: #ffffff;
+}
+
+.galleryCard:hover .galleryOverlay {
+  opacity: 1;
+}
+
+.zoomIcon {
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2B2B2B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================== INQUIRY CTA ===================== */
+.inquirySection {
+  background: #F4EFEA;
+  border-top: 1px solid rgba(200, 155, 96, 0.2);
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.inquiryInner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.inquiryTitle {
+  font-family: var(--font-libre), serif;
+  font-size: 32px;
+  color: #2B2B2B;
+  font-weight: 400;
+  margin: 0 0 12px;
+}
+
+.inquiryDesc {
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.inquiryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #C89B60;
+  color: #ffffff;
+  padding: 14px 36px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.inquiryBtn:hover {
+  background: #b28850;
+}
+
+/* ===================== LIGHTBOX MODAL ===================== */
+.lightboxModal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: background 0.2s;
+}
+
+.lightboxClose:hover {
+  background: #C89B60;
+}
+
+.lightboxImgWrapper {
+  position: relative;
+  width: 90vw;
+  max-width: 1100px;
+  height: 80vh;
+}
+
+/* ===================== RESPONSIVE / MOBILE ===================== */
+@media (max-width: 1024px) {
+  .hero {
+    padding: 120px 20px 50px;
+    min-height: 500px;
+  }
+
+  .cardTitle {
+    font-size: 38px;
+  }
+
+  .galleryCard {
+    height: 360px;
+  }
+}
+
+/* MOBILE VIEW: SHOW ALL IMAGES IN SAME STRUCTURE (1-COLUMN STACKED) */
+@media (max-width: 768px) {
+  .hero {
+    padding: 100px 16px 40px;
+    min-height: 440px;
+  }
+
+  .backBtn {
+    top: 75px;
+    left: 16px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .heroCard {
+    padding: 28px 20px 24px;
+    border-radius: 18px;
+  }
+
+  .cardCategory {
+    font-size: 11px;
+  }
+
+  .cardTitle {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .cardSubtitle {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .cardDescription {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .metaGrid {
+    gap: 8px;
+    padding-top: 18px;
+  }
+
+  .metaItem {
+    padding: 0 6px;
+  }
+
+  .metaLabel {
+    font-size: 10px;
+  }
+
+  .metaValue {
+    font-size: 12px;
+  }
+
+  .gallerySection {
+    padding: 36px 16px 60px;
+  }
+
+  .galleryTitle {
+    font-size: 24px;
+  }
+
+  /* 1-column stacked in mobile view as requested */
+  .galleryGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .galleryCard {
+    height: 260px;
+    min-height: 220px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardTitle {
+    font-size: 24px;
+  }
+
+  .galleryCard {
+    height: 220px;
+    min-height: 200px;
+    border-radius: 12px;
+  }
+}

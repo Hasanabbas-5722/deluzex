@@ -395,6 +395,21 @@ export default function AdminProducts() {
                         <div style={{ fontWeight: 600, color: "var(--admin-primary)", fontSize: "0.95rem" }}>
                           {prod.product_title}
                         </div>
+                        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginTop: "4px", flexWrap: "wrap" }}>
+                          <span style={{ fontSize: "0.75rem", color: "#64748B", fontWeight: 600 }}>
+                            SKU: {prod.sku || "ME-DP-105"}
+                          </span>
+                          <span style={{
+                            fontSize: "0.7rem",
+                            padding: "1px 6px",
+                            borderRadius: "4px",
+                            fontWeight: 700,
+                            background: prod.stock_status?.toLowerCase().includes("out") ? "#FEE2E2" : prod.stock_status?.toLowerCase().includes("order") ? "#FFEDD5" : "#DCFCE7",
+                            color: prod.stock_status?.toLowerCase().includes("out") ? "#991B1B" : prod.stock_status?.toLowerCase().includes("order") ? "#9A3412" : "#166534",
+                          }}>
+                            {prod.stock_status || "IN STOCK"}
+                          </span>
+                        </div>
                         {prod.product_description && (
                           <div
                             style={{
@@ -404,7 +419,7 @@ export default function AdminProducts() {
                               overflow: "hidden",
                               textOverflow: "ellipsis",
                               maxWidth: "340px",
-                              marginTop: "2px",
+                              marginTop: "3px",
                             }}
                           >
                             {prod.product_description}
@@ -430,6 +445,11 @@ export default function AdminProducts() {
                         <span style={{ fontWeight: 700, color: "var(--admin-primary)", fontSize: "0.95rem" }}>
                           ₹{Number(prod.product_price || 0).toLocaleString()}
                         </span>
+                        {prod.price_note && (
+                          <div style={{ fontSize: "0.72rem", color: "#64748B", marginTop: "2px" }}>
+                            {prod.price_note}
+                          </div>
+                        )}
                       </td>
 
                       {/* DYNAMIC NEW ARRIVAL TOGGLE BUTTON & BADGE */}
@@ -452,7 +472,6 @@ export default function AdminProducts() {
                             border: isNewArrival ? "1px solid #F59E0B" : "1px solid var(--admin-border)",
                             background: isNewArrival ? "#FFFBEB" : "#ffffff",
                             color: isNewArrival ? "#B45309" : "#64748B",
-                            boxShadow: isNewArrival ? "0 2px 8px rgba(245, 158, 11, 0.15)" : "none",
                           }}
                           onMouseEnter={(e) => {
                             if (!isNewArrival) {
@@ -487,6 +506,9 @@ export default function AdminProducts() {
 
                       <td style={{ textAlign: "right" }}>
                         <div style={{ display: "flex", gap: "0.6rem", justifyContent: "flex-end", alignItems: "center" }}>
+                          <Link href={`/product/${prodId}`} target="_blank" className={styles.actionLink} style={{ color: "#E0531C", borderColor: "rgba(224, 83, 28, 0.3)" }}>
+                            View
+                          </Link>
                           <Link href={`/admin/products/edit/${prodId}`} className={styles.actionLink}>
                             <Pencil size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: "3px" }} />
                             Edit

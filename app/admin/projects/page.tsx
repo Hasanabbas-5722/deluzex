@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "../admin.module.css";
 import {
   Plus,
@@ -29,6 +30,7 @@ import {
   deleteProject,
   toggleProjectFeatured,
   swapProjectSequence,
+  uploadCmsImage,
   Project,
 } from "../../services/api";
 
@@ -64,10 +66,18 @@ export default function AdminProjectsPage() {
     subtitle: "",
     description: "",
     installations_count: "",
+    year: "2024",
+    scope: "Architectural Lighting Design",
+    area: "",
     image_url: "",
     is_featured: false,
     sequence: 1,
   });
+
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [newGalleryUrl, setNewGalleryUrl] = useState("");
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const galleryFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [imageTab, setImageTab] = useState<"file" | "url">("file");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -105,10 +115,15 @@ export default function AdminProjectsPage() {
       subtitle: "",
       description: "",
       installations_count: "12 Custom Fixtures",
+      year: new Date().getFullYear().toString(),
+      scope: "Architectural Lighting Design",
+      area: "",
       image_url: "",
       is_featured: false,
       sequence: nextSeq,
     });
+    setGalleryImages([]);
+    setNewGalleryUrl("");
     setSelectedFile(null);
     setPreviewUrl("");
     setImageTab("file");
@@ -126,10 +141,21 @@ export default function AdminProjectsPage() {
       subtitle: project.subtitle || "",
       description: project.description || "",
       installations_count: project.installations_count || "",
+      year: project.year || "2024",
+      scope: project.scope || "Architectural Lighting Design",
+      area: project.area || "",
       image_url: project.image_url || "",
       is_featured: Boolean(project.is_featured),
       sequence: project.sequence || 1,
     });
+    setGalleryImages(
+      project.gallery_images && project.gallery_images.length > 0
+        ? project.gallery_images
+        : project.image_url
+        ? [project.image_url]
+        : []
+    );
+    setNewGalleryUrl("");
     setSelectedFile(null);
     setPreviewUrl(project.image_url || "");
     setImageTab(
@@ -147,7 +173,45 @@ export default function AdminProjectsPage() {
     setErrorMsg("");
     setSelectedFile(null);
     setPreviewUrl("");
+    setGalleryImages([]);
+    setNewGalleryUrl("");
   }
+
+  const handleAddGalleryUrl = () => {
+    if (!newGalleryUrl.trim()) return;
+    setGalleryImages((prev) => [...prev, newGalleryUrl.trim()]);
+    setNewGalleryUrl("");
+  };
+
+  const handleGalleryFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const files = Array.from(e.target.files);
+    setUploadingGallery(true);
+    setErrorMsg("");
+    try {
+      for (const file of files) {
+        const url = await uploadCmsImage(file);
+        setGalleryImages((prev) => [...prev, url]);
+      }
+      setSuccessMsg(`Uploaded ${files.length} photo(s) to gallery.`);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to upload gallery image");
+    } finally {
+      setUploadingGallery(false);
+      if (galleryFileInputRef.current) galleryFileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveGalleryImage = (indexToRemove: number) => {
+    setGalleryImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleSetCover = (url: string) => {
+    setFormData((prev) => ({ ...prev, image_url: url }));
+    setPreviewUrl(url);
+    setSelectedFile(null);
+    setSuccessMsg("Cover image updated to selected gallery photo.");
+  };
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
@@ -183,13 +247,19 @@ export default function AdminProjectsPage() {
       if (formData.subtitle.trim()) submitData.append("subtitle", formData.subtitle.trim());
       if (formData.description.trim()) submitData.append("description", formData.description.trim());
       if (formData.installations_count.trim()) submitData.append("installations_count", formData.installations_count.trim());
+      if (formData.year.trim()) submitData.append("year", formData.year.trim());
+      if (formData.scope.trim()) submitData.append("scope", formData.scope.trim());
+      if (formData.area.trim()) submitData.append("area", formData.area.trim());
       submitData.append("is_featured", String(formData.is_featured));
       submitData.append("sequence", String(formData.sequence || 1));
+      submitData.append("gallery_images", JSON.stringify(galleryImages));
 
       if (selectedFile) {
         submitData.append("image_file", selectedFile);
       } else if (formData.image_url.trim()) {
         submitData.append("image_url", formData.image_url.trim());
+      } else if (galleryImages.length > 0) {
+        submitData.append("image_url", galleryImages[0]);
       } else {
         submitData.append("image_url", "/images/project_lounge_1784107767735.jpg");
       }
@@ -228,8 +298,12 @@ export default function AdminProjectsPage() {
       submitData.append("subtitle", formData.subtitle.trim());
       submitData.append("description", formData.description.trim());
       submitData.append("installations_count", formData.installations_count.trim());
+      submitData.append("year", formData.year.trim());
+      submitData.append("scope", formData.scope.trim());
+      submitData.append("area", formData.area.trim());
       submitData.append("is_featured", String(formData.is_featured));
       submitData.append("sequence", String(formData.sequence || 1));
+      submitData.append("gallery_images", JSON.stringify(galleryImages));
 
       if (selectedFile) {
         submitData.append("image_file", selectedFile);
@@ -501,6 +575,44 @@ export default function AdminProjectsPage() {
                       placeholder="e.g. 18 Bespoke Fixtures"
                       value={formData.installations_count}
                       onChange={(e) => setFormData({ ...formData, installations_count: e.target.value })}
+                      className={styles.formInput}
+                      style={{ padding: "0.85rem 1rem", fontSize: "0.95rem" }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem" }}>
+                  <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                    <label className={styles.formLabel}>Year / Completion</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 2024"
+                      value={formData.year}
+                      onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                      className={styles.formInput}
+                      style={{ padding: "0.85rem 1rem", fontSize: "0.95rem" }}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                    <label className={styles.formLabel}>Scope of Work</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Architectural Lighting Design"
+                      value={formData.scope}
+                      onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
+                      className={styles.formInput}
+                      style={{ padding: "0.85rem 1rem", fontSize: "0.95rem" }}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                    <label className={styles.formLabel}>Area / Scale</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 8,500 sq ft"
+                      value={formData.area}
+                      onChange={(e) => setFormData({ ...formData, area: e.target.value })}
                       className={styles.formInput}
                       style={{ padding: "0.85rem 1rem", fontSize: "0.95rem" }}
                     />
@@ -816,6 +928,203 @@ export default function AdminProjectsPage() {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* 3. Project Gallery Images Section */}
+                <div style={{ borderTop: "1px solid var(--admin-border)", paddingTop: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 700, color: "var(--admin-primary)", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <ImageIcon size={18} color="#C49A45" />
+                        <span>3. Project Gallery Showcase Images ({galleryImages.length})</span>
+                      </h3>
+                      <p style={{ margin: "0.25rem 0 0", fontSize: "0.825rem", color: "var(--admin-text-muted)" }}>
+                        Photos rendered on the project showcase page (2-column grid on laptop/desktop, 1-column stacked on mobile).
+                      </p>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                      <button
+                        type="button"
+                        onClick={() => galleryFileInputRef.current?.click()}
+                        disabled={uploadingGallery}
+                        className={styles.secondaryButton}
+                        style={{
+                          fontSize: "0.825rem",
+                          padding: "0.45rem 0.85rem",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "6px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Upload size={14} />
+                        <span>{uploadingGallery ? "Uploading..." : "Upload Photos"}</span>
+                      </button>
+                      <input
+                        ref={galleryFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        style={{ display: "none" }}
+                        onChange={handleGalleryFileUpload}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Add by URL input */}
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <input
+                      type="text"
+                      placeholder="Add photo by URL (e.g. /images/... or https://...)"
+                      value={newGalleryUrl}
+                      onChange={(e) => setNewGalleryUrl(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddGalleryUrl();
+                        }
+                      }}
+                      className={styles.formInput}
+                      style={{ padding: "0.6rem 0.85rem", fontSize: "0.85rem", flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddGalleryUrl}
+                      className={styles.primaryButton}
+                      style={{ padding: "0.6rem 1rem", fontSize: "0.85rem", whiteSpace: "nowrap" }}
+                    >
+                      <Plus size={14} /> Add URL
+                    </button>
+                  </div>
+
+                  {/* Gallery Thumbnails Grid */}
+                  {galleryImages.length === 0 ? (
+                    <div
+                      style={{
+                        padding: "1.5rem",
+                        textAlign: "center",
+                        background: "#f8fafc",
+                        borderRadius: "10px",
+                        border: "1px dashed var(--admin-border)",
+                        color: "var(--admin-text-muted)",
+                        fontSize: "0.85rem",
+                      }}
+                    >
+                      No gallery photos added yet. Upload files or paste URLs above.
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                        gap: "0.75rem",
+                        maxHeight: "340px",
+                        overflowY: "auto",
+                        padding: "4px",
+                      }}
+                    >
+                      {galleryImages.map((imgUrl, imgIdx) => {
+                        const isCover = formData.image_url === imgUrl;
+                        return (
+                          <div
+                            key={imgIdx}
+                            style={{
+                              position: "relative",
+                              height: "110px",
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              border: isCover ? "2px solid #C49A45" : "1px solid var(--admin-border)",
+                              background: "#000000",
+                              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+                            }}
+                          >
+                            <Image
+                              src={imgUrl}
+                              alt={`Gallery ${imgIdx + 1}`}
+                              fill
+                              unoptimized
+                              style={{ objectFit: "cover" }}
+                            />
+
+                            {isCover && (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  top: "6px",
+                                  left: "6px",
+                                  background: "#C49A45",
+                                  color: "#000000",
+                                  fontSize: "0.65rem",
+                                  fontWeight: 700,
+                                  padding: "2px 6px",
+                                  borderRadius: "4px",
+                                  zIndex: 2,
+                                }}
+                              >
+                                Cover
+                              </span>
+                            )}
+
+                            <div
+                              style={{
+                                position: "absolute",
+                                inset: 0,
+                                background: "rgba(0,0,0,0.45)",
+                                opacity: 0,
+                                transition: "opacity 0.2s",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "6px",
+                                zIndex: 3,
+                              }}
+                              onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+                              onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
+                            >
+                              {!isCover && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleSetCover(imgUrl)}
+                                  title="Set as Main Cover"
+                                  style={{
+                                    background: "#ffffff",
+                                    color: "#111827",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    padding: "4px 6px",
+                                    fontSize: "0.7rem",
+                                    fontWeight: 600,
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Make Cover
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveGalleryImage(imgIdx)}
+                                title="Remove Image"
+                                style={{
+                                  background: "#ef4444",
+                                  color: "#ffffff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  padding: "5px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1247,11 +1556,14 @@ export default function AdminProjectsPage() {
                         <div style={{ fontWeight: 600, color: "var(--admin-primary)", fontSize: "0.95rem" }}>
                           {project.title}
                         </div>
-                        {project.subtitle && (
-                          <div style={{ fontSize: "0.8rem", color: "var(--admin-text-muted)", marginTop: "2px" }}>
-                            {project.subtitle}
-                          </div>
-                        )}
+                        <div style={{ fontSize: "0.8rem", color: "var(--admin-text-muted)", marginTop: "2px", display: "flex", gap: "6px", alignItems: "center" }}>
+                          {project.subtitle && <span>{project.subtitle}</span>}
+                          {project.gallery_images && project.gallery_images.length > 0 && (
+                            <span style={{ color: "#C49A45", fontWeight: 600, fontSize: "0.75rem" }}>
+                              • {project.gallery_images.length} photo{project.gallery_images.length > 1 ? "s" : ""}
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       {/* Location */}
@@ -1312,6 +1624,14 @@ export default function AdminProjectsPage() {
                       {/* Actions */}
                       <td style={{ textAlign: "right" }}>
                         <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
+                          <Link
+                            href={`/projects/${projId}`}
+                            target="_blank"
+                            className={styles.actionButton}
+                            title="View Live Project Showcase"
+                          >
+                            <Eye size={15} />
+                          </Link>
                           <button
                             type="button"
                             onClick={() => startEdit(project)}

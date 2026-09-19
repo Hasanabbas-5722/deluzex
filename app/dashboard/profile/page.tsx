@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
@@ -25,7 +25,58 @@ function getInitialUserValue(key: string, defaultValue: string, userObj?: Record
 
 export default function ProfilePage() {
   const { user, login } = useAuth();
-  const userRecord = user as Record<string, string> | null;
+  const userRecord = user as Record<string, any> | null;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarError, setAvatarError] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedAvatar = localStorage.getItem("user_avatar");
+      if (storedAvatar) {
+        setAvatarPreview(storedAvatar);
+      } else if (userRecord?.avatar_url || userRecord?.avatar || userRecord?.image || userRecord?.image_url) {
+        setAvatarPreview(userRecord?.avatar_url || userRecord?.avatar || userRecord?.image || userRecord?.image_url);
+      }
+    }
+  }, [user]);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      showToast("Please select a valid image file.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showToast("Image size should be less than 5MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      setAvatarPreview(result);
+      setAvatarError(false);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user_avatar", result);
+        try {
+          const stored = JSON.parse(localStorage.getItem("user") || "{}");
+          const updated = { ...stored, avatar_url: result };
+          localStorage.setItem("user", JSON.stringify(updated));
+          const token = localStorage.getItem("authToken") || "";
+          login(token, updated);
+        } catch {
+          // ignore
+        }
+      }
+      showToast("Profile photo updated successfully!");
+    };
+    reader.readAsDataURL(file);
+  };
 
   const [firstName, setFirstName] = useState(() =>
     getInitialUserValue("first_name", userRecord?.first_name || userRecord?.name?.split(" ")[0] || "Hasanabbas", userRecord)
@@ -176,12 +227,54 @@ export default function ProfilePage() {
       {/* Hero Profile Card */}
       <div className={styles.profileHero}>
         <div className={styles.heroLeft}>
-          <div className={styles.avatarWrapper}>
-            <Image
-              src="/images/avatar_woman_1784107804209.jpg"
-              alt="Profile"
-              fill
-              className={styles.avatarImg}
+          <div style={{ position: "relative" }}>
+            <div className={styles.avatarWrapper}>
+              {avatarPreview && !avatarError ? (
+                <Image
+                  src={avatarPreview}
+                  alt="Profile"
+                  fill
+                  unoptimized
+                  className={styles.avatarImg}
+                  onError={() => setAvatarError(true)}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "linear-gradient(135deg, #C89B60, #856117)",
+                    color: "#ffffff",
+                    fontSize: "2rem",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {(firstName?.[0] || email?.[0] || "U").toUpperCase()}
+                </div>
+              )}
+            </div>
+            <button
+              type="button"
+              className={styles.avatarEditBtn}
+              onClick={() => fileInputRef.current?.click()}
+              title="Change profile picture"
+              aria-label="Change profile picture"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleAvatarChange}
             />
           </div>
           <div className={styles.heroInfo}>

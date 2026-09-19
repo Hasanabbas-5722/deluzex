@@ -145,12 +145,12 @@ export default async function Home() {
         <div className={styles.projectGrid}>
           {featuredProjects && featuredProjects.length > 0 ? (
             featuredProjects.slice(0, 2).map((proj) => (
-              <Link key={proj.id || proj._id} href="/projects" className={styles.projectCard}>
+              <Link key={proj.id || proj._id} href={`/projects/${proj._id || proj.id}`} className={styles.projectCard}>
                 <Image
                   src={proj.image_url || "/images/project_lounge_1784107767735.jpg"}
                   alt={proj.title}
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 50vw, 50vw"
                   style={{ objectFit: "cover" }}
                 />
                 <div className={styles.projectCardLabel}>
@@ -173,7 +173,7 @@ export default async function Home() {
                   src="/images/project_lounge_1784107767735.jpg"
                   alt="Luxury Villa Residence"
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 50vw, 50vw"
                   style={{ objectFit: "cover" }}
                 />
                 <div className={styles.projectCardLabel}>
@@ -193,7 +193,7 @@ export default async function Home() {
                   src="/images/project_lobby_1784107778993.jpg"
                   alt="Grand Hotel Lobby"
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 50vw, 50vw"
                   style={{ objectFit: "cover" }}
                 />
                 <div className={styles.projectCardLabel}>

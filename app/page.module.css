@@ -1583,45 +1583,63 @@
   }
 
   .projectGrid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     width: 100%;
     max-width: 100%;
     height: auto;
-    gap: 16px;
+    gap: 14px;
   }
 
   .projectCard {
     flex: none;
     width: 100%;
-    height: 250px;
-    min-height: 250px;
-    border-radius: 16px;
+    height: 240px;
+    min-height: 200px;
+    border-radius: 14px;
     position: relative;
     overflow: hidden;
     display: block;
   }
 
   .projectCardLabel {
-    bottom: 14px;
-    left: 14px;
-    right: 14px;
-    padding: 12px 16px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 10px 12px;
     border-radius: 10px;
     width: auto;
+    gap: 8px;
+  }
+
+  .projectCardLabelText {
+    min-width: 0;
+    overflow: hidden;
   }
 
   .projectCardLabelTitle {
-    font-size: 15px;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .projectCardLabelSub {
-    font-size: 12px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .projectArrowBtn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .projectArrowBtn svg {
+    width: 14px;
+    height: 14px;
   }
 
   .btnExploreProjects {
@@ -1823,45 +1841,65 @@
   }
 
   .projectGrid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     width: 100%;
     max-width: 100%;
     height: auto;
-    gap: 14px;
+    gap: 10px;
   }
 
   .projectCard {
     flex: none;
     width: 100%;
-    height: 220px;
-    min-height: 220px;
-    border-radius: 14px;
+    height: 190px;
+    min-height: 170px;
+    border-radius: 12px;
     position: relative;
     overflow: hidden;
     display: block;
   }
 
   .projectCardLabel {
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    padding: 10px 14px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    padding: 8px 10px;
     border-radius: 8px;
     width: auto;
+    gap: 6px;
+  }
+
+  .projectCardLabelText {
+    min-width: 0;
+    overflow: hidden;
   }
 
   .projectCardLabelTitle {
-    font-size: 13px;
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .projectCardLabelSub {
-    font-size: 11px;
+    font-size: 10px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .projectArrowBtn {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .projectArrowBtn svg {
+    width: 12px;
+    height: 12px;
   }
 
   .btnExploreProjects {
