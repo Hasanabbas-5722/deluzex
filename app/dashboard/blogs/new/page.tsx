@@ -5,9 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "./newBlog.module.css";
 import { createBlog } from "../../../services/api";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function NewBlog() {
   const router = useRouter();
+  const { user, isAuthenticated, openLoginModal } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState("");
@@ -41,6 +43,11 @@ export default function NewBlog() {
   };
 
   const handleSave = async (status: "Draft" | "Published") => {
+    if (!isAuthenticated) {
+      openLoginModal(undefined, "Please sign in to publish an article.");
+      return;
+    }
+
     if (!title.trim()) {
       alert("Please enter a blog title.");
       return;
@@ -49,13 +56,19 @@ export default function NewBlog() {
     setIsSubmitting(true);
     setFeedback(null);
 
+    const authorName =
+      (user as any)?.name ||
+      `${(user as any)?.first_name || ""} ${(user as any)?.last_name || ""}`.trim() ||
+      (user as any)?.email ||
+      "Contributor";
+
     try {
       await createBlog({
         title: title.trim(),
         category,
         excerpt: excerpt.trim() || title.trim(),
         content: content.trim() || "A captivating insight into luxury architectural lighting.",
-        author: "De Luzex Team",
+        author: authorName,
         read_time: "5 min read",
         status,
         image: coverImage.startsWith("blob:") ? undefined : coverImage,

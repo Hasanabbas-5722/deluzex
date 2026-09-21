@@ -318,7 +318,7 @@ export default function Login() {
             {emailError && <span className={styles.errorText}>{emailError}</span>}
           </div>
           <div className={styles.formGroup}>
-            <label>Password</label>
+            <label>Create Password</label>
             <input 
               type="password" 
               placeholder="••••••••" 
@@ -363,12 +363,6 @@ export default function Login() {
               {isLogin ? "Register now" : "Sign in here"}
             </button>
           </p>
-        </div>
-
-        <div style={{ marginTop: '1.25rem', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '1rem' }}>
-          <Link href="/admin/login" style={{ fontSize: '0.8rem', color: '#C49A45', textDecoration: 'none', fontWeight: 600 }}>
-            Administrator Portal &rarr;
-          </Link>
         </div>
       </div>
     </main>

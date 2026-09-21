@@ -13,13 +13,16 @@ import {
   addToWishlist,
   removeFromWishlist,
   checkWishlistStatus,
+  fetchProductReviews,
+  submitProductReview,
+  ProductReviewsResponse,
   Product,
 } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
 export default function ProductDetail() {
   const dispatch = useDispatch();
-  const { user, isAuthenticated, openLoginModal } = useAuth();
+  const { user, isAuthenticated, isAdmin, openLoginModal } = useAuth();
   const userEmail = (user as Record<string, string>)?.email || "";
   const params = useParams();
   const [wishlistItemId, setWishlistItemId] = useState<string | null>(null);
@@ -29,6 +32,20 @@ export default function ProductDetail() {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Reviews State
+  const [reviewsStats, setReviewsStats] = useState<ProductReviewsResponse | null>(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewSuccessMsg, setReviewSuccessMsg] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewHoverRating, setReviewHoverRating] = useState(0);
+  const [reviewForm, setReviewForm] = useState({
+    name: "",
+    email: "",
+    title: "",
+    text: "",
+  });
+
   // UI State
   const [activeThumb, setActiveThumb] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -37,6 +54,7 @@ export default function ProductDetail() {
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [inquirySuccess, setInquirySuccess] = useState(false);
   const [inquiryLoading, setInquiryLoading] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
   const [inquiryForm, setInquiryForm] = useState({
     name: "",
     email: "",
@@ -56,6 +74,11 @@ export default function ProductDetail() {
         ]);
         setProduct(prodData);
         setRelatedProducts(relatedData);
+
+        if (prodData) {
+          const reviewsData = await fetchProductReviews(String(prodData.id || params.slug));
+          setReviewsStats(reviewsData);
+        }
       } catch (error) {
         console.error("Failed to fetch product:", error);
       } finally {
@@ -94,10 +117,6 @@ export default function ProductDetail() {
     // Fallback placeholder if no images
     if (images.length === 0) {
       images.push("/images/lamp_modern_tall_1784107732736.jpg");
-    }
-    // Ensure we have at least 4 items for the thumbnail row preview if available
-    while (images.length > 1 && images.length < 4) {
-      images.push(images[0]);
     }
     return images;
   }, [product]);
@@ -163,8 +182,20 @@ export default function ProductDetail() {
 
   const stockBadgeLabel = product.stock_status || (product.in_stock === false ? "OUT OF STOCK" : "IN STOCK");
 
+  const handleOpenInquiryModal = () => {
+    if (!isAuthenticated) {
+      openLoginModal(undefined, "Please sign in to request a quote or trade inquiry.");
+      return;
+    }
+    setInquiryModalOpen(true);
+  };
+
   const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      openLoginModal(undefined, "Please sign in to submit a quote inquiry.");
+      return;
+    }
     setInquiryLoading(true);
     try {
       // Post inquiry to backend contact / inquiry endpoint
@@ -186,6 +217,62 @@ export default function ProductDetail() {
       setInquirySuccess(true);
     } finally {
       setInquiryLoading(false);
+    }
+  };
+
+  const handleOpenReviewModal = () => {
+    if (!isAuthenticated) {
+      openLoginModal(undefined, "Please sign in to write a review.");
+      return;
+    }
+    const defaultName = (user as any)?.name || `${(user as any)?.first_name || ""} ${(user as any)?.last_name || ""}`.trim() || "";
+    const defaultEmail = userEmail || "";
+    setReviewForm((prev) => ({
+      ...prev,
+      name: prev.name || defaultName,
+      email: prev.email || defaultEmail,
+    }));
+    setShowReviewModal(true);
+  };
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      openLoginModal(undefined, "Please sign in to write a review.");
+      return;
+    }
+    if (!product) return;
+    if (!reviewForm.name.trim()) {
+      alert("Please enter your name.");
+      return;
+    }
+    if (!reviewForm.text.trim()) {
+      alert("Please enter your review comments.");
+      return;
+    }
+    setReviewSubmitting(true);
+    try {
+      const res = await submitProductReview({
+        product_id: String(product.id || params.slug),
+        author_name: reviewForm.name.trim(),
+        author_email: reviewForm.email.trim() || undefined,
+        rating: reviewRating,
+        title: reviewForm.title.trim() || undefined,
+        text: reviewForm.text.trim(),
+      });
+      setReviewsStats(res.stats);
+      setReviewSuccessMsg("Thank you! Your review has been submitted.");
+      setTimeout(() => {
+        setShowReviewModal(false);
+        setReviewSuccessMsg("");
+        setReviewForm({ name: "", email: "", title: "", text: "" });
+        setReviewRating(5);
+      }, 1400);
+    } catch (err: any) {
+      console.error("Failed to submit review:", err);
+      alert(err?.message || "Failed to submit review. Please try again.");
+    } finally {
+      setReviewSubmitting(false);
     }
   };
 
@@ -274,8 +361,22 @@ export default function ProductDetail() {
             <div className={styles.divider} />
 
             {/* Technical Specifications Section */}
-            <div className={styles.specsSection}>
-              <div className={styles.specsHeader}>Technical Specifications</div>
+            <div className={styles.specsSection} id="specifications">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.85rem", flexWrap: "wrap", gap: "0.5rem" }}>
+                <div className={styles.specsHeader} style={{ margin: 0 }}>Technical Specifications</div>
+                <button
+                  type="button"
+                  className={styles.btnInlineTechSpec}
+                  onClick={() => setShowPdfModal(true)}
+                  title="View and Download Technical Specification PDF"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                  <span>PDF Datasheet</span>
+                </button>
+              </div>
               <div className={styles.specsList}>
                 {specRows.map(
                   (spec, idx) =>
@@ -308,9 +409,25 @@ export default function ProductDetail() {
               <button
                 type="button"
                 className={styles.btnInquiry}
-                onClick={() => setInquiryModalOpen(true)}
+                onClick={handleOpenInquiryModal}
               >
                 Request Quote / Inquiry
+              </button>
+
+              {/* Technical Specification Button */}
+              <button
+                type="button"
+                className={styles.btnTechSpec}
+                onClick={() => setShowPdfModal(true)}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+                Technical Specification
               </button>
 
               {/* Secondary 2-Column Buttons Row */}
@@ -483,100 +600,288 @@ export default function ProductDetail() {
         </div>
       )}
 
+      {/* ==================== TECHNICAL SPECIFICATION PDF MODAL ==================== */}
+      {showPdfModal && (
+        <div className={styles.modalBackdrop} onClick={() => setShowPdfModal(false)}>
+          <div
+            className={styles.modalContent}
+            style={{ maxWidth: "920px", width: "95%", maxHeight: "90vh", display: "flex", flexDirection: "column" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E0531C" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                <h3 className={styles.modalHeaderTitle}>
+                  Technical Specification — {product.product_title}
+                </h3>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                {product.technical_spec_pdf && (
+                  <>
+                    <a
+                      href={product.technical_spec_pdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.pdfDownloadBtn}
+                      style={{ background: "#F1F5F9", color: "#334155", border: "1px solid #CBD5E1" }}
+                      title="Open PDF in a new browser tab"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      Open Fullscreen
+                    </a>
+                    <a
+                      href={product.technical_spec_pdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className={styles.pdfDownloadBtn}
+                      title="Download PDF directly"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      Download PDF
+                    </a>
+                  </>
+                )}
+                <button
+                  type="button"
+                  className={styles.modalCloseBtn}
+                  onClick={() => setShowPdfModal(false)}
+                  aria-label="Close modal"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.modalBody} style={{ padding: "1.25rem", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column" }}>
+              {product.technical_spec_pdf ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", flex: 1, width: "100%" }}>
+                  <div style={{ width: "100%", height: "70vh", minHeight: "520px", borderRadius: "8px", overflow: "hidden", border: "1px solid #E2E8F0", background: "#f8fafc" }}>
+                    <iframe
+                      src={`${product.technical_spec_pdf}#toolbar=1&navpanes=0`}
+                      title={`Technical Specification - ${product.product_title}`}
+                      style={{ width: "100%", height: "100%", border: "none" }}
+                    />
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.5rem 0.25rem", fontSize: "0.8rem", color: "#64748B", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <span>Official studio technical specification sheet uploaded from Admin.</span>
+                    <div style={{ display: "flex", gap: "1rem" }}>
+                      <a href={product.technical_spec_pdf} target="_blank" rel="noopener noreferrer" style={{ color: "#E0531C", textDecoration: "underline", fontWeight: 600 }}>
+                        Direct PDF Link &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "3.5rem 1.5rem", textAlign: "center", background: "#F8FAFC", borderRadius: "10px", border: "1px dashed #CBD5E1", gap: "1.25rem", margin: "1rem 0" }}>
+                  <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#FEE2E2", color: "#DC2626", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#1E293B", margin: "0 0 0.4rem 0" }}>
+                      No Specification PDF Attached Yet
+                    </h4>
+                    <p style={{ fontSize: "0.875rem", color: "#64748B", maxWidth: "460px", margin: 0, lineHeight: 1.5 }}>
+                      An official technical specification PDF has not been uploaded for this product yet. Admin can upload a PDF directly from the Admin Portal.
+                    </p>
+                  </div>
+
+                  {isAdmin && (
+                    <Link
+                      href={`/admin/products/edit/${product.id || params.slug}`}
+                      style={{ background: "#E0531C", color: "#FFFFFF", padding: "0.65rem 1.35rem", borderRadius: "6px", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", marginTop: "0.25rem" }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                      Upload PDF in Admin Portal &rarr;
+                    </Link>
+                  )}
+
+                  <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", justifyContent: "center", marginTop: "0.5rem" }}>
+                    <a
+                      href={`https://wa.me/${product.whatsapp_number || "918511682031"}?text=${encodeURIComponent(`Hello De Luzex, I would like to request the technical specification brochure for ${product.product_title}.`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ background: "#25D366", color: "#FFFFFF", padding: "0.55rem 1.1rem", borderRadius: "6px", fontSize: "0.82rem", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px" }}
+                    >
+                      Request via WhatsApp
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowPdfModal(false);
+                        handleOpenInquiryModal();
+                      }}
+                      style={{ background: "#FFFFFF", border: "1px solid #CBD5E1", color: "#334155", padding: "0.55rem 1.1rem", borderRadius: "6px", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer" }}
+                    >
+                      Inquire with Studio
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ==================== BOTTOM SECTIONS ==================== */}
       <div className={styles.bottomSections}>
         {/* CUSTOMER REVIEWS */}
         <section className={styles.reviewsSection}>
-          <h2 className={styles.reviewsTitle}>Customer Reviews</h2>
+          <div className={styles.reviewsHeaderRow}>
+            <div>
+              <h2 className={styles.reviewsTitle}>Customer Reviews</h2>
+            </div>
+            <button
+              type="button"
+              className={styles.writeReviewBtn}
+              onClick={handleOpenReviewModal}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+              Write a Review
+            </button>
+          </div>
+
           <div className={styles.ratingSummary}>
             <div className={styles.ratingScore}>
-              <h3>{product.product_rating || 4.8}</h3>
+              <h3>{(reviewsStats?.average_rating ?? (product.product_rating || 4.8)).toFixed(1)}</h3>
               <div className={styles.stars}>
-                {"★".repeat(Math.floor(product.product_rating || 5))}
-                {"☆".repeat(5 - Math.floor(product.product_rating || 5))}
+                {"★".repeat(Math.round(reviewsStats?.average_rating ?? (product.product_rating || 4.8)))}
+                {"☆".repeat(5 - Math.round(reviewsStats?.average_rating ?? (product.product_rating || 4.8)))}
               </div>
-              <p>35 Reviews</p>
+              <p>{reviewsStats?.total_reviews ?? 35} Reviews</p>
             </div>
             <div className={styles.ratingBars}>
-              {[
-                { stars: 5, pct: "85%" },
-                { stars: 4, pct: "10%" },
-                { stars: 3, pct: "5%" },
-                { stars: 2, pct: "0%" },
-                { stars: 1, pct: "0%" },
-              ].map((bar) => (
-                <div key={bar.stars} className={styles.ratingBarRow}>
-                  <span>{bar.stars} Stars</span>
-                  <div className={styles.barTrack}>
-                    <div className={styles.barFill} style={{ width: bar.pct }}></div>
+              {[5, 4, 3, 2, 1].map((stars) => {
+                const barData = reviewsStats?.breakdown?.[String(stars)] ?? {
+                  count: stars === 5 ? 30 : stars === 4 ? 3 : stars === 3 ? 2 : 0,
+                  pct: stars === 5 ? 85 : stars === 4 ? 10 : stars === 3 ? 5 : 0,
+                };
+                return (
+                  <div key={stars} className={styles.ratingBarRow}>
+                    <span>{stars} Stars</span>
+                    <div className={styles.barTrack}>
+                      <div className={styles.barFill} style={{ width: `${barData.pct}%`, transition: "width 0.4s ease-out" }}></div>
+                    </div>
+                    <span className={styles.barCount}>{barData.pct}%</span>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
           <div className={styles.reviewList}>
-            {[
-              {
-                name: "Sarah Williams",
-                date: "Oct 12, 2025",
-                initial: "SW",
-                text: "Absolutely stunning quality. The finish and weight exceeded our expectations for our boutique hotel project. Highly recommended.",
-              },
-              {
-                name: "Paul Sanderson",
-                date: "Sep 28, 2025",
-                initial: "PS",
-                text: "Very high quality materials. The earthy slip finish looks incredibly premium in person. Safe packaging ensured zero breakage.",
-              },
-              ...(showAllReviews
-                ? [
-                    {
-                      name: "Elena Rostova",
-                      date: "Aug 15, 2025",
-                      initial: "ER",
-                      text: "Exceeded all our design expectations! The clay firing durability is top-notch for high-frequency dining service.",
-                    },
-                  ]
-                : []),
-            ].map((review, i) => (
-              <div key={i} className={styles.reviewItem}>
-                <div className={styles.reviewHeader}>
-                  <div className={styles.reviewUser}>
-                    <div className={styles.avatar}>{review.initial}</div>
-                    <div>
-                      <div className={styles.reviewName}>{review.name}</div>
-                      <div className={styles.reviewDate}>{review.date}</div>
+            {(reviewsStats?.reviews && reviewsStats.reviews.length > 0
+              ? (showAllReviews ? reviewsStats.reviews : reviewsStats.reviews.slice(0, 3))
+              : [
+                  {
+                    id: "default-1",
+                    product_id: String(product.id || params.slug),
+                    author_name: "Sarah Williams",
+                    created_at: "2025-10-12T14:30:00Z",
+                    rating: 5,
+                    title: "Stunning craftsmanship",
+                    text: "Absolutely stunning quality. The finish and weight exceeded our expectations for our boutique hotel project. Highly recommended.",
+                  },
+                  {
+                    id: "default-2",
+                    product_id: String(product.id || params.slug),
+                    author_name: "Paul Sanderson",
+                    created_at: "2025-09-28T11:15:00Z",
+                    rating: 5,
+                    title: "Very high quality materials",
+                    text: "Very high quality materials. The earthy slip finish looks incredibly premium in person. Safe packaging ensured zero breakage.",
+                  },
+                ]
+            ).map((rev, i) => {
+              const initials = (rev.author_name || "Customer")
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase() || "CU";
+              const formattedDate = rev.created_at
+                ? new Date(rev.created_at).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "Recent";
+              const starCount = Math.max(1, Math.min(5, rev.rating || 5));
+
+              return (
+                <div key={rev.id || i} className={styles.reviewItem}>
+                  <div className={styles.reviewHeader}>
+                    <div className={styles.reviewUser}>
+                      <div className={styles.avatar}>{initials}</div>
+                      <div>
+                        <div className={styles.reviewName}>{rev.author_name}</div>
+                        <div className={styles.reviewDate}>{formattedDate}</div>
+                      </div>
+                    </div>
+                    <div style={{ color: "#F59E0B", letterSpacing: "2px" }}>
+                      {"★".repeat(starCount)}
+                      {"☆".repeat(5 - starCount)}
                     </div>
                   </div>
-                  <div style={{ color: "#F59E0B" }}>★★★★★</div>
+                  {rev.title && (
+                    <h4 style={{ margin: "0 0 0.35rem 0", fontSize: "0.95rem", fontWeight: 600, color: "#1F2937" }}>
+                      {rev.title}
+                    </h4>
+                  )}
+                  <p className={styles.reviewText}>{rev.text}</p>
                 </div>
-                <p className={styles.reviewText}>{review.text}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <button
-            className={styles.readAllBtn}
-            type="button"
-            onClick={() => setShowAllReviews(!showAllReviews)}
-          >
-            {showAllReviews ? "Show Fewer Reviews" : "Read all Reviews"}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              style={{
-                transform: showAllReviews ? "rotate(180deg)" : "none",
-                transition: "transform 0.25s",
-              }}
+          {((reviewsStats?.reviews?.length ?? 2) > 3) && (
+            <button
+              className={styles.readAllBtn}
+              type="button"
+              onClick={() => setShowAllReviews(!showAllReviews)}
             >
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+              {showAllReviews ? "Show Fewer Reviews" : `Read all ${reviewsStats?.reviews?.length} Reviews`}
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                style={{
+                  transform: showAllReviews ? "rotate(180deg)" : "none",
+                  transition: "transform 0.25s",
+                }}
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          )}
         </section>
 
         {/* COMPLETE THE LOOK */}
@@ -665,6 +970,132 @@ export default function ProductDetail() {
           </div>
         </section>
       </div>
+
+      {/* ==================== WRITE REVIEW MODAL ==================== */}
+      {showReviewModal && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => !reviewSubmitting && setShowReviewModal(false)}
+        >
+          <div
+            className={styles.modalContent}
+            style={{ maxWidth: "540px" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <div>
+                <h3 className={styles.modalTitle}>Write a Customer Review</h3>
+                <p style={{ margin: "0.25rem 0 0", fontSize: "0.82rem", color: "#6B7280" }}>
+                  {product.product_title}
+                </p>
+              </div>
+              <button
+                className={styles.modalCloseBtn}
+                type="button"
+                onClick={() => !reviewSubmitting && setShowReviewModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            {reviewSuccessMsg ? (
+              <div className={styles.modalSuccessBox}>
+                <div className={styles.modalSuccessIcon}>✓</div>
+                <h4 style={{ margin: "0 0 0.5rem", fontSize: "1.15rem", color: "#1F2937" }}>
+                  Review Published!
+                </h4>
+                <p style={{ margin: 0, fontSize: "0.88rem", color: "#4B5563" }}>
+                  {reviewSuccessMsg}
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleReviewSubmit} className={styles.modalBody}>
+                {/* Rating Picker */}
+                <div className={styles.modalFormGroup}>
+                  <label className={styles.modalFormLabel}>Overall Rating *</label>
+                  <div className={styles.starPickerRow}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        className={`${styles.starBtn} ${(reviewHoverRating || reviewRating) >= star ? styles.starBtnActive : ""}`}
+                        onClick={() => setReviewRating(star)}
+                        onMouseEnter={() => setReviewHoverRating(star)}
+                        onMouseLeave={() => setReviewHoverRating(0)}
+                        aria-label={`${star} Stars`}
+                      >
+                        ★
+                      </button>
+                    ))}
+                    <span className={styles.starLabel}>
+                      {(reviewHoverRating || reviewRating) === 5 && "5 - Excellent!"}
+                      {(reviewHoverRating || reviewRating) === 4 && "4 - Very Good"}
+                      {(reviewHoverRating || reviewRating) === 3 && "3 - Good"}
+                      {(reviewHoverRating || reviewRating) === 2 && "2 - Fair"}
+                      {(reviewHoverRating || reviewRating) === 1 && "1 - Poor"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className={styles.modalFormGroup}>
+                  <label className={styles.modalFormLabel}>Your Name *</label>
+                  <input
+                    required
+                    type="text"
+                    value={reviewForm.name}
+                    onChange={(e) => setReviewForm({ ...reviewForm, name: e.target.value })}
+                    placeholder="e.g. Sarah Williams"
+                    className={styles.modalFormInput}
+                  />
+                </div>
+
+                <div className={styles.modalFormGroup}>
+                  <label className={styles.modalFormLabel}>Email Address (Optional)</label>
+                  <input
+                    type="email"
+                    value={reviewForm.email}
+                    onChange={(e) => setReviewForm({ ...reviewForm, email: e.target.value })}
+                    placeholder="e.g. sarah@example.com"
+                    className={styles.modalFormInput}
+                  />
+                </div>
+
+                <div className={styles.modalFormGroup}>
+                  <label className={styles.modalFormLabel}>Review Title / Headline</label>
+                  <input
+                    type="text"
+                    value={reviewForm.title}
+                    onChange={(e) => setReviewForm({ ...reviewForm, title: e.target.value })}
+                    placeholder="e.g. Stunning quality and safe delivery"
+                    className={styles.modalFormInput}
+                  />
+                </div>
+
+                <div className={styles.modalFormGroup}>
+                  <label className={styles.modalFormLabel}>Your Review *</label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={reviewForm.text}
+                    onChange={(e) => setReviewForm({ ...reviewForm, text: e.target.value })}
+                    placeholder="Write your feedback here... What did you like or dislike about the finish, lighting, craftsmanship, or packaging?"
+                    className={styles.modalFormInput}
+                    style={{ resize: "vertical" }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={reviewSubmitting}
+                  className={styles.modalSubmitBtn}
+                >
+                  {reviewSubmitting ? "Submitting Review..." : "Submit Review"}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

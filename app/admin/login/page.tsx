@@ -23,8 +23,24 @@ export default function AdminLogin() {
   const [toast, setToast] = useState<ToastProps | null>(null);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("expired") === "1") {
+        setToast({
+          type: "error",
+          message: "Your session has expired. Please sign in again to continue.",
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (isAuthenticated && isAdmin) {
-      router.push("/admin");
+      const redirectParam =
+        typeof window !== "undefined"
+          ? new URLSearchParams(window.location.search).get("redirect")
+          : null;
+      router.push(redirectParam && redirectParam.startsWith("/admin") ? redirectParam : "/admin");
     }
   }, [isAuthenticated, isAdmin, router]);
 
@@ -109,6 +125,11 @@ export default function AdminLogin() {
 
       <div className={styles.loginCard}>
         <div className={styles.header}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.25rem" }}>
+            <Link href="/" title="Back to De Luzex Storefront">
+              <img src="/images/logos/de_luzex_white.svg" alt="De Luzex" height="34" style={{ height: "34px", width: "auto" }} />
+            </Link>
+          </div>
           <div className={styles.badge}>
             <span className={styles.badgeDot} />
             Restricted Access

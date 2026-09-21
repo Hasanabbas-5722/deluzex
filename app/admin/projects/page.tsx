@@ -22,6 +22,7 @@ import {
   Star,
   MapPin,
   ExternalLink,
+  Video,
 } from "lucide-react";
 import {
   fetchProjects,
@@ -79,6 +80,11 @@ export default function AdminProjectsPage() {
   const [uploadingGallery, setUploadingGallery] = useState(false);
   const galleryFileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [videos, setVideos] = useState<string[]>([]);
+  const [newVideoUrl, setNewVideoUrl] = useState("");
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const videoFileInputRef = useRef<HTMLInputElement | null>(null);
+
   const [imageTab, setImageTab] = useState<"file" | "url">("file");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
@@ -124,6 +130,8 @@ export default function AdminProjectsPage() {
     });
     setGalleryImages([]);
     setNewGalleryUrl("");
+    setVideos([]);
+    setNewVideoUrl("");
     setSelectedFile(null);
     setPreviewUrl("");
     setImageTab("file");
@@ -156,6 +164,8 @@ export default function AdminProjectsPage() {
         : []
     );
     setNewGalleryUrl("");
+    setVideos(Array.isArray(project.videos) ? project.videos : []);
+    setNewVideoUrl("");
     setSelectedFile(null);
     setPreviewUrl(project.image_url || "");
     setImageTab(
@@ -175,6 +185,8 @@ export default function AdminProjectsPage() {
     setPreviewUrl("");
     setGalleryImages([]);
     setNewGalleryUrl("");
+    setVideos([]);
+    setNewVideoUrl("");
   }
 
   const handleAddGalleryUrl = () => {
@@ -204,6 +216,35 @@ export default function AdminProjectsPage() {
 
   const handleRemoveGalleryImage = (indexToRemove: number) => {
     setGalleryImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleAddVideoUrl = () => {
+    if (!newVideoUrl.trim()) return;
+    setVideos((prev) => [...prev, newVideoUrl.trim()]);
+    setNewVideoUrl("");
+  };
+
+  const handleVideoFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const files = Array.from(e.target.files);
+    setUploadingVideo(true);
+    setErrorMsg("");
+    try {
+      for (const file of files) {
+        const url = await uploadCmsImage(file);
+        setVideos((prev) => [...prev, url]);
+      }
+      setSuccessMsg(`Uploaded ${files.length} video(s).`);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to upload video");
+    } finally {
+      setUploadingVideo(false);
+      if (videoFileInputRef.current) videoFileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveVideo = (indexToRemove: number) => {
+    setVideos((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
   const handleSetCover = (url: string) => {
@@ -253,6 +294,7 @@ export default function AdminProjectsPage() {
       submitData.append("is_featured", String(formData.is_featured));
       submitData.append("sequence", String(formData.sequence || 1));
       submitData.append("gallery_images", JSON.stringify(galleryImages));
+      submitData.append("videos", JSON.stringify(videos));
 
       if (selectedFile) {
         submitData.append("image_file", selectedFile);
@@ -304,6 +346,7 @@ export default function AdminProjectsPage() {
       submitData.append("is_featured", String(formData.is_featured));
       submitData.append("sequence", String(formData.sequence || 1));
       submitData.append("gallery_images", JSON.stringify(galleryImages));
+      submitData.append("videos", JSON.stringify(videos));
 
       if (selectedFile) {
         submitData.append("image_file", selectedFile);
@@ -1126,6 +1169,168 @@ export default function AdminProjectsPage() {
                     </div>
                   )}
                 </div>
+
+                {/* 4. Project Videos Section */}
+                <div style={{ borderTop: "1px solid var(--admin-border)", paddingTop: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 700, color: "var(--admin-primary)", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <Video size={18} color="#C49A45" />
+                        <span>4. Project Showcase Videos ({videos.length})</span>
+                      </h3>
+                      <p style={{ margin: "0.25rem 0 0", fontSize: "0.825rem", color: "var(--admin-text-muted)" }}>
+                        Add as many architectural walkthrough or showcase videos as you want (YouTube, Vimeo, MP4 URLs, or video file uploads).
+                      </p>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                      <button
+                        type="button"
+                        onClick={() => videoFileInputRef.current?.click()}
+                        disabled={uploadingVideo}
+                        className={styles.secondaryButton}
+                        style={{
+                          fontSize: "0.825rem",
+                          padding: "0.45rem 0.85rem",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "6px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Upload size={14} />
+                        <span>{uploadingVideo ? "Uploading..." : "Upload Video File"}</span>
+                      </button>
+                      <input
+                        ref={videoFileInputRef}
+                        type="file"
+                        accept="video/*"
+                        multiple
+                        style={{ display: "none" }}
+                        onChange={handleVideoFileUpload}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Add by Video URL input */}
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <input
+                      type="text"
+                      placeholder="Enter Video URL (e.g. https://www.youtube.com/watch?v=... or https://.../video.mp4)"
+                      value={newVideoUrl}
+                      onChange={(e) => setNewVideoUrl(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddVideoUrl();
+                        }
+                      }}
+                      className={styles.formInput}
+                      style={{ padding: "0.6rem 0.85rem", fontSize: "0.85rem", flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddVideoUrl}
+                      className={styles.primaryButton}
+                      style={{ padding: "0.6rem 1rem", fontSize: "0.85rem", whiteSpace: "nowrap" }}
+                    >
+                      <Plus size={14} /> Add Video
+                    </button>
+                  </div>
+
+                  {/* Videos List */}
+                  {videos.length === 0 ? (
+                    <div
+                      style={{
+                        padding: "1.5rem",
+                        textAlign: "center",
+                        background: "#f8fafc",
+                        borderRadius: "10px",
+                        border: "1px dashed var(--admin-border)",
+                        color: "var(--admin-text-muted)",
+                        fontSize: "0.85rem",
+                      }}
+                    >
+                      No videos added yet. You can add as many video links or files as you want.
+                    </div>
+                  ) : (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                      {videos.map((vidUrl, vidIdx) => (
+                        <div
+                          key={vidIdx}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "0.75rem 1rem",
+                            background: "#ffffff",
+                            border: "1px solid var(--admin-border)",
+                            borderRadius: "8px",
+                            gap: "1rem",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", overflow: "hidden" }}>
+                            <div
+                              style={{
+                                width: "32px",
+                                height: "32px",
+                                borderRadius: "6px",
+                                background: "#fef3c7",
+                                color: "#b45309",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                                fontWeight: 700,
+                                fontSize: "0.85rem",
+                              }}
+                            >
+                              {vidIdx + 1}
+                            </div>
+                            <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                              <a
+                                href={vidUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  fontSize: "0.85rem",
+                                  color: "#2563eb",
+                                  textDecoration: "underline",
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: "4px",
+                                }}
+                              >
+                                {vidUrl}
+                                <ExternalLink size={12} />
+                              </a>
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveVideo(vidIdx)}
+                            title="Remove Video"
+                            style={{
+                              background: "#fee2e2",
+                              color: "#dc2626",
+                              border: "none",
+                              borderRadius: "6px",
+                              padding: "6px 8px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                              flexShrink: 0,
+                            }}
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -1561,6 +1766,11 @@ export default function AdminProjectsPage() {
                           {project.gallery_images && project.gallery_images.length > 0 && (
                             <span style={{ color: "#C49A45", fontWeight: 600, fontSize: "0.75rem" }}>
                               • {project.gallery_images.length} photo{project.gallery_images.length > 1 ? "s" : ""}
+                            </span>
+                          )}
+                          {project.videos && project.videos.length > 0 && (
+                            <span style={{ color: "#2563eb", fontWeight: 600, fontSize: "0.75rem" }}>
+                              • {project.videos.length} video{project.videos.length > 1 ? "s" : ""}
                             </span>
                           )}
                         </div>

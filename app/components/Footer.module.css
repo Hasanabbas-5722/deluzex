@@ -41,16 +41,37 @@
 
 .footerLogos {
   display: flex;
-  gap: 22px;
+  gap: 14px;
   align-items: center;
-
+  flex-wrap: wrap;
+  margin: 0.25rem 0;
 }
 
 .footerLogoItem {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, filter 0.25s ease;
 }
+
+.footerLogoItem:hover {
+  transform: translateY(-3px) scale(1.06);
+  filter: brightness(1.08);
+}
+
+.footerLogoImg {
+  border-radius: 10px;
+  object-fit: contain;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.25s ease;
+}
+
+.footerLogoItem:hover .footerLogoImg {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
 
 .footerDesc {
   font-size: 14px;

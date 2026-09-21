@@ -33,9 +33,41 @@
 
 .logo {
   font-family: var(--font-playfair), serif;
-  font-size: 1.8rem;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: -0.02em;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoWhite {
+  display: none;
+  height: 38px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  transition: opacity 0.25s ease;
+}
+
+.logoBlack {
+  display: block;
+  height: 38px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  transition: opacity 0.25s ease;
+}
+
+.headerTransparent .logoWhite {
+  display: block;
+}
+
+.headerTransparent .logoBlack {
+  display: none;
 }
 
 /* Hidden on desktop, shown on mobile/tablet only via media query */

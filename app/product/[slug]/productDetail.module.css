@@ -79,13 +79,17 @@
 }
 
 .thumbnailRow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .thumbnailCard {
   position: relative;
+  width: 82px;
+  height: 82px;
+  flex: 0 0 82px;
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
@@ -276,6 +280,73 @@
 .btnInquiry:hover {
   background: #C84512;
   box-shadow: 0 6px 20px rgba(224, 83, 28, 0.35);
+  transform: translateY(-1px);
+}
+
+.btnTechSpec {
+  width: 100%;
+  background: #1F2937;
+  color: #FFFFFF;
+  border: 1px solid #1F2937;
+  border-radius: 8px;
+  padding: 0.95rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.15);
+  transition: all 0.2s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btnTechSpec:hover {
+  background: #111827;
+  border-color: #111827;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(31, 41, 55, 0.25);
+}
+
+.pdfDownloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #E0531C;
+  color: #FFFFFF;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.pdfDownloadBtn:hover {
+  background: #C84512;
+}
+
+.btnInlineTechSpec {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #FAF6F0;
+  color: #2D3748;
+  border: 1px solid #D5CCC0;
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnInlineTechSpec:hover {
+  background: #FFFFFF;
+  border-color: #E0531C;
+  color: #E0531C;
   transform: translateY(-1px);
 }
 
@@ -485,12 +556,83 @@
   border-top: 1px solid #E5DECE;
 }
 
+.reviewsHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .reviewsTitle {
   font-family: var(--font-playfair), serif;
   font-size: 2rem;
   font-weight: 600;
   color: #1F2937;
-  margin-bottom: 2rem;
+  margin: 0;
+}
+
+.writeReviewBtn {
+  background: #E0531C;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(224, 83, 28, 0.22);
+  transition: all 0.2s ease;
+}
+
+.writeReviewBtn:hover {
+  background: #C84512;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(224, 83, 28, 0.28);
+}
+
+.barCount {
+  width: 42px !important;
+  text-align: right;
+  font-size: 0.78rem;
+  color: #6B7280;
+}
+
+.starPickerRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #D1D5DB;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.starBtn:hover {
+  transform: scale(1.15);
+}
+
+.starBtnActive {
+  color: #F59E0B;
+}
+
+.starLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #D97706;
+  margin-left: 0.5rem;
 }
 
 .ratingSummary {
@@ -823,6 +965,16 @@
 
   .thumbnailRow {
     gap: 0.6rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .thumbnailCard {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
   }
 
   .secondaryRow {

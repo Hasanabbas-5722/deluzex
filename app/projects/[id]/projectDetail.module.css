@@ -255,6 +255,54 @@
   justify-content: center;
 }
 
+.videoCard {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000000;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.videoCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+}
+
+.videoFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.videoPlayer {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.videoBadge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
 /* ===================== INQUIRY CTA ===================== */
 .inquirySection {
   background: #F4EFEA;
@@ -429,7 +477,8 @@
     gap: 16px;
   }
 
-  .galleryCard {
+  .galleryCard,
+  .videoCard {
     height: 260px;
     min-height: 220px;
     border-radius: 14px;
@@ -441,7 +490,8 @@
     font-size: 24px;
   }
 
-  .galleryCard {
+  .galleryCard,
+  .videoCard {
     height: 220px;
     min-height: 200px;
     border-radius: 12px;

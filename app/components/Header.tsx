@@ -116,7 +116,22 @@ export default function Header() {
         </button>
 
         <div className={styles.logo}>
-          <Link href="/">deluzex</Link>
+          <Link href="/" className={styles.logoLink} aria-label="De Luzex Lighting Home">
+            <img
+              src="/images/logos/de_luzex_white.svg"
+              alt="De Luzex"
+              height="38"
+              width="130"
+              className={styles.logoWhite}
+            />
+            <img
+              src="/images/logos/de_luzex_black.svg"
+              alt="De Luzex"
+              height="38"
+              width="130"
+              className={styles.logoBlack}
+            />
+          </Link>
         </div>
       </div>
 

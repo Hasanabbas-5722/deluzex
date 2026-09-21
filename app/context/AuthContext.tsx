@@ -69,11 +69,78 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [pendingCartProduct, setPendingCartProduct] = useState<PendingCartProduct | null>(null);
 
   useEffect(() => {
-    const authed = hasAccessToken() || Boolean(window.localStorage.getItem("authToken"));
+    const getLocalToken = (): string | null => {
+      if (typeof window === "undefined") return null;
+      const direct =
+        window.localStorage.getItem("authToken") ||
+        window.localStorage.getItem("access_token") ||
+        window.localStorage.getItem("token");
+      if (direct) return direct;
+      if (typeof document !== "undefined") {
+        const cookies = document.cookie.split(";");
+        for (const cookie of cookies) {
+          const [name, value] = cookie.trim().split("=");
+          if (name === "access_token" || name === "accessToken") {
+            return decodeURIComponent(value);
+          }
+        }
+      }
+      return null;
+    };
+
+    const token = getLocalToken();
     const storedUser = readStoredUser();
-    setIsAuthenticated(authed);
-    setUser(storedUser);
-    setLoading(false);
+
+    if (!token) {
+      setIsAuthenticated(false);
+      setUser(null);
+      setLoading(false);
+    } else {
+      // Optimistically display stored user while validating to prevent visual flicker
+      if (storedUser) {
+        setUser(storedUser);
+        setIsAuthenticated(true);
+      }
+
+      // Check validity with backend
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.deluzexlighting.com/api/v1";
+      fetch(`${apiUrl}/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      })
+        .then(async (res) => {
+          if (res.ok) {
+            const body = await res.json();
+            const freshUser = body && body.data ? body.data : body;
+            setUser(freshUser);
+            setIsAuthenticated(true);
+            if (typeof window !== "undefined") {
+              window.localStorage.setItem("user", JSON.stringify(freshUser));
+            }
+          } else if (res.status === 401 || res.status === 403) {
+            // Token is invalid or expired
+            logout();
+            if (typeof window !== "undefined") {
+              const path = window.location.pathname;
+              if (path.startsWith("/admin") && path !== "/admin/login") {
+                const redirectParam = encodeURIComponent(window.location.pathname + window.location.search);
+                window.location.href = `/admin/login?expired=1&redirect=${redirectParam}`;
+              }
+            }
+          }
+        })
+        .catch(() => {
+          // If network failure / offline, preserve storedUser state
+          if (storedUser) {
+            setIsAuthenticated(true);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
 
     try {
       const storedPending = window.sessionStorage.getItem("pending_cart_product");
@@ -83,6 +150,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore JSON parse errors
     }
+
+    const handleSessionExpired = () => {
+      logout();
+    };
+
+    window.addEventListener("auth:session-expired", handleSessionExpired);
+    return () => {
+      window.removeEventListener("auth:session-expired", handleSessionExpired);
+    };
   }, []);
 
   const isAdmin = Boolean(user && typeof user === "object" && (user as Record<string, unknown>).is_admin === true);
@@ -120,8 +196,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = (token: string, userData: AuthUser) => {
     setIsAuthenticated(true);
     setUser(userData);
-    document.cookie = `access_token=${token}; path=/; max-age=86400; SameSite=Lax`;
+    // 7 days expiration (604800s) matching backend ACCESS_TOKEN_EXPIRE_MINUTES
+    document.cookie = `access_token=${token}; path=/; max-age=604800; SameSite=Lax`;
     localStorage.setItem("authToken", token);
+    localStorage.setItem("access_token", token);
     if (userData) {
       localStorage.setItem("user", JSON.stringify(userData));
     }
@@ -130,9 +208,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
-    document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax";
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
+    if (typeof document !== "undefined") {
+      document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax";
+    }
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
   };
 
   return (

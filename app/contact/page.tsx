@@ -4,8 +4,10 @@ import styles from "./contact.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { submitContactForm, fetchSiteContent } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 export default function Contact() {
+  const { isAuthenticated, openLoginModal, user } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,6 +23,20 @@ export default function Contact() {
     fetchSiteContent("site_settings").then(setSettings).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      const defaultName = (user as any)?.name || `${(user as any)?.first_name || ""} ${(user as any)?.last_name || ""}`.trim();
+      const defaultEmail = (user as any)?.email || "";
+      const defaultPhone = (user as any)?.phone || "";
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || defaultName,
+        email: prev.email || defaultEmail,
+        phone: prev.phone || defaultPhone,
+      }));
+    }
+  }, [user]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -29,6 +45,10 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      openLoginModal(undefined, "Please sign in to send an inquiry or message to our studio team.");
+      return;
+    }
     setStatus("loading");
     setErrorMessage("");
 

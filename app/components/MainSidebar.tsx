@@ -19,7 +19,7 @@ export default function MainSidebar() {
       <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarCollapsed}`}>
         <div className={styles.sidebarHeader}>
           <Link href="/" onClick={() => setSidebarOpen(false)} className={styles.logo}>
-            deluzex
+            <img src="/images/logos/de_luzex_black.svg" alt="De Luzex" height="38" style={{ height: "38px", width: "auto" }} />
           </Link>
           <button className={styles.closeBtn} onClick={() => setSidebarOpen(false)}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

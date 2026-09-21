@@ -1075,7 +1075,114 @@ export default function AdminContentPage() {
             </div>
           </div>
 
-          {/* Social Links & Copyright */}
+          {/* Available On Platforms & Marketplaces (Footer Logos) */}
+          <div className={styles.card} style={{ width: "100%", maxWidth: "100%", padding: "2rem" }}>
+            <div style={{ borderBottom: "1px solid var(--admin-border)", paddingBottom: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "var(--admin-primary)" }}>
+                  &quot;Available On&quot; Platform Links (Footer Logos)
+                </h3>
+              </div>
+              <p style={{ margin: "0.35rem 0 0 0", fontSize: "0.85rem", color: "var(--admin-text-muted)" }}>
+                Configure the destination links for the Amazon, Flipkart, WhatsApp, and Instagram logos displayed under &quot;Available On&quot; in the website footer.
+              </p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+              {/* Amazon Link */}
+              <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                <label className={styles.formLabel} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <img src="/images/logos/amazon.svg" alt="Amazon" width={22} height={22} style={{ borderRadius: "4px" }} />
+                  Amazon Store Link
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://www.amazon.in/deluzex"
+                  value={settingsData.available_on?.amazon || ""}
+                  onChange={(e) =>
+                    setSettingsData({
+                      ...settingsData,
+                      available_on: {
+                        ...(settingsData.available_on || {}),
+                        amazon: e.target.value,
+                      },
+                    })
+                  }
+                  className={styles.formInput}
+                />
+              </div>
+
+              {/* Flipkart Link */}
+              <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                <label className={styles.formLabel} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <img src="/images/logos/flipkart.svg" alt="Flipkart" width={22} height={22} style={{ borderRadius: "4px" }} />
+                  Flipkart Store Link
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://www.flipkart.com/deluzex"
+                  value={settingsData.available_on?.flipkart || ""}
+                  onChange={(e) =>
+                    setSettingsData({
+                      ...settingsData,
+                      available_on: {
+                        ...(settingsData.available_on || {}),
+                        flipkart: e.target.value,
+                      },
+                    })
+                  }
+                  className={styles.formInput}
+                />
+              </div>
+
+              {/* WhatsApp Link */}
+              <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                <label className={styles.formLabel} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <img src="/images/logos/whatsapp.svg" alt="WhatsApp" width={22} height={22} style={{ borderRadius: "4px" }} />
+                  WhatsApp Link / Phone Number
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://wa.me/918511682031 or 918511682031"
+                  value={settingsData.available_on?.whatsapp || ""}
+                  onChange={(e) =>
+                    setSettingsData({
+                      ...settingsData,
+                      available_on: {
+                        ...(settingsData.available_on || {}),
+                        whatsapp: e.target.value,
+                      },
+                    })
+                  }
+                  className={styles.formInput}
+                />
+              </div>
+
+              {/* Instagram Link */}
+              <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                <label className={styles.formLabel} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <img src="/images/logos/instagram.svg" alt="Instagram" width={22} height={22} style={{ borderRadius: "4px" }} />
+                  Instagram Profile Link
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://instagram.com/deluzex"
+                  value={settingsData.available_on?.instagram || ""}
+                  onChange={(e) =>
+                    setSettingsData({
+                      ...settingsData,
+                      available_on: {
+                        ...(settingsData.available_on || {}),
+                        instagram: e.target.value,
+                      },
+                    })
+                  }
+                  className={styles.formInput}
+                />
+              </div>
+            </div>
+          </div>
+
           <div className={styles.card} style={{ width: "100%", maxWidth: "100%", padding: "2rem" }}>
             <div style={{ borderBottom: "1px solid var(--admin-border)", paddingBottom: "0.75rem", marginBottom: "1.5rem" }}>
               <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "var(--admin-primary)" }}>
@@ -1085,16 +1192,36 @@ export default function AdminContentPage() {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
               <div className={styles.formGroup} style={{ marginBottom: 0 }}>
+                <label className={styles.formLabel}>WhatsApp URL / Number</label>
+                <input
+                  type="text"
+                  placeholder="https://wa.me/918511682031 or +91 85116 82031"
+                  value={settingsData.social_links?.whatsapp || settingsData.available_on?.whatsapp || ""}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSettingsData({
+                      ...settingsData,
+                      social_links: { ...settingsData.social_links, whatsapp: val },
+                      available_on: { ...settingsData.available_on, whatsapp: val },
+                    });
+                  }}
+                  className={styles.formInput}
+                />
+              </div>
+
+              <div className={styles.formGroup} style={{ marginBottom: 0 }}>
                 <label className={styles.formLabel}>Instagram URL</label>
                 <input
                   type="text"
                   value={settingsData.social_links?.instagram || ""}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const val = e.target.value;
                     setSettingsData({
                       ...settingsData,
-                      social_links: { ...settingsData.social_links, instagram: e.target.value },
-                    })
-                  }
+                      social_links: { ...settingsData.social_links, instagram: val },
+                      available_on: { ...settingsData.available_on, instagram: val },
+                    });
+                  }}
                   className={styles.formInput}
                 />
               </div>

@@ -203,12 +203,6 @@ export default function Blogs() {
                       fill
                       style={{ objectFit: "cover" }}
                     />
-                    {blog.is_featured && (
-                      <div className={styles.authorBadge}>
-                        <div className={styles.authorAvatar}></div>
-                        <span>{blog.author || "De Luzex"}</span>
-                      </div>
-                    )}
                   </div>
                   <div className={styles.blogContent}>
                     <p className={styles.blogCategory}>{blog.category || "Design & Inspiration"}</p>

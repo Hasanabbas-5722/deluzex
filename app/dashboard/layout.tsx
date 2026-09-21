@@ -9,15 +9,34 @@ import { useSidebar } from "../context/SidebarContext";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout, isAdmin } = useAuth();
+  const { logout, isAdmin, isAuthenticated, loading, openLoginModal } = useAuth();
   const { sidebarOpen, setSidebarOpen } = useSidebar();
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      openLoginModal(undefined, "Please sign in to access your user account and dashboard.");
+      router.push("/");
+    }
+  }, [loading, isAuthenticated, openLoginModal, router]);
 
   const handleLogout = () => {
     logout();
     setShowLogoutModal(false);
     router.push("/");
   };
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#6B7280" }}>
+        <p>Verifying access...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const adminMenuItems = isAdmin
     ? [
@@ -64,6 +83,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarCollapsed}`}>
         <div className={styles.sidebarInner}>
+          <div style={{ padding: "1.25rem 1.25rem 0.75rem 1.25rem", borderBottom: "1px solid rgba(0,0,0,0.06)", marginBottom: "0.75rem" }}>
+            <Link href="/" title="De Luzex Storefront" style={{ display: "flex", alignItems: "center" }}>
+              <img src="/images/logos/de_luzex_black.svg" alt="De Luzex" height="30" style={{ height: "30px", width: "auto" }} />
+            </Link>
+          </div>
+
           {menuItems.map((group, idx) => (
             <div key={idx} className={styles.menuGroup}>
               <h4 className={styles.groupTitle}>{group.group}</h4>

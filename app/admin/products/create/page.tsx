@@ -38,7 +38,10 @@ export default function CreateProduct() {
 
   const [customSpecs, setCustomSpecs] = useState<ProductSpecification[]>([]);
   const [mainImage, setMainImage] = useState<File | null>(null);
-  const [galleryImages, setGalleryImages] = useState<(File | null)[]>([null, null, null, null]);
+  const [mainImagePreview, setMainImagePreview] = useState<string | null>(null);
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [specPdf, setSpecPdf] = useState<File | null>(null);
+  const [specPdfUrl, setSpecPdfUrl] = useState<string>("");
   const [isNewArrival, setIsNewArrival] = useState(false);
 
   useEffect(() => {
@@ -51,16 +54,26 @@ export default function CreateProduct() {
 
   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setMainImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setMainImage(file);
+      setMainImagePreview(URL.createObjectURL(file));
     }
   };
 
-  const handleGalleryImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    if (e.target.files && e.target.files[0]) {
-      const newGallery = [...galleryImages];
-      newGallery[index] = e.target.files[0];
-      setGalleryImages(newGallery);
+  const handleAddGalleryFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selected = Array.from(e.target.files);
+      setGalleryFiles((prev) => [...prev, ...selected]);
+      e.target.value = "";
     }
+  };
+
+  const handleRemoveGalleryFile = (index: number) => {
+    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleClearAllGalleryFiles = () => {
+    setGalleryFiles([]);
   };
 
   const handleAddCustomSpec = () => {
@@ -102,15 +115,21 @@ export default function CreateProduct() {
       }
       
       payload.append("product_main_image", mainImage);
-      galleryImages.forEach(file => {
-        if (file) payload.append("product_images", file);
+      galleryFiles.forEach((file) => {
+        payload.append("product_images", file);
       });
+
+      if (specPdf) {
+        payload.append("technical_spec_pdf", specPdf);
+      } else if (specPdfUrl.trim()) {
+        payload.append("technical_spec_pdf_url", specPdfUrl.trim());
+      }
 
       await createProduct(payload);
       router.push("/admin/products");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Failed to create product");
+      alert(error?.message || "Failed to create product");
       setLoading(false);
     }
   };
@@ -279,6 +298,69 @@ export default function CreateProduct() {
             ))}
           </div>
 
+          {/* TECHNICAL SPECIFICATION PDF */}
+          <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '1.5rem', marginTop: '0.5rem' }}>
+            <h3 style={sectionHeaderStyle}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              Technical Specification PDF / Brochure
+            </h3>
+            <p style={{ fontSize: '0.825rem', color: 'var(--admin-text-muted)', marginBottom: '0.75rem' }}>
+              Upload an official product datasheet or brochure PDF. Customers can read and download this document directly from the product page.
+            </p>
+            <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              {specPdf ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FFFFFF', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid #CBD5E1' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '6px', background: '#FEE2E2', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.82rem' }}>
+                      PDF
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1E293B' }}>{specPdf.name}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748B' }}>{(specPdf.size / 1024).toFixed(1)} KB</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSpecPdf(null)}
+                    style={{ background: '#FEE2E2', color: '#DC2626', border: 'none', borderRadius: '6px', padding: '0.4rem 0.85rem', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    ✕ Remove
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setSpecPdf(e.target.files[0]);
+                      }
+                    }}
+                    style={inputStyle}
+                  />
+                  <div style={{ margin: '0.85rem 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600, textTransform: 'uppercase' }}>OR Enter ImageKit / PDF URL</span>
+                    <div style={{ flex: 1, height: '1px', background: '#E2E8F0' }} />
+                  </div>
+                  <input
+                    type="url"
+                    placeholder="e.g. https://ik.imagekit.io/2s78gfu2x/specs/datasheet.pdf"
+                    value={specPdfUrl}
+                    onChange={(e) => setSpecPdfUrl(e.target.value)}
+                    style={{ ...inputStyle, marginTop: 0 }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* CONTACT & OVERRIDES */}
           <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '1.5rem' }}>
             <h3 style={sectionHeaderStyle}>Dedicated Contact Overrides (Optional)</h3>
@@ -294,21 +376,185 @@ export default function CreateProduct() {
             <input type="text" name="phone_number" value={formData.phone_number} onChange={handleChange} style={inputStyle} placeholder="Leave empty for site default (+91 85116 82031)" />
           </div>
 
-          {/* IMAGES */}
+          {/* MEDIA & GALLERY */}
           <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '1.5rem', marginTop: '0.5rem' }}>
-            <h3 style={sectionHeaderStyle}>Product Gallery Images</h3>
-            
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)', display: 'block', marginBottom: '0.5rem' }}>Main Image *</label>
-              <input required type="file" accept="image/*" onChange={handleMainImageChange} style={inputStyle} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div>
+                <h3 style={sectionHeaderStyle}>Product Media & Gallery</h3>
+                <p style={{ fontSize: '0.825rem', color: 'var(--admin-text-muted)', margin: '0.25rem 0 0' }}>
+                  Upload the main cover image and dynamic gallery photos (1, 2, 3, or more).
+                </p>
+              </div>
+              {galleryFiles.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearAllGalleryFiles}
+                  style={{
+                    background: '#FEE2E2',
+                    border: '1px solid #FCA5A5',
+                    color: '#DC2626',
+                    borderRadius: '6px',
+                    padding: '0.35rem 0.75rem',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                  }}
+                >
+                  Clear Gallery ({galleryFiles.length})
+                </button>
+              )}
             </div>
             
-            <label style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)', display: 'block', marginBottom: '0.5rem' }}>Additional Gallery Thumbnails</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-              <input type="file" accept="image/*" onChange={(e) => handleGalleryImageChange(e, 0)} style={inputStyle} />
-              <input type="file" accept="image/*" onChange={(e) => handleGalleryImageChange(e, 1)} style={inputStyle} />
-              <input type="file" accept="image/*" onChange={(e) => handleGalleryImageChange(e, 2)} style={inputStyle} />
-              <input type="file" accept="image/*" onChange={(e) => handleGalleryImageChange(e, 3)} style={inputStyle} />
+            {/* Main Cover Image */}
+            <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '10px', border: '1px solid #E2E8F0', marginBottom: '1.5rem' }}>
+              <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', display: 'block', marginBottom: '0.5rem' }}>
+                Main Cover Image *
+              </label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                {mainImagePreview && (
+                  <div style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #E0531C', flexShrink: 0 }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={mainImagePreview} alt="Main preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                )}
+                <div style={{ flex: 1, minWidth: '220px' }}>
+                  <input required={!mainImage} type="file" accept="image/*" onChange={handleMainImageChange} style={inputStyle} />
+                  <span style={{ fontSize: '0.78rem', color: '#64748B', display: 'block', marginTop: '0.35rem' }}>
+                    Primary display image across store catalog and product hero showcase.
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Additional Gallery Images */}
+            <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div>
+                  <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)' }}>
+                    Additional Gallery Images
+                  </label>
+                  <span style={{ fontSize: '0.8rem', color: '#64748B', marginLeft: '0.5rem' }}>
+                    ({galleryFiles.length} selected — add one or multiple)
+                  </span>
+                </div>
+              </div>
+
+              {/* Upload Drop/Click Box */}
+              <div>
+                <label
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '1.25rem',
+                    border: '2px dashed #CBD5E1',
+                    borderRadius: '8px',
+                    background: '#FFFFFF',
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleAddGalleryFiles}
+                    style={{ display: 'none' }}
+                  />
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '0.5rem' }}>
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                    <circle cx="9" cy="9" r="2"/>
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                  </svg>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--admin-primary)' }}>
+                    + Click to select gallery images (upload single or multiple)
+                  </span>
+                  <span style={{ fontSize: '0.78rem', color: '#94A3B8', marginTop: '0.25rem' }}>
+                    Select 1, 2, 3 or more images. You can add more at any time.
+                  </span>
+                </label>
+              </div>
+
+              {/* Gallery Image Previews */}
+              {galleryFiles.length > 0 && (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+                  gap: '0.85rem',
+                  marginTop: '1rem',
+                }}>
+                  {galleryFiles.map((file, idx) => {
+                    const previewUrl = URL.createObjectURL(file);
+                    return (
+                      <div
+                        key={`${file.name}-${idx}`}
+                        style={{
+                          position: 'relative',
+                          background: '#FFFFFF',
+                          borderRadius: '8px',
+                          border: '1px solid #E2E8F0',
+                          overflow: 'hidden',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                      >
+                        <div style={{ position: 'relative', width: '100%', height: '100px', background: '#F1F5F9' }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={previewUrl}
+                            alt={`Gallery ${idx + 1}`}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                          <span style={{
+                            position: 'absolute',
+                            top: '5px',
+                            left: '5px',
+                            background: 'rgba(0,0,0,0.65)',
+                            color: '#FFFFFF',
+                            fontSize: '0.68rem',
+                            fontWeight: 600,
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                          }}>
+                            #{idx + 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveGalleryFile(idx)}
+                            title="Remove image"
+                            style={{
+                              position: 'absolute',
+                              top: '5px',
+                              right: '5px',
+                              background: '#EF4444',
+                              color: '#FFFFFF',
+                              border: 'none',
+                              borderRadius: '50%',
+                              width: '22px',
+                              height: '22px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              fontSize: '0.75rem',
+                              fontWeight: 'bold',
+                              boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                            }}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        <div style={{ padding: '0.4rem 0.5rem', fontSize: '0.72rem', color: '#64748B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {file.name}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 
