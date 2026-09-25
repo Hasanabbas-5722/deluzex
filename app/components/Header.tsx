@@ -136,18 +136,13 @@ export default function Header() {
       </div>
 
       <nav className={styles.nav}>
-        <Link href="/">Lighting</Link>
+        <Link href="/">Home</Link>
         <Link href="/categories">Categories</Link>
         <Link href="/shop">Shop</Link>
         <Link href="/projects">Projects</Link>
         <Link href="/blogs">Blogs</Link>
         <Link href="/about">About</Link>
         <Link href="/contact">Contact</Link>
-        {isAdmin && (
-          <Link href="/admin" style={{ color: "#C49A45", fontWeight: 700, letterSpacing: "0.05em" }}>
-            Admin
-          </Link>
-        )}
       </nav>
 
       <div className={styles.headerIcons}>
