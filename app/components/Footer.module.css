@@ -83,25 +83,28 @@
 /* Social icons */
 .socialIcons {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   align-items: center;
 }
 
 .socialIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #C89B60;
   background: transparent;
-  border: none;
-  padding: 4px;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+  border: 1px solid #E8D8C0;
+  transition: background 0.3s, color 0.3s;
   text-decoration: none;
 }
 
 .socialIcon:hover {
-  color: #9E743A;
-  transform: translateY(-2px) scale(1.15);
+  background: #C89B60;
+  color: #fff;
+  border-color: #C89B60;
 }
 
 .footerDivider {
