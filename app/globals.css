@@ -1,6 +1,7 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
 @import "tailwindcss";
 @source "../components";
 @source "../lib";
@@ -17,6 +18,7 @@
   --color-text-light: #666666;
   --color-white: #ffffff;
   --font-libre: 'Libre Caslon Display', serif;
+  --font-italianno: 'Italianno', cursive;
   --font-inter: 'Inter', sans-serif;
   --font-general-sans: 'General Sans', sans-serif;
   --font-figtree: 'Figtree', sans-serif;
@@ -40,6 +42,20 @@ body {
 
 body:has([data-admin-root]) {
   padding-top: 0 !important;
+}
+
+body:has([data-coming-soon]) {
+  padding-top: 0 !important;
+  overflow: hidden;
+}
+
+body:has([data-coming-soon]) header,
+body:has([data-coming-soon]) [class*="footer"]:not([data-coming-soon-social]),
+body:has([data-coming-soon]) [class*="Footer"]:not([data-coming-soon-social]),
+body:has([data-coming-soon]) [class*="cartSidebar"],
+body:has([data-coming-soon]) [class*="mainSidebar"],
+body:has([data-coming-soon]) [class*="userLoginModal"] {
+  display: none !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
