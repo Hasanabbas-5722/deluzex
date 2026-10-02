@@ -19,7 +19,29 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All Projects");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [visibleLimit, setVisibleLimit] = useState(6);
+  const [visibleLimit, setVisibleLimit] = useState(4);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    projectType: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({ name: "", email: "", phone: "", projectType: "" });
+    }, 4000);
+  };
 
   useEffect(() => {
     async function load() {
@@ -38,7 +60,7 @@ export default function Projects() {
 
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat);
-    setVisibleLimit(6);
+    setVisibleLimit(4);
   };
 
   const filteredProjects = useMemo(() => {
@@ -54,7 +76,7 @@ export default function Projects() {
       <section className={styles.hero}>
         <div className={styles.heroBg}>
           <Image
-            src="/images/project_lobby_1784107778993.jpg"
+            src="/images/hero_bg_1784107713316.jpg"
             alt="Projects Hero"
             fill
             style={{ objectFit: "cover" }}
@@ -286,38 +308,117 @@ export default function Projects() {
         {filteredProjects.length > visibleLimit && (
           <div className={styles.centerBtn}>
             <button
-              className={styles.btnPrimaryRounded}
+              className={styles.loadMoreBtn}
               type="button"
-              onClick={() => setVisibleLimit((prev) => prev + 6)}
+              onClick={() => setVisibleLimit((prev) => prev + 4)}
             >
-              Load More ({filteredProjects.length - visibleLimit} Remaining)
+              Load More masterpeice
             </button>
           </div>
         )}
       </section>
 
-      {/* CTA SECTION */}
-      <section className={styles.ctaSection}>
-        <div className={styles.ctaContent}>
-          <h2 className={styles.ctaTitle}>Start Your Project</h2>
-          <p>
-            Let our experts help you select the perfect lighting for your next design endeavor.
-          </p>
-          <div className={styles.ctaButtons}>
-            <Link
-              href="/contact"
-              className={styles.btnPrimaryRounded}
-              style={{ textDecoration: "none" }}
-            >
-              Book A Consultation
-            </Link>
-            <Link
-              href="/contact"
-              className={styles.btnOutlineRounded}
-              style={{ textDecoration: "none" }}
-            >
-              Contact Us
-            </Link>
+      {/* CUSTOM LIGHTING CONSULTATION SECTION (#FEEDDF) */}
+      <section className={styles.consultationSection}>
+        <div className={styles.consultationContainer}>
+          <div className={styles.consultationLeft}>
+            <span className={styles.consultationTagline}>bespoke lighting design</span>
+            <h2 className={styles.consultationHeading}>
+              Custom Lighting<br />Consultation
+            </h2>
+            <p className={styles.consultationDesc}>
+              Bring Your Unique Vision To Life. Our Lighting Specialists Collaborate With Architects, Interior Designers,
+            </p>
+
+            <form onSubmit={handleFormSubmit} className={styles.formCard}>
+              {submitted && (
+                <div className={styles.successMsg}>
+                  Thank you! Our lighting specialist will contact you shortly.
+                </div>
+              )}
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel} htmlFor="name">
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={handleFormChange}
+                  className={styles.formInput}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel} htmlFor="email">
+                  Email<span style={{ color: "#e11d48" }}>*</span>
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Enter your mail"
+                  value={formData.email}
+                  onChange={handleFormChange}
+                  className={styles.formInput}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel} htmlFor="phone">
+                  Phone Number
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="Enter your Number"
+                  value={formData.phone}
+                  onChange={handleFormChange}
+                  className={styles.formInput}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel} htmlFor="projectType">
+                  Project Type
+                </label>
+                <select
+                  id="projectType"
+                  name="projectType"
+                  value={formData.projectType}
+                  onChange={handleFormChange}
+                  className={styles.formSelect}
+                >
+                  <option value="" disabled>
+                    Select your project type
+                  </option>
+                  <option value="Residential">Residential</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Hospitality">Hospitality</option>
+                  <option value="Public Spaces">Public Spaces</option>
+                  <option value="Bespoke Design">Bespoke Installation</option>
+                </select>
+              </div>
+
+              <button type="submit" className={styles.submitBtn}>
+                Start Collaboration
+              </button>
+            </form>
+          </div>
+
+          <div className={styles.consultationRight}>
+            <Image
+              src="/images/consultation_lounge.jpg"
+              alt="Custom Lighting Consultation"
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 992px) 100vw, 50vw"
+            />
           </div>
         </div>
       </section>

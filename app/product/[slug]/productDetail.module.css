@@ -2,10 +2,11 @@
 
 .mainWrapper {
   width: 100%;
-  background: #F8F4EE; /* Soft warm light linen/cream */
+  background: var(--color-bg, #F8F1EA);
   min-height: 100vh;
   color: #1F2421;
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding-top: 68px;
 }
 
 .container {
