@@ -646,6 +646,38 @@
   font-weight: 400;
 }
 
+.newArrivalArrows {
+  display: none;
+}
+
+.newArrivalArrowBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #D6CDC2;
+  background: #FAF7F2;
+  color: #8A857E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0;
+}
+
+.newArrivalArrowActive {
+  border-color: #D79322;
+  color: #D79322;
+}
+
+.newArrivalArrowBtn:hover,
+.newArrivalArrowBtn:active {
+  border-color: #D79322;
+  color: #D79322;
+  background: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(215, 147, 34, 0.2);
+}
+
 /* ==========================================================================
    FEATURED PROJECTS SECTION
    Figma: 1440x885, "Our Featured Projects." Libre Caslon, 2 large image cards
@@ -920,6 +952,19 @@
   color: #ffffff;
 }
 
+.btnStoryDesktopText {
+  display: inline;
+}
+
+.btnStoryMobileText {
+  display: none;
+}
+
+.btnStoryArrow {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
 .aboutFeatures {
   display: flex;
   gap: 0;
@@ -978,6 +1023,11 @@
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
+}
+
+.aboutRightImg {
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 /* Stats Row: 4 image cards with overlaid text */
@@ -1593,7 +1643,12 @@
   }
 
   .categoriesSection {
-    padding: 40px 16px;
+    padding: 28px 16px 8px;
+    gap: 10px;
+  }
+
+  .btnExploreCat {
+    margin-top: 0;
   }
 
   .categoriesTagline {
@@ -1606,34 +1661,62 @@
 
   .categoryGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     height: auto;
     width: 100%;
-    gap: 12px;
+    max-width: 360px;
+    margin: 0 auto;
+    gap: 12px 10px;
   }
 
   .catCard {
     flex: none;
     width: 100%;
-    height: 190px;
-    border-radius: 16px;
-    border-top-left-radius: 36px;
-    border-bottom-right-radius: 36px;
-    border-top-right-radius: 8px;
-    border-bottom-left-radius: 8px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    border-top-left-radius: 34px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 34px;
+    border-bottom-left-radius: 0;
   }
 
   .catCardLabel {
-    padding: 28px 10px 14px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 8px 10px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.25) 55%, transparent 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
   }
 
   .catCardLabel span {
-    font-size: 16px;
+    font-family: var(--font-libre), 'Libre Caslon Display', 'Playfair Display', Georgia, serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #ffffff;
+    font-style: italic;
+    letter-spacing: 0.02em;
     text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    line-height: 1.2;
   }
 
   .newArrivalsSection {
-    padding: 40px 16px;
+    padding: 40px 0 32px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .newArrivalsHeader {
+    padding: 0 16px;
   }
 
   .newArrivalsTitle {
@@ -1645,18 +1728,60 @@
   }
 
   .newArrivalsGrid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 16px;
+    padding: 8px 16px 0px;
+    width: 100%;
+    max-width: 100%;
+    scroll-snap-type: x mandatory;
+  }
+
+  .newArrivalsGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .newArrivalCard {
+    flex: 0 0 220px;
+    width: 220px;
+    scroll-snap-align: start;
   }
 
   .newArrivalImgBox {
-    height: 300px;
+    height: 250px;
     border-radius: 20px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  .newArrivalInfo {
+    margin-top: 8px;
+    gap: 3px;
+  }
+
+  .newArrivalRating {
+    margin-top: 2px;
+    line-height: 1.1;
+  }
+
+  .newArrivalArrows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: -6px;
+    width: 100%;
   }
 
   .projectsSection {
-    padding: 40px 16px;
-    gap: 24px;
+    padding: 16px 16px 36px;
+    gap: 20px;
     width: 100%;
     height: auto;
   }
@@ -1732,102 +1857,188 @@
     font-size: 13px;
   }
 
+  /* ABOUT US SECTION - Mobile View (matching Figma design) */
   .aboutSection {
-    padding: 40px 16px;
+    padding: 32px 16px 24px;
+    gap: 16px;
+    width: 100%;
+    height: auto;
+  }
+
+  .aboutInner {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    height: auto;
+    gap: 14px;
+  }
+
+  .aboutLeft {
+    flex: 1 1 58%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .aboutLabel {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #6E737E;
+    text-transform: uppercase;
+    margin: 0 0 5px;
+    line-height: 1.2;
   }
 
   .aboutTitle {
-    font-size: 28px;
+    font-family: var(--font-libre), serif;
+    font-size: 20px;
+    line-height: 1.15;
+    letter-spacing: -0.3px;
+    color: #2E3340;
+    font-weight: 400;
+    margin: 0 0 8px;
+  }
+
+  .aboutDivider {
+    display: none;
+  }
+
+  .aboutDesc {
+    font-family: var(--font-hanken), sans-serif;
+    font-size: 11px;
+    line-height: 1.42;
+    color: #5E6472;
+    margin: 0 0 14px;
+    max-width: 100%;
+  }
+
+  .btnDiscoverStory {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border: 1px solid #D79322;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #D79322;
+    margin-bottom: 0;
+    width: fit-content;
+    gap: 0;
+    text-decoration: none;
+  }
+
+  .btnStoryDesktopText {
+    display: none;
+  }
+
+  .btnStoryMobileText {
+    display: inline;
+  }
+
+  .btnStoryArrow {
+    display: none !important;
   }
 
   .aboutFeatures {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 12px 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    margin-top: 20px;
-    gap: 8px;
-  }
-
-  .aboutFeatureItem {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-    padding: 0 4px;
-  }
-
-  .aboutFeatureIcon {
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none;
-  }
-
-  .aboutFeatureItem span {
-    font-size: 11px;
-    font-weight: 500;
-    color: #424355;
-    line-height: 1.25;
-    text-align: center;
-    letter-spacing: 0.01em;
-  }
-
-  .aboutFeatureDivider {
-    display: block;
-    width: 1px;
-    height: 36px;
-    background: rgba(0, 0, 0, 0.12);
-    flex-shrink: 0;
+    display: none !important;
   }
 
   .aboutRight {
-    height: 260px;
+    flex: 0 0 40%;
+    width: 40%;
+    min-width: 110px;
+    max-width: 165px;
+    height: 205px;
+    position: relative;
+    border-radius: 0 !important;
+    overflow: hidden;
+    align-self: center;
+  }
+
+  .aboutRightImg {
+    border-radius: 0 !important;
   }
 
   .statsRow {
-    flex-wrap: wrap;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    width: 100%;
     height: auto;
-    margin-top: 24px;
+    margin-top: 14px;
+    flex-wrap: nowrap;
   }
 
   .statCard {
-    flex: 0 0 calc(50% - 6px);
-    height: 140px;
-    border-radius: 12px;
+    flex: none;
+    width: 100%;
+    height: 72px;
+    border-radius: 6px;
+    background: #181A1E;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .statCardImg {
+    filter: brightness(0.28) contrast(1.1);
   }
 
   .statOverlay {
-    padding: 16px 14px 14px;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8px 6px 7px 7px;
+    background: linear-gradient(180deg, rgba(16, 18, 22, 0.25) 0%, rgba(16, 18, 22, 0.85) 100%);
+    z-index: 2;
   }
 
   .statNum {
-    font-size: 28px;
+    font-family: var(--font-libre), serif;
+    font-size: 17px;
+    line-height: 1;
+    color: #FFFFFF;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+    margin-bottom: 3px;
   }
 
   .statLabel {
-    font-size: 12px;
+    font-family: var(--font-hanken), sans-serif;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 400;
+    line-height: 1.15;
+    text-align: left;
+    letter-spacing: -0.01em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .storiesSection {
-    padding: 40px 16px;
+    padding: 32px 16px 14px;
+    gap: 14px;
   }
 
   .storiesTitle {
     font-size: 28px;
+  }
+
+  .storiesMarquee {
+    padding: 6px 0 4px;
   }
 
   .marqueeGroupStories {
@@ -1835,30 +2046,74 @@
     gap: 16px;
   }
 
+  .arrowOutline,
+  .arrowSolid {
+    width: 44px;
+    height: 44px;
+  }
+
   .storyCard {
-    width: 280px;
+    width: 270px;
+    padding: 20px 18px 16px;
+    gap: 12px;
+    border-radius: 14px;
     flex-shrink: 0;
   }
 
+  .storyStars {
+    font-size: 15px;
+    letter-spacing: 1.5px;
+  }
+
+  .storyText {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .storyAuthor {
+    gap: 10px;
+    margin-top: 2px;
+  }
+
+  .storyAuthorInfo h5 {
+    font-size: 15px;
+    margin: 0 0 2px;
+  }
+
+  .storyAuthorInfo span {
+    font-size: 11px;
+  }
+
   .ctaSection {
-    padding: 50px 16px;
+    min-height: auto;
+    padding: 28px 16px;
+  }
+
+  .ctaInner {
+    padding: 0;
+    gap: 12px;
   }
 
   .ctaTitle {
-    font-size: 28px;
+    font-size: 26px;
   }
 
   .ctaDesc {
     font-size: 13px;
+    line-height: 1.45;
   }
 
   .ctaBtns {
     position: relative;
     z-index: 15;
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 10px;
     width: 100%;
+    max-width: 360px;
+    margin: 6px auto 0;
     pointer-events: auto;
   }
 
@@ -1869,13 +2124,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    max-width: 280px;
-    padding: 14px 24px;
-    font-size: 14px;
+    flex: 1 1 0;
+    width: auto;
+    max-width: 175px;
+    padding: 11px 16px;
+    font-size: 13px;
     text-align: center;
     cursor: pointer;
     pointer-events: auto;
+    white-space: nowrap;
   }
 }
 
@@ -1886,39 +2143,130 @@
 
   .categoryGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 8px;
     width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
   }
 
   .catCard {
-    height: 170px;
-    border-radius: 14px;
-    border-top-left-radius: 28px;
-    border-bottom-right-radius: 28px;
-    border-top-right-radius: 6px;
-    border-bottom-left-radius: 6px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 0;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 0;
   }
 
   .catCardLabel {
-    padding: 22px 6px 12px;
+    padding: 18px 6px 8px;
   }
 
   .catCardLabel span {
-    font-size: 14px;
+    font-family: var(--font-libre), 'Libre Caslon Display', 'Playfair Display', Georgia, serif;
+    font-size: 13.5px;
+    font-style: italic;
     text-align: center;
     line-height: 1.2;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+
+  .categoriesSection {
+    padding: 22px 12px 4px;
+    gap: 8px;
   }
 
   .btnExploreCat {
-    margin-top: 20px;
-    padding: 10px 24px;
-    font-size: 13px;
+    margin-top: 0;
+    padding: 8px 20px;
+    font-size: 12.5px;
+  }
+
+  .newArrivalsSection {
+    padding: 34px 0 24px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .newArrivalsHeader {
+    padding: 0 16px;
+  }
+
+  .newArrivalsGrid {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    padding: 6px 16px 0px;
+    width: 100%;
+    max-width: 100%;
+    scroll-snap-type: x mandatory;
+  }
+
+  .newArrivalsGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .newArrivalCard {
+    flex: 0 0 200px;
+    width: 200px;
+    scroll-snap-align: start;
+  }
+
+  .newArrivalImgBox {
+    height: 235px;
+    border-radius: 18px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  }
+
+  .newArrivalInfo {
+    margin-top: 6px;
+    gap: 2px;
+  }
+
+  .newArrivalRating {
+    margin-top: 1px;
+    line-height: 1;
+  }
+
+  .newArrivalName {
+    font-size: 15px;
+  }
+
+  .newArrivalPrice {
+    font-size: 16px;
+  }
+
+  .newArrivalRatingText {
+    font-size: 12.5px;
+  }
+
+  .newArrivalArrows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: -8px;
+    width: 100%;
+  }
+
+  .newArrivalArrowBtn {
+    width: 36px;
+    height: 36px;
   }
 
   .projectsSection {
-    padding: 36px 16px;
-    gap: 18px;
+    padding: 12px 16px 28px;
+    gap: 16px;
     width: 100%;
     height: auto;
   }
@@ -1996,58 +2344,133 @@
     font-size: 13px;
   }
 
-  .aboutFeatures {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 14px 6px;
-    background: #FFFFFF;
-    border-radius: 14px;
-    border: 1px solid rgba(200, 155, 96, 0.25);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
-    margin-top: 18px;
-    gap: 2px;
+  .aboutSection {
+    padding: 26px 12px 20px;
+    gap: 12px;
   }
 
-  .aboutFeatureItem {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 6px;
-    padding: 0 2px;
+  .aboutInner {
+    gap: 10px;
   }
 
-  .aboutFeatureIcon {
-    width: 40px;
-    height: 40px;
-    background: #FAF6F0;
-    border: 1.5px solid rgba(200, 155, 96, 0.35);
-    border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(200, 155, 96, 0.1);
+  .aboutTitle {
+    font-size: 18px;
+    margin: 0 0 6px;
   }
 
-  .aboutFeatureIcon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .aboutFeatureItem span {
+  .aboutDesc {
     font-size: 10px;
-    font-weight: 600;
-    color: #2B2B2B;
-    line-height: 1.2;
-    text-align: center;
+    line-height: 1.38;
+    margin: 0 0 10px;
   }
 
-  .aboutFeatureDivider {
-    display: block;
-    width: 1px;
+  .btnDiscoverStory {
+    padding: 5px 12px;
+    font-size: 10.5px;
+  }
+
+  .aboutRight {
+    flex: 0 0 40%;
+    width: 40%;
+    min-width: 100px;
+    max-width: 150px;
+    height: 185px;
+    border-radius: 0 !important;
+  }
+
+  .statsRow {
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  .statCard {
+    height: 64px;
+    border-radius: 6px;
+  }
+
+  .statOverlay {
+    padding: 6px 5px;
+  }
+
+  .statNum {
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  .statLabel {
+    font-size: 7.5px;
+    line-height: 1.12;
+  }
+
+  .storyCard {
+    width: 250px;
+    padding: 16px 14px 14px;
+    gap: 10px;
+    border-radius: 12px;
+  }
+
+  .storyStars {
+    font-size: 13.5px;
+    letter-spacing: 1px;
+  }
+
+  .storyText {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .storyAuthor {
+    gap: 8px;
+    margin-top: 0;
+  }
+
+  .storyAuthorInfo h5 {
+    font-size: 13.5px;
+    margin: 0 0 2px;
+  }
+
+  .storyAuthorInfo span {
+    font-size: 10.5px;
+  }
+
+  .storiesSection {
+    padding: 24px 12px 10px;
+    gap: 12px;
+  }
+
+  .storiesTitle {
+    font-size: 24px;
+  }
+
+  .storiesMarquee {
+    padding: 4px 0 2px;
+  }
+
+  .arrowOutline,
+  .arrowSolid {
+    width: 38px;
     height: 38px;
-    background: rgba(200, 155, 96, 0.22);
-    flex-shrink: 0;
+  }
+
+  .ctaSection {
+    min-height: auto;
+    padding: 22px 14px;
+  }
+
+  .ctaInner {
+    gap: 10px;
+  }
+
+  .ctaBtns {
+    gap: 8px;
+    max-width: 330px;
+    margin: 4px auto 0;
+  }
+
+  .ctaBtnPrimary,
+  .ctaBtnOutline {
+    padding: 10px 12px;
+    font-size: 12.5px;
+    max-width: 160px;
   }
 }

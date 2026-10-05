@@ -48,8 +48,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${libre.variable} ${italianno.variable} ${hanken.variable}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${libre.variable} ${italianno.variable} ${hanken.variable}`} suppressHydrationWarning>
         <AuthProvider>
           <VisitorTracker />
           <SidebarProvider>

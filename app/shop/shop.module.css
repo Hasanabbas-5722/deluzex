@@ -220,11 +220,24 @@
 .filterPills {
   display: flex;
   gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 2px 8px 2px;
+  max-width: 100%;
+}
+
+.filterPills::-webkit-scrollbar {
+  display: none;
 }
 
 .pill {
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 0.35rem 1.15rem;
   height: 34px;
   display: inline-flex;
@@ -688,8 +701,50 @@
   }
 
   .categoriesGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 10px;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .categoryCard {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    border-top-left-radius: 34px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 34px;
+    border-bottom-left-radius: 0;
+  }
+
+  .categoryOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.25) 55%, transparent 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 18px 8px 10px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .categoryTitle {
+    font-family: var(--font-libre), 'Libre Caslon Display', 'Playfair Display', Georgia, serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #ffffff;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    text-align: center;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    line-height: 1.2;
   }
 
   .filterBar {
@@ -698,6 +753,11 @@
     align-items: stretch;
     gap: 1rem;
     margin-bottom: 1.5rem;
+  }
+
+  .filterPills {
+    gap: 0.55rem;
+    width: 100%;
   }
 
   .activeFilterNotice {
@@ -767,12 +827,36 @@
   }
 
   .categoriesGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 8px;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  .categoryCard {
+    aspect-ratio: 1 / 1;
+    height: auto;
+    border-radius: 0;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 0;
+  }
+
+  .categoryOverlay {
+    padding: 16px 6px 8px;
   }
 
   .categoryTitle {
-    font-size: 0.95rem;
+    font-family: var(--font-libre), 'Libre Caslon Display', 'Playfair Display', Georgia, serif;
+    font-size: 13.5px;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.2;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   }
 
   .productGrid {

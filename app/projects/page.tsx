@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import styles from "./projects.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,12 +14,20 @@ const CATEGORIES = [
   "Public Spaces",
 ];
 
+const PROJECT_TYPES = [
+  { label: "Residential", value: "Residential" },
+  { label: "Commercial", value: "Commercial" },
+  { label: "Hospitality", value: "Hospitality" },
+  { label: "Public Spaces", value: "Public Spaces" },
+  { label: "Bespoke Installation", value: "Bespoke Design" },
+];
+
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All Projects");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [visibleLimit, setVisibleLimit] = useState(4);
+  const [visibleLimit, setVisibleLimit] = useState(6);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,6 +35,31 @@ export default function Projects() {
     projectType: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isProjectTypeOpen, setIsProjectTypeOpen] = useState(false);
+  const projectTypeRef = useRef<HTMLDivElement>(null);
+
+  // Close project type dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        projectTypeRef.current &&
+        !projectTypeRef.current.contains(event.target as Node)
+      ) {
+        setIsProjectTypeOpen(false);
+      }
+    }
+    if (isProjectTypeOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProjectTypeOpen]);
+
+  const handleSelectProjectType = (val: string) => {
+    setFormData((prev) => ({ ...prev, projectType: val }));
+    setIsProjectTypeOpen(false);
+  };
 
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -60,7 +93,7 @@ export default function Projects() {
 
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat);
-    setVisibleLimit(4);
+    setVisibleLimit(6);
   };
 
   const filteredProjects = useMemo(() => {
@@ -276,11 +309,11 @@ export default function Projects() {
                     style={{ objectFit: "cover" }}
                   />
                   <div className={styles.projectLabelBox}>
-                    <div>
+                    <div className={styles.plbTextContainer}>
                       <span className={styles.plbTitle}>{project.title}</span>
                       <span className={styles.plbSub}>
-                        {project.location || "Global"} •{" "}
-                        {project.installations_count || "View Details >"}
+                        <span className={styles.plbSubLocation}>{project.location || "Global"}</span>
+                        <span className={styles.plbSubDetails}> • {project.installations_count || "View Details >"}</span>
                       </span>
                     </div>
                     <span
@@ -293,7 +326,7 @@ export default function Projects() {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="2"
+                        strokeWidth="2.2"
                       >
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
@@ -310,7 +343,7 @@ export default function Projects() {
             <button
               className={styles.loadMoreBtn}
               type="button"
-              onClick={() => setVisibleLimit((prev) => prev + 4)}
+              onClick={() => setVisibleLimit((prev) => prev + 6)}
             >
               Load More masterpeice
             </button>
@@ -383,26 +416,101 @@ export default function Projects() {
                 />
               </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel} htmlFor="projectType">
+              <div className={styles.formGroup} ref={projectTypeRef}>
+                <label className={styles.formLabel} id="projectTypeLabel">
                   Project Type
                 </label>
-                <select
-                  id="projectType"
+                <input
+                  type="hidden"
                   name="projectType"
                   value={formData.projectType}
-                  onChange={handleFormChange}
-                  className={styles.formSelect}
+                />
+                <button
+                  type="button"
+                  id="projectType"
+                  aria-labelledby="projectTypeLabel"
+                  aria-haspopup="listbox"
+                  aria-expanded={isProjectTypeOpen}
+                  className={`${styles.customSelectBtn} ${
+                    isProjectTypeOpen ? styles.customSelectBtnOpen : ""
+                  }`}
+                  onClick={() => setIsProjectTypeOpen((prev) => !prev)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                      e.preventDefault();
+                      setIsProjectTypeOpen((prev) => !prev);
+                    } else if (e.key === "Escape") {
+                      setIsProjectTypeOpen(false);
+                    }
+                  }}
                 >
-                  <option value="" disabled>
-                    Select your project type
-                  </option>
-                  <option value="Residential">Residential</option>
-                  <option value="Commercial">Commercial</option>
-                  <option value="Hospitality">Hospitality</option>
-                  <option value="Public Spaces">Public Spaces</option>
-                  <option value="Bespoke Design">Bespoke Installation</option>
-                </select>
+                  <span
+                    className={
+                      formData.projectType
+                        ? styles.selectValueText
+                        : styles.selectPlaceholderText
+                    }
+                  >
+                    {PROJECT_TYPES.find(
+                      (p) => p.value === formData.projectType
+                    )?.label || "Select your project type"}
+                  </span>
+                  <svg
+                    className={`${styles.selectChevron} ${
+                      isProjectTypeOpen ? styles.selectChevronOpen : ""
+                    }`}
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+
+                {isProjectTypeOpen && (
+                  <ul
+                    className={styles.selectDropdownMenu}
+                    role="listbox"
+                    aria-labelledby="projectTypeLabel"
+                  >
+                    {PROJECT_TYPES.map((pt) => {
+                      const isSelected = formData.projectType === pt.value;
+                      return (
+                        <li
+                          key={pt.value}
+                          role="option"
+                          aria-selected={isSelected}
+                          className={`${styles.selectOption} ${
+                            isSelected ? styles.selectOptionActive : ""
+                          }`}
+                          onClick={() => handleSelectProjectType(pt.value)}
+                        >
+                          <span>{pt.label}</span>
+                          {isSelected && (
+                            <svg
+                              className={styles.checkIcon}
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
 
               <button type="submit" className={styles.submitBtn}>

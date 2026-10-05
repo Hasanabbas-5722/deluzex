@@ -179,6 +179,20 @@
   line-height: 1.2;
 }
 
+.plbTextContainer {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.plbSubLocation {
+  display: inline;
+}
+
+.plbSubDetails {
+  display: inline;
+}
+
 .iconBtnRoundWhite {
   width: 28px;
   height: 28px;
@@ -294,6 +308,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
+  position: relative;
 }
 
 .formLabel {
@@ -335,6 +350,127 @@
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   padding-right: 2rem;
+}
+
+/* CUSTOM RESPONSIVE THEMED SELECT */
+.customSelectBtn {
+  font-family: 'General Sans', var(--font-hanken), 'Inter', -apple-system, sans-serif;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.8rem;
+  background: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.customSelectBtn:hover {
+  border-color: #D8A56E;
+  background: #fffdfa;
+}
+
+.customSelectBtn:focus-visible,
+.customSelectBtnOpen {
+  border-color: #D8A56E;
+  box-shadow: 0 0 0 3px rgba(216, 165, 110, 0.18);
+  background: #ffffff;
+}
+
+.selectValueText {
+  color: #1e293b;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectPlaceholderText {
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+
+.selectChevron {
+  color: #D8A56E;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.selectChevronOpen {
+  transform: rotate(180deg);
+}
+
+.selectDropdownMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1.5px solid rgba(216, 165, 110, 0.45);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(45, 35, 20, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 0.3rem;
+  margin: 0;
+  list-style: none;
+  z-index: 100;
+  animation: selectDropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes selectDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selectOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  font-family: 'General Sans', var(--font-hanken), 'Inter', -apple-system, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.selectOption:hover {
+  background: rgba(216, 165, 110, 0.12);
+  color: #b87b38;
+}
+
+.selectOptionActive {
+  background: #D8A56E;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.selectOptionActive:hover {
+  background: #c9935b;
+  color: #ffffff !important;
+}
+
+.checkIcon {
+  color: #ffffff;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
 }
 
 .submitBtn {
@@ -434,29 +570,36 @@
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 320px;
-    padding: 5rem 1.25rem 2rem;
+    height: auto;
+    min-height: auto;
+    margin-top: -68px;
+    padding: 82px 1.25rem 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .heroSub {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     letter-spacing: 0.16em;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 0.4rem;
   }
 
   .heroTitle {
-    font-size: 2.2rem;
+    font-size: 2.1rem;
+    margin-bottom: 0.6rem;
   }
 
   .heroDesc {
-    font-size: 1.05rem;
-    line-height: 1.5;
-    max-width: 90%;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    max-width: 95%;
   }
 
   .filterSection {
-    padding: 1.75rem 1.25rem 1.25rem;
+    padding: 0.85rem 16px 1.25rem;
   }
 
   .filters {
@@ -464,7 +607,7 @@
     overflow-x: auto;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.35rem;
     scrollbar-width: none;
   }
 
@@ -480,45 +623,110 @@
   }
 
   .projectsSection {
-    padding: 0 1.25rem 4rem;
+    padding: 0 16px 3.5rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .projectGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 12px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .projectCard {
-    height: 260px;
+    width: 100%;
+    aspect-ratio: 1.15 / 1;
+    height: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
   }
 
   .projectLabelBox {
-    bottom: 0.85rem;
-    left: 0.85rem;
-    right: auto;
-    max-width: calc(85% - 0.85rem);
-    min-width: 180px;
-    padding: 0.65rem 0.95rem;
-    background: rgba(245, 240, 232, 0.75);
-    border-radius: 10px;
-    gap: 0.75rem;
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 6px 8px;
+    background: rgba(245, 240, 232, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 7px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+    box-sizing: border-box;
+  }
+
+  .plbTextContainer {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .plbTitle {
-    font-size: 0.85rem;
+    font-size: 10px;
+    font-weight: 600;
+    color: #222b38;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: rgba(34, 43, 56, 0.45);
+    margin-bottom: 2px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .plbSub {
-    font-size: 0.68rem;
+    font-size: 8.5px;
+    color: #64748b;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .plbSubDetails {
+    display: none;
   }
 
   .iconBtnRoundWhite {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    margin-left: 2px;
+  }
+
+  .iconBtnRoundWhite svg {
+    width: 10px;
+    height: 10px;
+    stroke-width: 2.2;
   }
 
   .centerBtn {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
   }
 
   .consultationSection {
-    padding: 3rem 1.25rem 3.5rem;
+    padding: 1.5rem 1.25rem 3rem;
   }
 
   .consultationHeading {
@@ -526,8 +734,7 @@
   }
 
   .consultationRight {
-    height: 320px;
-    border-radius: 14px;
+    display: none;
   }
 
   .formCard {
@@ -537,8 +744,76 @@
 }
 
 @media (max-width: 480px) {
+  .hero {
+    margin-top: -68px;
+    padding: 78px 1rem 16px;
+  }
+
+  .heroSub {
+    font-size: 0.82rem;
+    margin-bottom: 0.3rem;
+  }
+
   .heroTitle {
-    font-size: 1.85rem;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .heroDesc {
+    font-size: 0.88rem;
+    line-height: 1.4;
+    max-width: 100%;
+  }
+
+  .filterSection {
+    padding: 0.75rem 14px 1rem;
+  }
+
+  .projectsSection {
+    padding: 0 14px 2.5rem;
+  }
+
+  .projectGrid {
+    gap: 12px 10px;
+  }
+
+  .projectCard {
+    aspect-ratio: 1.15 / 1;
+    height: auto;
+    border-radius: 9px;
+  }
+
+  .projectLabelBox {
+    bottom: 7px;
+    left: 7px;
+    right: 7px;
+    padding: 5px 7px;
+    border-radius: 6px;
+    gap: 4px;
+  }
+
+  .plbTitle {
+    font-size: 9.5px;
+    letter-spacing: -0.01em;
+  }
+
+  .plbSub {
+    font-size: 8px;
+  }
+
+  .iconBtnRoundWhite {
+    width: 19px;
+    height: 19px;
+    min-width: 19px;
+  }
+
+  .iconBtnRoundWhite svg {
+    width: 9.5px;
+    height: 9.5px;
+  }
+
+  .consultationSection {
+    padding: 1.25rem 1rem 2.5rem;
   }
 
   .consultationHeading {

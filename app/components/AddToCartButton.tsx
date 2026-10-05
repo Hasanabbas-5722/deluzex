@@ -19,6 +19,11 @@ export default function AddToCartButton({ product, styleClass, variant = "defaul
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const productId = product._id || product.id || "";
   const cartItem = cartItems.find(item => String(item.id) === String(productId));
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -55,7 +60,7 @@ export default function AddToCartButton({ product, styleClass, variant = "defaul
     dispatch(updateQuantity({ id: productId, change: 1 }));
   };
 
-  if (cartItem) {
+  if (mounted && cartItem) {
     return (
       <div className="cartQuantityControl" style={{
         position: 'absolute',

@@ -260,8 +260,9 @@ export default async function Home() {
               )}
             </p>
             <Link href="/about" className={styles.btnDiscoverStory}>
-              Discover Our Story
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <span className={styles.btnStoryDesktopText}>Discover Our Story</span>
+              <span className={styles.btnStoryMobileText}>Learn more</span>
+              <svg className={styles.btnStoryArrow} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />
               </svg>
@@ -306,7 +307,8 @@ export default async function Home() {
               src={cmsHome?.story?.image || "/images/about_chandelier_1784107790569.jpg"}
               alt="Chandelier"
               fill
-              style={{ objectFit: "cover", borderRadius: "12px" }}
+              className={styles.aboutRightImg}
+              style={{ objectFit: "cover" }}
             />
           </div>
         </div>
